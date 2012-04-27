@@ -1,0 +1,274 @@
+/*
+ * Copyright 2012 Kantega AS
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+html {
+	background: gray url("../gfx/weavebg.png");
+	text-align: center;
+}
+
+body {
+	margin: 40px auto 100px;
+	text-align: left;
+	width: 700px;
+	background-color: white;
+	border: 1px solid black;
+    box-shadow: 0 0 70px -10px #000;
+}
+
+#content {
+
+}
+
+
+
+
+#logo{
+    background: #000 url("../gfx/logo-base.png") no-repeat;
+    cursor: pointer;
+    width: 360px;
+    height: 115px;
+    position: relative;
+    overflow: hidden;
+    display: block;
+    text-decoration: none;
+}
+
+#logo:hover{
+    background: #000 url("../gfx/logo-base-hover.png") no-repeat;
+}
+#logo-sweep{
+    width: 100%;
+    height: 35px;
+    position: relative;
+    top: -40px;
+    background: transparent url("../gfx/logo-sweep.png");
+}
+
+#logo-mask{
+   width: 100%;
+   height: 100%;
+   background: transparent url("../gfx/logo-mask.png");
+    position: absolute;
+    top: 0;
+}
+
+.contentPadding{
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#header {
+	padding: 1em;
+	border-bottom: 1px solid #aaa;
+	text-align: center;
+	background-color: #000;
+
+}
+
+#tagline{
+    color: #aaa;
+    font-family: Arial;
+        font-size: 13px;
+    position: relative;
+    top: 53px;
+    left: 53px;
+    text-align: left;
+
+}
+#footer {
+	border-top: 1px solid #aaa;
+	padding: 1em;
+	text-align: center;
+	background-color: #cccccc;
+    position: relative;
+}
+
+#kantegalogo{
+    background: url(../gfx/kantega_logo.png) no-repeat;
+    display: block;
+    width: 120px;
+    height: 40px;
+    position: absolute;
+    right: 0;
+    top: 5px;
+}
+
+h1 a, h1 a:hover, h1 a:visited {
+	text-decoration: none;
+	color: black;
+}
+
+h1 {
+	margin: 0;
+	padding: 0;
+}
+
+h2 {
+	margin: 5px 0;
+}
+
+h3 {
+	margin-top: 10px;
+}
+
+form {
+	width: auto;
+}
+
+p {
+	clear: both;
+    margin: 0;
+}
+
+tbody tr:nth-child(even) td.passed, tbody tr.even td.passed, td.passed {
+	background: #99ff99;
+}
+
+tbody tr:nth-child(even) td.failed, tbody tr.even td.failed, td.failed {
+	background: #ff6666;
+}
+
+
+
+
+#siteDefinition dt{
+    width: 100px;
+    float: left;
+    text-align: left;
+    padding-right: 10px;
+}
+
+siteDefinition dd{
+    width: 200px;
+    float: left;
+}
+
+a.button, .button{
+    border: 0;
+    padding: 0;
+    background: url("../gfx/glassButton-static-white.png") no-repeat;
+    width: 123px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    margin: 3px 10px;
+    text-decoration: none;
+    color: #555;
+    font-size: 13px;
+    font-weight: bold;
+    display: block;
+float: right;
+}
+
+.button.negative{
+    color: #a55;
+}
+
+a.button:hover, .button:hover{
+    background: url("../gfx/glassButton-static-blue.png") no-repeat;
+    border: 0;
+    padding: 0;
+}
+
+a.button.negative:hover, .button.negative:hover{
+    background: url("../gfx/glassButton-static-red.png") no-repeat;
+    border: 0;
+    padding: 0;
+}
+
+.buttonContainer{
+    background: #ccc;
+    overflow: auto;
+    padding: 5px 20px;
+    text-align: left;
+    border-top: 1px solid #aaa;
+    line-height: 39px;
+    color: #555;
+}
+
+tr.testResult{
+    border: 1px solid #ddd;
+}
+
+img.modelight{
+    float: left;
+    margin-right: 10px;
+}
+
+.rounded{
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #eee;
+}
+
+.floatContainer{
+    overflow: auto;
+}
+
+.leftFloat{
+    float:left;
+}
+
+#evil-iframe-container{
+    position: relative;
+}
+
+#evil-iframe-div {
+    background-color: #000;
+    width: 7em;
+    height: 5em;
+    position: absolute;
+    top: 200px;
+    padding: 30px;
+    text-align: center;
+    v-align: center;
+    left: 400px;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    opacity: 0.5;
+}
+
+#evil-iframe-div a{
+    color: #fff;
+}
+
+
+.siteIframe {
+    border: 5px groove gray;
+    width: 650px;
+    height: 800px;
+    margin-left: 10px;
+}
+
+.bigtext{
+    font-size: 14px;
+}
+
+.graytext{
+
+    color: #555;
+}
+
+.centeredtext{
+    text-align: center;
+}
+
+.halfWidth{
+    width:320px;
+}
+
+.alternatingGray tr:nth-child(even) td, tbody tr.even td {
+    background:#e5ecf9;
+}

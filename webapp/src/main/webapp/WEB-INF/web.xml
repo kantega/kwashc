@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2012 Kantega AS
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+    <listener>
+        <listener-class>kwashc.blog.Log4jInitializer</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>BlogServlet</servlet-name>
+        <servlet-class>kwashc.blog.servlet.BlogServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BlogServlet</servlet-name>
+        <url-pattern>/blog</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>kwashc.blog.servlet.AdminServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/blog/admin</url-pattern>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>kwashc.blog.servlet.LogInServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/j_security_check</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EditServlet</servlet-name>
+        <servlet-class>kwashc.blog.servlet.EditServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>EditServlet</servlet-name>
+        <url-pattern>/edit</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RedirectServlet</servlet-name>
+        <servlet-class>kwashc.blog.servlet.RedirectServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RedirectServlet</servlet-name>
+        <url-pattern>/redirect</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>LogInFilter</filter-name>
+        <filter-class>kwashc.SecurityFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LogInFilter</filter-name>
+        <url-pattern>/admin</url-pattern>
+    </filter-mapping>
+
+</web-app>

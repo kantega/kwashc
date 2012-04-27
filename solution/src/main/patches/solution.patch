@@ -1,0 +1,265 @@
+Index: webapp/src/main/java/kwashc/blog/servlet/LogInServlet.java
+===================================================================
+--- webapp/src/main/java/kwashc/blog/servlet/LogInServlet.java	(revision 2250)
++++ webapp/src/main/java/kwashc/blog/servlet/LogInServlet.java	(revision )
+@@ -44,7 +44,7 @@
+         String password = request.getParameter("password");
+ 
+         User user = Database.getUser(username);
+-        if (user != null && user.getPassword().equals(password)) {
++        if (user != null && user.getPassword().equals(Database.createHash(password))) {
+             session.setAttribute(USER_SESSION_ATTRIBUTE, user);
+             logger.info("User logged in: " + user);
+             // a user is logged in, redirect to target:
+Index: webapp/src/main/webapp/WEB-INF/jsp/blog.jsp
+===================================================================
+--- webapp/src/main/webapp/WEB-INF/jsp/blog.jsp	(revision 2250)
++++ webapp/src/main/webapp/WEB-INF/jsp/blog.jsp	(revision )
+@@ -57,14 +57,17 @@
+             </div>
+         </c:if>
+ 
+-        <h4 class="postTitle">${comment.title}</h4>
++        <h4 class="postTitle"><c:out value="${comment.title}"/></h4>
+ 
+-        <div class="postBody">${comment.comment}</div>
++        <div class="postBody"><c:out value="${comment.comment}"/></div>
+     </div>
+ </c:forEach>
+ 
+ <form id="commentForm" action="/blog" method="POST">
+     <fieldset>
++
++	    <input type="hidden" name="CSRF" value="${pageContext.session.id}"/>
++
+         <legend>Post a comment:</legend>
+ 
+         <p>
+Index: webapp/src/main/java/kwashc/blog/database/Database.java
+===================================================================
+--- webapp/src/main/java/kwashc/blog/database/Database.java	(revision 2250)
++++ webapp/src/main/java/kwashc/blog/database/Database.java	(revision )
+@@ -20,6 +20,8 @@
+ import kwashc.blog.model.User;
+ 
+ import javax.servlet.ServletException;
++import java.security.MessageDigest;
++import java.security.NoSuchAlgorithmException;
+ import java.util.Collections;
+ import java.util.HashMap;
+ import java.util.Map;
+@@ -34,15 +36,22 @@
+ 
+     static {
+         // initial content:
+-        User user = new User("username", "password");
++        User user = new User("username", createHash("password"));
+         users.put("username", user);
+-        users.put("guest", new User("guest", "guest"));
++        users.put("guest", new User("guest", createHash("guest")));
+         // system user
+-        users.put("system", new User("system", "xik74659bs7zw6t59sw6508w"));
++        users.put("system", new User("system", createHash("xik74659bs7zw6t59sw6508w")));
+ 
+         comments.add(new Comment(user, "Test message", "This is a test message, already residing in the database."));
+     }
+ 
++	public static String createHash(String text) {
++		try {
++			return new String(MessageDigest.getInstance("SHA-512").digest(text.getBytes()));
++		} catch (NoSuchAlgorithmException e) {
++			throw new RuntimeException(e);
++		}
++	}
+ 
+     public static Comment getComment(int ID) throws ServletException {
+         for (Comment comment : comments) {
+Index: webapp/src/main/java/kwashc/blog/servlet/RedirectServlet.java
+===================================================================
+--- webapp/src/main/java/kwashc/blog/servlet/RedirectServlet.java	(revision 2250)
++++ webapp/src/main/java/kwashc/blog/servlet/RedirectServlet.java	(revision )
+@@ -29,11 +29,17 @@
+     @Override
+     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+ 
+-        String url = req.getParameter("url");
++	    String url = req.getParameter("url");
++	    // whitelist
++	    if (url.startsWith("http://www.owasp.org")) {
+ 
++		    /**
++		     * We want to see what people are clicking on, so we save the stat here:
++		     */
+-        ClickStats.addClick(url);
++		    ClickStats.addClick(url);
+ 
+-        resp.sendRedirect(url);
++		    resp.sendRedirect(url);
++	    }
+ 
+     }
+ 
+Index: webapp/src/main/webapp/WEB-INF/web.xml
+===================================================================
+--- webapp/src/main/webapp/WEB-INF/web.xml	(revision 2250)
++++ webapp/src/main/webapp/WEB-INF/web.xml	(revision )
+@@ -40,8 +40,8 @@
+ 
+     <servlet-mapping>
+         <servlet-name>AdminServlet</servlet-name>
+-        <url-pattern>/blog/admin</url-pattern>
+         <url-pattern>/admin</url-pattern>
++        <url-pattern>/blog/admin</url-pattern>
+     </servlet-mapping>
+ 
+     <servlet>
+@@ -72,9 +72,22 @@
+     <servlet-mapping>
+         <servlet-name>RedirectServlet</servlet-name>
+         <url-pattern>/redirect</url-pattern>
+-    </servlet-mapping>    
++    </servlet-mapping>
+ 
++	<error-page>
++		<error-code>404</error-code>
++		<location>/error.jsp</location>
++	</error-page>
++	<error-page>
++		<error-code>500</error-code>
++		<location>/error.jsp</location>
++	</error-page>
++	<error-page>
++		<exception-type>java.lang.Throwable</exception-type>
++		<location>/error.jsp</location>
++	</error-page>
++
+-    <filter>
++	<filter>
+         <filter-name>LogInFilter</filter-name>
+         <filter-class>kwashc.SecurityFilter</filter-class>
+     </filter>
+@@ -82,6 +95,8 @@
+     <filter-mapping>
+         <filter-name>LogInFilter</filter-name>
+         <url-pattern>/admin</url-pattern>
++        <url-pattern>/blog/admin</url-pattern>
++        <url-pattern>/edit</url-pattern>
+     </filter-mapping>
+ 
+ </web-app>
+Index: webapp/pom.xml
+===================================================================
+--- webapp/pom.xml	(revision 2250)
++++ webapp/pom.xml	(revision )
+@@ -116,7 +116,29 @@
+ 							<keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+ 							<password>owaspJetty</password>
+ 							<keyPassword>owaspJetty</keyPassword>
+-							<!--<excludeCipherSuites></excludeCipherSuites>-->
++							<includeCipherSuites>
++								<includeCipherSuite>TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_DHE_DSS_WITH_AES_128_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_DHE_DSS_WITH_AES_256_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_DHE_RSA_WITH_AES_128_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_DHE_RSA_WITH_AES_256_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_RSA_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_RSA_WITH_AES_128_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_RSA_WITH_AES_256_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_ECDH_RSA_WITH_AES_128_CBC_SHA</includeCipherSuite>
++								<includeCipherSuite>TLS_ECDH_RSA_WITH_AES_256_CBC_SHA</includeCipherSuite>
++							</includeCipherSuites>
+ 						</connector>
+ 					</connectors>
+ 				</configuration>
+Index: webapp/src/main/java/kwashc/blog/servlet/EditServlet.java
+===================================================================
+--- webapp/src/main/java/kwashc/blog/servlet/EditServlet.java	(revision 2250)
++++ webapp/src/main/java/kwashc/blog/servlet/EditServlet.java	(revision )
+@@ -34,10 +34,13 @@
+ 
+     @Override
+     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
++	    try {
+-        int commentID = Integer.parseInt(req.getParameter("commentID"));
+-        Comment c = Database.getComment(commentID);
+-        c.setComment("Comment is edited and anonymised!");
++		    int commentID = Integer.parseInt(req.getParameter("commentID"));
++		    Comment c = Database.getComment(commentID);
++		    c.setComment("Comment is edited and anonymised!");
+-
++	    } catch (NumberFormatException e) {
++		    // ignore
++	    }
+-        resp.sendRedirect("/blog");
++	    resp.sendRedirect("/blog");
+     }
+ }
+Index: webapp/src/main/java/kwashc/blog/servlet/BlogServlet.java
+===================================================================
+--- webapp/src/main/java/kwashc/blog/servlet/BlogServlet.java	(revision 2250)
++++ webapp/src/main/java/kwashc/blog/servlet/BlogServlet.java	(revision )
+@@ -30,7 +30,7 @@
+ 
+     @Override
+     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+-
++		resp.setHeader("X-FRAME-OPTIONS", "deny");
+         req.setAttribute("comments", Database.getComments());
+ 
+         getServletConfig().getServletContext().getRequestDispatcher("/WEB-INF/jsp/blog.jsp").forward(req, resp);
+@@ -38,14 +38,18 @@
+ 
+     @Override
+     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+-        String title = req.getParameter("title");
+-        String comment = req.getParameter("comment");
++	    String title = req.getParameter("title");
++	    String comment = req.getParameter("comment");
++	    String sid = req.getParameter("CSRF");
+-
++	    
++	    if (req.getSession().getId().equals(sid)) {
++
+-        User user = (User) req.getSession(true).getAttribute("USER");
++		    User user = (User) req.getSession(true).getAttribute("USER");
+ 
+-        Database.addComment(new Comment(user, title, comment));
++		    Database.addComment(new Comment(user, title, comment));
++	    }
+ 
+-        // redirect to avoid double-posts
++	    // redirect to avoid double-posts
+         resp.sendRedirect("/blog");
+     }
+ 
+Index: webapp/src/main/webapp/WEB-INF/jsp/header.jsp
+===================================================================
+--- webapp/src/main/webapp/WEB-INF/jsp/header.jsp	(revision 2250)
++++ webapp/src/main/webapp/WEB-INF/jsp/header.jsp	(revision )
+@@ -20,7 +20,7 @@
+ 
+ <head>
+ 	<!-- When you register the site, modify the line below: -->
+ 
+     <link rel="stylesheet" href="/css/blueprint/plugins/link-icons/screen.css" type="text/css"
+           media="screen, projection">
+@@ -33,6 +33,8 @@
+     <![endif]-->
+ 
+     <link href="/css/style.css" rel="stylesheet" type="text/css" media="all"/>
+	<title>KWASHC blog</title>
++	<script>if (top!=self) top.location.href=self.location.href</script>
+ </head>
+ 
+ <body>
