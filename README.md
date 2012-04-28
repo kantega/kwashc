@@ -1,4 +1,4 @@
-# Kantega Web Application Security Hero Challenge (kwashc) #
+# Kantega Web Application Security Hero Challenge (KWASHC) #
 
 ## About ##
 
@@ -63,5 +63,5 @@ Build and run client
 
 For ideas, suggestions or other non spam inquiries:
 
-    anders at kantega dot no
-    espenaf at kantega dot no
+    anders.batstrand at kantega dot no
+    espen.fossen at kantega dot no
