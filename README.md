@@ -50,6 +50,12 @@ Build and run client
         mvn clean install jetty:run
 
 
+Create Eclipse project with correct path for depenencies
+
+        cd webapp
+        mvn eclipse:eclipse
+        mvn -Declipse.workspace="your Eclipse Workspace" eclipse:configure-workspace
+
 ## Credits ##
 
     Anders Båtstrand   idea, framework and tests
