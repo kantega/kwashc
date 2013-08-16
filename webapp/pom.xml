@@ -74,31 +74,25 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>keytool-maven-plugin</artifactId>
-				<version>1.0</version>
+				<version>1.3</version>
 				<executions>
 					<execution>
 						<phase>generate-resources</phase>
-						<id>clean</id>
+						<id>generateKeyPair</id>
 						<goals>
-							<goal>clean</goal>
+							<goal>generateKeyPair</goal>
 						</goals>
-					</execution>
-					<execution>
-						<phase>generate-resources</phase>
-						<id>genkey</id>
-						<goals>
-							<goal>genkey</goal>
-						</goals>
+                        <configuration>
+                            <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+                            <dname>cn=localhost, ou=Blog Department, o=InsecureSoft, c=NO</dname>
+                            <keypass>owaspJetty</keypass>
+                            <storepass>owaspJetty</storepass>
+                            <alias>owaspJetty</alias>
+                            <keyalg>RSA</keyalg>
+                            <skipIfExist>true</skipIfExist>
+                        </configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
-					<dname>cn=localhost</dname>
-					<keypass>owaspJetty</keypass>
-					<storepass>owaspJetty</storepass>
-					<alias>owaspJetty</alias>
-					<keyalg>RSA</keyalg>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
