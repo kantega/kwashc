@@ -35,11 +35,11 @@ import java.util.List;
 
 /**
  * Tests if passwords in the webapp is stored a cryptographic secure way. To accomplish this a backdoor in the webapp
- * has been created. The test cannot determine if the password is stored securly, but I can inform the about the
+ * has been created. The test cannot determine if the password is stored securely, but I can inform the about the
  * most known failures of creating secure passwords.
  *
  * The test check the following:
- * Output must bes ASCII characters only
+ * Output must be ASCII characters only
  * Output should not contain the original password as a substring
  * Output size must be larger then 56 char (224 bit)
  * Output cannot be just an MD2, MD5 or SHA-1 hash
