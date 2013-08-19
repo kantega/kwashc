@@ -59,9 +59,8 @@
 		<li><a href="http://<%= request.getLocalAddr() %>:<%= request.getLocalPort() %>">This server
             (http://<%= request.getLocalAddr() %>:<%= request.getLocalPort() %>)</a></li>
 		<li><a href="source/KWASHC-webapp.zip">KWASHC Blog Webapp</a>. This is your test blog, packaged as a Maven
-            project. Follow the <a href="/gettingstarted">getting started guide</a>, or ask one of the tutors. If you
-            have not previously worked with a Maven project, we recommend importing it with
-            <a target="_blank" href="http://www.jetbrains.com/idea/free_java_ide.html">IDEA</a></li>
+            project.</li>
+        <li>Follow the <a href="/gettingstarted">getting started guide</a>, or ask one of the tutors if you need help.</li>
 	</ul>
 	<h3>Resources</h3>
 	<ul>
