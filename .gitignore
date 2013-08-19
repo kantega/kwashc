@@ -1,0 +1,10 @@
+target
+bin
+gen
+libs
+.settings
+.classpath
+.project
+*.iml
+/temp
+.idea
