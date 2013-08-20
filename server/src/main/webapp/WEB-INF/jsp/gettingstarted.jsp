@@ -40,8 +40,20 @@
         <li><a href="/site/new">Register</a> your site</li>
     </ul>
 
+    <h3>Option 2: Native Gradle</h3>
 
-    <h3>Option 2: IntelliJ IDEA & Maven</h3>
+    <ul>
+        <li>cd webapp</li>
+        <li>Windows: gradlew.bat</li>
+        <li>Linux/Mac: ./gradlew</li>
+        <li>gradle cloneArquillian buildArquillian build</li>
+        <li>gradle arquillianRun</li>
+        <li>Access blog application with browser on <a target="_blank" href="http://localhost:8080">localhost:8080</a>
+        </li>
+        <li><a href="/site/new">Register</a> your site</li>
+    </ul>
+
+    <h3>Option 3: IntelliJ IDEA & Maven</h3>
 
     <ul>
         <li>Download and install <a target="_blank" href="http://maven.apache.org/download.html">Maven</a></li>
@@ -57,7 +69,7 @@
         <li><a href="/site/new">Register</a> your site</li>
     </ul>
 
-    <h3>Option 3: Stand-alone Eclipse</h3>
+    <h3>Option 4: Stand-alone Eclipse</h3>
 
     <ul>
         <li>Download and install <a target="_blank" href="http://www.eclipse.org/downloads/moreinfo/java.php">Eclipse for Java Developers</a></li>
@@ -72,7 +84,7 @@
         <li><a href="/site/new">Register</a> your site</li>
     </ul>
 
-    <h3>Option 4: Eclipse & Maven installed</h3>
+    <h3>Option 5: Eclipse & Maven installed</h3>
 
     <ul>
         <li>cd webapps</li>

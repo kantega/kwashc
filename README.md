@@ -30,13 +30,15 @@ __Server__
 
 __Clients__
 
-* Apache Maven 3.x
+* Apache Maven 3.x || Eclipse for Java Developers 4+
 * JVM 6.x (7.x for all tests to go green, but let the participants find out themselves, see SSLProtocolTest for more info)
 * A decent IDE, like IDEA, Eclipse
 * Internet connection for downloading maven dependencies
 
 
 ## Usage ##
+
+__Maven__
 
 Build and run server
 
@@ -47,22 +49,25 @@ Build and run server
 Build and run client
 
         cd webapp
-        mvn clean install jetty:run
+        mvn install jetty:run
 
+__Gradle__
 
-Create Eclipse project with correct path for depenencies
+Build and run client
 
         cd webapp
-        mvn eclipse:eclipse
-        mvn -Declipse.workspace="your Eclipse Workspace" eclipse:configure-workspace
+        gradlew
+        gradle cloneArquillian buildArquillian build
+        gradle arquillianRun
+
 
 ## Credits ##
 
-    Anders Båtstrand   idea, framework and tests
+    Anders BÃ¥tstrand   idea, framework and tests
     Espen A. Fossen    framework and additional tests
-    Øystein Øie        framework and additional tests
+    Ã˜ystein Ã˜ie        framework and additional tests
     Frode Standal      additional tests
-    Espen Hjertø       web design
+    Espen HjertÃ¸       web design
 
 
 ## Contact ##

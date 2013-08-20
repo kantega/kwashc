@@ -1,0 +1,84 @@
+apply plugin: 'war'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.ajoberstar:gradle-git:0.6.1'
+        classpath fileTree(dir: 'build/arquillian/build/libs', includes: ['arquillian-0.1.jar'])
+    }
+}
+
+repositories {
+   mavenCentral()
+}
+
+dependencies {
+    compile "javax.servlet:jstl:1.2"
+    compile "net.sourceforge.jwebunit:jwebunit-htmlunit-plugin:2.5"
+    compile "log4j:log4j:1.2.16"
+    compile "org.slf4j:slf4j-log4j12:1.6.2"
+    providedCompile "javax.servlet:servlet-api:2.5"
+}
+
+/*
+ * Copyright 2013 Kantega AS
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import org.ajoberstar.gradle.git.tasks.*
+
+task cloneArquillian(type: GitClone) {
+        def destination = file("build/arquillian")
+        uri = "https://github.com/aslakknutsen/arquillian-gradle-plugin.git"
+        destinationPath = destination
+        bare = false
+        enabled = !destination.exists() //to clone only once
+}
+
+task buildArquillian(type: GradleBuild) {
+    buildFile = 'build/arquillian/build.gradle'
+    tasks = ['build']
+}
+
+if(new File("build/arquillian/build/libs/arquillian-0.1.jar").exists()){
+
+    apply plugin: 'arquillian'
+
+    arquillian {
+        debug = true
+        deployable = war.archivePath
+
+        containers {
+            jetty {
+                version = '8'
+                type = 'embedded'
+                config = ['bindHttpPort': 8080, 'bindAddress': '0.0.0.0', 'jettyPlus': false]
+
+                dependencies {
+                    adapter 'org.jboss.arquillian.container:arquillian-jetty-embedded-7:1.0.0.CR2'
+                    container 'org.eclipse.jetty:jetty-webapp:8.0.3.v20111011'
+                    container 'org.eclipse.jetty:jetty-io:8.0.3.v20111011'
+                    container 'org.eclipse.jetty:jetty-server:8.0.3.v20111011'
+                    container 'org.eclipse.jetty:jetty-servlet:8.0.3.v20111011'
+                    container 'org.eclipse.jetty:jetty-util:8.0.3.v20111011'
+                    container 'org.eclipse.jetty:jetty-webapp:8.0.3.v20111011'
+                    container 'org.mortbay.jetty:jsp-2.1-glassfish:2.1.v20100127'
+                    container group: 'org.eclipse.jetty', name: 'jetty-plus', version: '8.0.3.v20111011'
+                }
+            }
+        }
+    }
+}
