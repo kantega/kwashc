@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kantega AS
+ * Copyright 2013 Kantega AS
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,11 @@ public class FrontPageController {
         model.addAttribute("testCloud", testCloud);
         return "display";
     }
-    
+    @RequestMapping(value="/gettingstarted", method = RequestMethod.GET)
+    public String showGettingStartedPage() {
+        return "gettingstarted";
+    }
+
     @RequestMapping(value="/needshelp", method = RequestMethod.GET)
     public String showNeedsHelpPage(Model model) {
 

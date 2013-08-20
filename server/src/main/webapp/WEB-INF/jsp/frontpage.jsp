@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%--
-  ~ Copyright 2012 Kantega AS
+  ~ Copyright 2013 Kantega AS
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -56,15 +56,17 @@
 <div class="contentPadding bigtext">
 	<h3>Links you will need</h3>
 	<ul>
-		<li><a href="http://<%= request.getLocalAddr() %>:<%= request.getLocalPort() %>">This server (http://<%= request.getLocalAddr() %>:<%= request.getLocalPort() %>)</a></li>
-		<li><a href="source/KWASHC-webapp.zip">KWASHC Blog Webapp</a>. This is your test blog, packaged as a Maven project. If you have not previously worked with a Maven project, we recommend importing it with <a target="_blank"
-	                                                                                             href="http://www.jetbrains.com/idea/free_java_ide.html">IDEA</a></li>
+		<li><a href="http://<%= request.getLocalAddr() %>:<%= request.getLocalPort() %>">This server
+            (http://<%= request.getLocalAddr() %>:<%= request.getLocalPort() %>)</a></li>
+		<li><a href="source/KWASHC-webapp.zip">KWASHC Blog Webapp</a>. This is your test blog, packaged as a Maven
+            project.</li>
+        <li>Follow the <a href="/gettingstarted">getting started guide</a>, or ask one of the tutors if you need help.</li>
 	</ul>
 	<h3>Resources</h3>
 	<ul>
 		<li><a target="_blank" href="http://maven.apache.org/download.html">Maven</a>
 			<a target="_blank" href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">JVM</a>
-			<a target="_blank" href="http://www.eclipse.org/downloads/">Eclipse</a>
+			<a target="_blank" href="http://www.eclipse.org/downloads/moreinfo/java.php">Eclipse for Java Developers</a>
 			<a target="_blank" href="http://www.jetbrains.com/idea/free_java_ide.html">IDEA</a>
 		</li>
 		<li><a target="_blank" href="https://www.owasp.org/index.php/Top_10_2010">OWASP Top 10 2010</a></li>

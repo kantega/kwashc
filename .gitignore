@@ -1,0 +1,12 @@
+target
+bin
+gen
+libs
+.settings
+.classpath
+.project
+*.iml
+/temp
+.idea
+KWASHC-webapp.zip
+kwashc-db.*
