@@ -37,6 +37,7 @@ public final class TestRepository {
 		add(new InsecureDirectObjectReferenceTest());
 		add(new InvalidatedRedirectTest());
 		add(new ImproperErrorHandlingTest());
+        add(new KnownVulnerableComponentsTest());
 		add(new InsecureCryptographicStorageTest());
 		// Test only works with a server with JVM > 6:
 		if (getMajorJVMVersion() > 6) add(new SSLProtocolTest());
