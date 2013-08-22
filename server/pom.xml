@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2012 Kantega AS
+  ~ Copyright 2013 Kantega AS
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -231,6 +231,21 @@
 					<stopPort/>
 				</configuration>
 			</plugin>
+            <plugin>
+              <artifactId>maven-clean-plugin</artifactId>
+              <version>2.5</version>
+              <configuration>
+                <filesets>
+                  <fileset>
+                    <directory>src/main/webapp/source</directory>
+                    <includes>
+                      <include>KWASHC-webapp.zip</include>
+                    </includes>
+                    <followSymlinks>false</followSymlinks>
+                  </fileset>
+                </filesets>
+              </configuration>
+            </plugin>
 		</plugins>
 
 	</build>
