@@ -45,7 +45,7 @@ public class InvalidatedRedirectTest extends AbstractTest {
 
 	@Override
 	public String getInformationURL() {
-		return "https://www.owasp.org/index.php/Top_10_2010-A10-Unvalidated_Redirects_and_Forwards";
+		return "https://www.owasp.org/index.php/Top_10_2013-A10-Unvalidated_Redirects_and_Forwards";
 	}
 
 	@Override

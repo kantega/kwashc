@@ -69,7 +69,7 @@
 			<a target="_blank" href="http://www.eclipse.org/downloads/moreinfo/java.php">Eclipse for Java Developers</a>
 			<a target="_blank" href="http://www.jetbrains.com/idea/free_java_ide.html">IDEA</a>
 		</li>
-		<li><a target="_blank" href="https://www.owasp.org/index.php/Top_10_2010">OWASP Top 10 2010</a></li>
+		<li><a target="_blank" href="https://www.owasp.org/index.php/Top_10_2013">OWASP Top 10 2013</a></li>
 		<li><a target="_blank" href="http://courses.coreservlets.com/Course-Materials/csajsp2.html">Beginning & Intermediate Servlet & JSP
 			Tutorials</a></li>
 	</ul>
