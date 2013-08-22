@@ -61,7 +61,7 @@ public class InvalidatedRedirectTest extends AbstractTest {
             responseBody = EntityUtils.toString(entity);
 
 	        // OBS: In case we are sent to the front page, we must check for something more specific than the wprd Kantega
-            if (responseBody.contains("Norges ledende konsulentselskap")) {
+            if (responseBody.contains("Nesten litt magisk - Kantega")) {
                 testResult.setPassed(false);
                 testResult.setMessage("Your application is vulnerable to phishing attacks due to invalidated redirects");
             } else {
