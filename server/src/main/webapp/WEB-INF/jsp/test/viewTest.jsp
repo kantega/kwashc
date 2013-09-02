@@ -50,7 +50,7 @@
     </div>
     <br>
     <div class="contentPadding">
-        <p>OBS: Individual test runs are not saved, and do not effect your score. To get a new score, <a
+        <p>OBS: Individual test runs are not saved, and do not affect your score. To get a new score, <a
                 href="<c:url value="/test/site/${site.id}/executeAll"/>">run all tests.</a></p>
         <br>
     </div>
