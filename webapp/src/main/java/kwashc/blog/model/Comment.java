@@ -19,6 +19,9 @@ package kwashc.blog.model;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * This blog is VERY simple. It consists only of comments!
+ */
 public class Comment implements Comparable<Comment> {
 
     private static AtomicInteger nextID = new AtomicInteger(0);

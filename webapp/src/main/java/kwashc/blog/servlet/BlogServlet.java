@@ -26,6 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This is the main page, and serves the comments get requests, and add comments on post requests.
+ */
 public class BlogServlet extends HttpServlet {
 
     @Override

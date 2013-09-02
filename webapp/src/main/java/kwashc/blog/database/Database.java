@@ -26,6 +26,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * This blog system uses a very basic in-memory database, consisting of a map og users, and a set of comments.
+ */
 public class Database {
 
     private static final Map<String, User> users = Collections.synchronizedMap(new HashMap<String, User>());

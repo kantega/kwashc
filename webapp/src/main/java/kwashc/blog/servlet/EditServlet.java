@@ -26,9 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * User: oysoie
- * Date: 06.okt.2011
- * Time: 12:58:43
+ * The edit function is really simple.
+ *
+ * If an admin finds a comment that needs editing, he replaces the text with a short notice:
+ *
+ * 'Comment is edited and anonymised!'
  */
 public class EditServlet extends HttpServlet {
 

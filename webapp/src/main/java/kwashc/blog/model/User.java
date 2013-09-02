@@ -17,9 +17,7 @@
 package kwashc.blog.model;
 
 /**
- * TODO andbat: Description/responsibilities.
- *
- * @author Anders Båstrand, (www.kantega.no)
+ * Stores very basic information about a user in the blog system
  */
 public class User {
 
@@ -42,7 +40,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "User {" +
                 "username='" + username + '\'' +
                 ", password='***********'" +
                 '}';

@@ -39,7 +39,7 @@ public class LogInServlet extends HttpServlet {
 
         HttpSession session = request.getSession(true);
 
-        // try to log in
+        // gather credentials from the request:
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
