@@ -41,6 +41,7 @@
     <mvc:resources cache-period="60" mapping="/css/**" location="/css/"/>
     <mvc:resources cache-period="60" mapping="/gfx/**" location="/gfx/"/>
     <mvc:resources cache-period="60" mapping="/js/**" location="/js/"/>
+    <mvc:resources cache-period="60" mapping="/introduction/**" location="/introduction/"/>
     <mvc:resources cache-period="60" mapping="/source/**" location="/source/"/>
 
 </beans>
