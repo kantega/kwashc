@@ -36,7 +36,7 @@
                 name = "Anonymous";
                 document.write(name+"!");
             }
-
+            $(location.hash);
         </script>
     </p>
 </c:if>
