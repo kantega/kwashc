@@ -38,6 +38,8 @@ public class EditServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int commentID = Integer.parseInt(req.getParameter("commentID"));
         Comment c = Database.getComment(commentID);
+        String title = c.getTitle();
+        c.setTitle(title + " - edited");
         c.setComment("Comment is edited and anonymised!");
 
         resp.sendRedirect("/blog");
