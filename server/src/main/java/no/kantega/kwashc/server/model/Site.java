@@ -55,6 +55,11 @@ public class Site extends AbstractPersistable<Long> implements Comparable<Site> 
 	@Column(nullable = true)
 	private Date completed;
 
+    @Past
+    @Temporal(value = TemporalType.TIMESTAMP)
+    @Column(nullable = true)
+    private Date lastPassed;
+
 	@Digits(integer = 6, fraction = 0)
     private String secureport = "8443";
 
@@ -146,6 +151,14 @@ public class Site extends AbstractPersistable<Long> implements Comparable<Site> 
 
     public void setSecureport(String secureport) {
         this.secureport = secureport;
+    }
+
+    public Date getLastPassed() {
+        return lastPassed;
+    }
+
+    public void setLastPassed(Date lastPassed) {
+        this.lastPassed = lastPassed;
     }
 
 	/**

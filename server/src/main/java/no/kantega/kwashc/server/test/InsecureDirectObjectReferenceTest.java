@@ -16,6 +16,10 @@
 
 package no.kantega.kwashc.server.test;
 
+import com.gargoylesoftware.htmlunit.WebClient;
+import net.sourceforge.jwebunit.api.IElement;
+import net.sourceforge.jwebunit.htmlunit.HtmlUnitTestingEngineImpl;
+import net.sourceforge.jwebunit.junit.WebTester;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import org.apache.commons.io.IOUtils;
@@ -27,17 +31,16 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 /**
  * Tests if an unauthenticated user can edit a blog post, by sending a GET-request with a commentID as a variable.
  *
  * The test checks the following:
  * Whether an unauthenticated user can edit a blog post
- * Whether the parameter, commentID, is properly validated
  *
  * Solution:
  * Add the edit servlet to the login filter
- * Validate the input parameter commentID
  *
  * @author Øystein Øie, (www.kantega.no)
  */
@@ -60,57 +63,46 @@ public class InsecureDirectObjectReferenceTest extends AbstractTest {
 	}
 
 	@Override
-    protected TestResult testSite(Site site, TestResult testResult){
+    protected TestResult testSite(Site site, TestResult testResult) throws Throwable{
 
-        DefaultHttpClient httpclient = new DefaultHttpClient();
-        try {
-            HttpGet getReq = new HttpGet(site.getAddress() + "edit?commentID=0");
-            HttpResponse resp = httpclient.execute(getReq);
-            int statusCode = resp.getStatusLine().getStatusCode();
-            String html = IOUtils.toString(resp.getEntity().getContent(), "UTF-8");
-            //EntityUtils.consume(resp.getEntity());
-            if (statusCode == 200  && html.contains("Post a comment:")) {
-                testResult.setPassed(false);
-                testResult.setMessage("Unauthorised editing completed ");
-            }
+        String random = UUID.randomUUID().toString();
 
-            else if (statusCode != 200) {
-                testResult.setPassed(false);
-                testResult.setMessage("Unauthorised editing is possible, but no matching comment found");
-            }
-            
-            else if (statusCode == 200 && html.contains("j_security_check")) {
-                HttpGet getReqAdmin = new HttpGet(site.getAddress() + "j_security_check?username=guest&password=guest");
-                resp = httpclient.execute(getReqAdmin);
-                getReq.addHeader(resp.getFirstHeader("Set-Cookie"));
-                EntityUtils.consume(resp.getEntity());
+        WebTester tester = new WebTester();
+        tester.beginAt(site.getAddress());
 
-                getReq.setURI(new URI(site.getAddress() + "edit?commentID=fdsa"));
-                resp =httpclient.execute(getReq);
-                statusCode = resp.getStatusLine().getStatusCode();
-                //html = IOUtils.toString(resp.getEntity().getContent(), "UTF-8");
+        tester.setTextField("title", random);
+        tester.setTextField("comment", "Edit post");
+        tester.clickButton("commentFormSubmit");
 
-                if(statusCode == 500) {
-                    testResult.setPassed(false);
-                    testResult.setMessage("Almost there, but invalid commentID should not generate HTTP 500");
-                }
-                else {
-                    testResult.setPassed(true);
-                    testResult.setMessage("Congratulation");
-                }
-            }
-        }
-        catch(IOException ioe) {
-            ioe.printStackTrace();
-        }
-        catch(URISyntaxException URIse) {
-            URIse.printStackTrace();
-        }
-        finally {
-            httpclient.getConnectionManager().shutdown();
+        String editHref = getCommentToAnonymise(site, random);
+
+        tester.gotoPage(site.getAddress() + editHref);
+        tester.gotoPage(site.getAddress() + "/blog");
+
+        String frontpage = tester.getPageSource();
+
+        if(frontpage.contains(random + " - edited")) {
+            testResult.setPassed(false);
+            testResult.setMessage("Unauthorised editing possible. Users should log in to be able to edit posts.");
+        } else
+        {
+            testResult.setPassed(true);
+            testResult.setMessage("You successfully prevented unauthorised editing!");
         }
 
         return testResult;
 
+    }
+
+    private String getCommentToAnonymise(Site site, String title){
+        WebTester admin = new WebTester();
+        admin.beginAt(site.getAddress() + "/admin");
+
+        admin.setTextField("username", "username");
+        admin.setTextField("password", "password");
+        admin.clickButton("formSubmitButton");
+
+        IElement elem = admin.getElementById("edit." + title);
+        return elem.getAttribute("href");
     }
 }
