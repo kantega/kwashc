@@ -20,6 +20,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * We save some statistics on external links, done from {@link kwashc.blog.servlet.RedirectServlet}
+ */
 public class ClickStats {
 
     private static final Map<String, Integer> clicks = Collections.synchronizedMap(new HashMap<String, Integer>());

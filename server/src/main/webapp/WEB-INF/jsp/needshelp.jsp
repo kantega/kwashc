@@ -74,32 +74,20 @@
 
     <table class="alternatingGray">
         <tr>
-            <th>Site:</th>
-            <th>Test:</th>
-            <th>Last passed:</th>
+            <th>Site name:</th>
+            <th>Last passed test:</th>
         </tr>
-        <c:forEach var="site" items="${helpMap}">
+        <c:forEach var="site" items="${sites}">
             <tr>
                 <td>
-                    <c:out value="${site.key}"/>
+                    <a href="<c:url value="/site/${site.id}/"/>"><c:out value="${site.name}"/></a>
                 </td>
-                <td></td>
-                <td></td>
+                <td>
+                    <c:out value="${site.lastPassed}"/>
+                </td>
             </tr>
-            <c:forEach var="test" items="${site.value}">
-                <tr>
-                    <td></td>
-                    <td>
-                        <c:out value="${test.key}"/>
-                    </td>
-                    <td>
-                        <c:out value="${test.value}"/> minutes ago
-                    </td>
-                </tr>
-            </c:forEach>
         </c:forEach>
     </table>
-
 </div>
 
 </body>

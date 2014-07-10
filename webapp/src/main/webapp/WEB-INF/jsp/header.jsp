@@ -33,6 +33,9 @@
     <![endif]-->
 
     <link href="/css/style.css" rel="stylesheet" type="text/css" media="all"/>
+
+    <script id="jquery" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+
 	<title>KWASHC blog</title>
 </head>
 

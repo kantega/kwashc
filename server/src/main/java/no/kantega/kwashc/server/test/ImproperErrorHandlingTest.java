@@ -69,7 +69,7 @@ public class ImproperErrorHandlingTest extends AbstractTest {
 
 	@Override
 	public String getInformationURL() {
-		return "https://www.owasp.org/index.php/Top_10_2007-Information_Leakage_and_Improper_Error_Handling";
+		return "https://www.owasp.org/index.php/Top_10_2013-A5-Security_Misconfiguration";
 	}
 
 	@Override

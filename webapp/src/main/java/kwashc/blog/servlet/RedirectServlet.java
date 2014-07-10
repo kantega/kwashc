@@ -24,6 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Servlet that redirects the user to a given URL
+ */
 public class RedirectServlet extends HttpServlet {
 
     @Override
@@ -34,7 +37,5 @@ public class RedirectServlet extends HttpServlet {
         ClickStats.addClick(url);
 
         resp.sendRedirect(url);
-
     }
-
 }

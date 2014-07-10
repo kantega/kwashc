@@ -33,16 +33,13 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * TODO andbat: Description/responsibilities.
- *
- * @author Anders Båstrand, (www.kantega.no)
+ * Simple filter that checks if a user exists in the session. If not, the target url is saved, and the user is redirected
+ * to the login page
  */
 public class SecurityFilter implements Filter {
 
-    private static final Logger logger = Logger.getLogger(SecurityFilter.class);
-
     public void init(FilterConfig filterConfig) throws ServletException {
-        // ignore
+        // nothing to initialize
     }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
@@ -58,6 +55,7 @@ public class SecurityFilter implements Filter {
             // a user is logged in, proceed
             chain.doFilter(req, resp);
         } else {
+            // save the target URL for later use
             session.setAttribute(LogInServlet.TARGET_PAGE_SESSION_ATTRIBUTE, request.getRequestURI() + "?" + request.getQueryString());
             // show login page
             session.getServletContext().getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, response);
@@ -65,6 +63,6 @@ public class SecurityFilter implements Filter {
     }
 
     public void destroy() {
-        // ignore
+        // nothing to do here
     }
 }

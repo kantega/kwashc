@@ -30,6 +30,6 @@ public class Log4jInitializer implements ServletContextListener {
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
-        // ignore
+        // normally we should clean up the thread 'configureAndWatch' created. We skip that in the case...
     }
 }

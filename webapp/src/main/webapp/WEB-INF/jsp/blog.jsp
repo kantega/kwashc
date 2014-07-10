@@ -20,6 +20,7 @@
 <h2>Welcome to the Kantega Web Application Security Hero Challenge blog!</h2>
 
 <p>This blog is NOT secure! That is about to change...</p>
+<a href="#bottom">Go to bottom</a>
 
 <c:if test="${sessionScope.user == null}">
     <p>
@@ -32,12 +33,12 @@
                 document.write(name+"!");
             }
             else {
-                name = "Anonymous"
+                name = "Anonymous";
                 document.write(name+"!");
             }
+            $(location.hash);
         </script>
     </p>
-
 </c:if>
 
 <c:if test="${sessionScope.user != null}">
@@ -52,7 +53,7 @@
 
         <c:if test="${sessionScope.user != null}">
             <div class="buttonsContainer">
-                <a class="editButton" title="Edit post" href="/edit?commentID=${comment.ID}">&nbsp;</a>
+                <a class="editButton" id="edit.${comment.title}" title="Edit post" href="/edit?commentID=${comment.ID}">&nbsp;</a>
                 <a class="deleteButton" id="delete.${comment.title}" title="Delete post" href="/admin?commentToDelete=${comment.ID}">&nbsp;</a>
             </div>
         </c:if>

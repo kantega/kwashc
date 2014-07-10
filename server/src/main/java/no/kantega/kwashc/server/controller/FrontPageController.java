@@ -20,6 +20,7 @@ import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestRun;
 import no.kantega.kwashc.server.repository.SiteRepository;
 import no.kantega.kwashc.server.repository.TestRunRepository;
+import no.kantega.kwashc.server.test.AbstractTest;
 import no.kantega.kwashc.server.test.TestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -28,10 +29,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class FrontPageController {
@@ -41,6 +39,8 @@ public class FrontPageController {
 
     @Autowired
     private TestRunRepository testRunRepository;
+
+    private static Map<String, List<String>> helpMap = new HashMap<String, List<String>>();
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String showFrontPage(Model model) {
@@ -87,49 +87,41 @@ public class FrontPageController {
     @RequestMapping(value="/needshelp", method = RequestMethod.GET)
     public String showNeedsHelpPage(Model model) {
 
-        Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "score"), new Sort.Order(Sort.Direction.ASC, "completed"));
-        Iterable<Site> sites = siteRepository.findAll(sort);
-
-        Map<String, Map<String, Integer>> dateMap = new HashMap<String, Map<String, Integer>>();
-
-        for(Site site : sites) {
-            dateMap.put(site.getName(), null);
-        }
-        
         List<TestRun> testRuns = testRunRepository.findAll();
 
-        Date threshold = new Date();
-        threshold.setTime(threshold.getTime() - 600000);
-        
-        Date dateNow = new Date();
-        
         for(TestRun testRun : testRuns) {
-            String site = testRun.getSite();
-            String test = testRun.getTestIdentifikator();
-            Date date = testRun.getTimeRun();
-            int minutes = (int)((dateNow.getTime() - date.getTime()) / 60000);
-            if(testRun.isPassed() && dateMap.containsKey(site)) {
-                if(dateMap.get(site) == null && date.before(threshold)) {
-                    Map<String, Integer> testMap= new HashMap<String, Integer>();
-                    testMap.put(test, minutes);
-                    dateMap.put(site, testMap);
+            if(testRun.isPassed()) {
+                String testRunSite = testRun.getSite();
+                String test = testRun.getTestIdentifikator();
+                List<String> remainingTests = helpMap.get(testRunSite);
+                if(remainingTests == null) {
+                    populateHelpMap(testRunSite);
                 }
                 else {
-                    if(dateMap.get(site).get(test) == null && date.before(threshold)) {
-                        dateMap.get(site).put(test, minutes);
-                    }
-                    else if(minutes < dateMap.get(site).get(test) && date.before(threshold)) {
-                        dateMap.get(site).put(test, minutes);
-                    }
-                    else {
-                        dateMap.get(site).remove(test);
+                    if(remainingTests.contains(test)) {
+                        remainingTests.remove(test);
+                        Site site = siteRepository.findByName(testRunSite);
+                        site.setLastPassed(testRun.getTimeRun());
+                        siteRepository.save(site);
                     }
                 }
             }
         }
 
-        model.addAttribute("helpMap", dateMap);
+        Sort sort = new Sort(new Sort.Order(Sort.Direction.ASC, "lastPassed"));
+        Iterable<Site> sites = siteRepository.findAll(sort);
+        model.addAttribute("sites", sites);
 
         return "needshelp";
+    }
+
+    private void populateHelpMap(String site) {
+        Map<String, AbstractTest> tests = TestRepository.getTests();
+
+        List<String> siteTests = new ArrayList<String>();
+        for(String test : tests.keySet()) {
+            siteTests.add(test);
+        }
+        helpMap.put(site, siteTests);
     }
 }
