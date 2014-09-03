@@ -11,3 +11,4 @@ libs
 KWASHC-webapp.zip
 kwashc-db.*
 build
+.gradle

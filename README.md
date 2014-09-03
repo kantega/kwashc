@@ -18,6 +18,7 @@ part of the challenge.
 The security risks are mostly based on the [OWASP Top 10](https://www.owasp.org). list, but a few additional risks have
 also been added.
 
+Correct pronunciation \ˈkärst\
 
 ## Requirements ##
 
@@ -30,7 +31,7 @@ __Server__
 
 __Clients__
 
-* Apache Maven 3.x || Eclipse for Java Developers 4+
+* Apache Maven 3.x || Eclipse for Java Developers 4+ || Gradle 2.0
 * JVM 6.x (7.x for all tests to go green, but let the participants find out themselves, see SSLProtocolTest for more info)
 * A decent IDE, like IDEA, Eclipse
 * Internet connection for downloading maven dependencies
@@ -53,12 +54,10 @@ Build and run client
 
 __Gradle__
 
-Build and run client
-
         cd webapp
         gradlew
-        gradle cloneArquillian buildArquillian build
-        gradle arquillianRun
+        gradlew(.bat) build
+        gradlew(.bat) jettyRunWar 
 
 
 ## Credits ##
