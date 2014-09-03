@@ -94,7 +94,7 @@ public class KnownVulnerableComponentsTest extends AbstractTest
         {
             testResult.setPassed(false);
             testResult.setMessage("The blog needs to support older versions of IE, try using the latest version 1.x of jquery.");
-        } else if(version.equalsIgnoreCase("1.10.2"))
+        } else if(version.equalsIgnoreCase("1.11.1"))
         {
             testResult.setPassed(true);
             testResult.setMessage("jQuery is successfully updated to the latest version!");
