@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kantega AS
+ * Copyright 2013 Kantega AS
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 /**
- * Test if the web application servlet container and underlying SSL/TLS Protocol implementation support TLS 1.1 og TLS
- * 1.2.
+ * Test if the web application servlet container and underlying SSL/TLS Protocol implementation support TLS 1.2.
  * <p/>
  * Solution: Running Jetty 8+ with oracle-jdk 1.7+. Old versions of oracle/sun jdk do not support it.
  * <p/>
@@ -87,7 +86,7 @@ public class SSLProtocolTest extends AbstractTest {
 
             SSLSocketFactory sf = new SSLSocketFactory(sslcontext, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             SSLSocket socket = (SSLSocket) sf.createSocket();
-            socket.setEnabledProtocols(new String[]{"TLSv1.1", "TLSv1.2"});
+            socket.setEnabledProtocols(new String[]{"TLSv1.2"});
 
             HttpParams params = new BasicHttpParams();
             params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 1000);
@@ -106,8 +105,8 @@ public class SSLProtocolTest extends AbstractTest {
             HttpResponse response = httpclient.execute(request);
 
             if (response.getStatusLine().getStatusCode() == 200) {
-                testResult.setPassed(true);
-                testResult.setMessage("Ok, application supports secure SSL/TLS protocols TLSv1.1 and TLSv1.2!");
+                testResult.setPassed(false);
+                testResult.setMessage("That`s better, you application supports secure SSL/TLS protocols TLSv1.2!");
             }
         } catch (KeyManagementException e) {
             testResult.setPassed(false);
