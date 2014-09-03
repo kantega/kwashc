@@ -106,7 +106,7 @@ public class SSLProtocolTest extends AbstractTest {
 
             if (response.getStatusLine().getStatusCode() == 200) {
                 testResult.setPassed(false);
-                testResult.setMessage("That`s better, you application supports secure SSL/TLS protocols TLSv1.2!");
+                testResult.setMessage("That`s better, you application supports secure SSL/TLS protocol TLSv1.2!");
             }
         } catch (KeyManagementException e) {
             testResult.setPassed(false);
