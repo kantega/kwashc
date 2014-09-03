@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Kantega AS
+ * Copyright 2013 Kantega AS
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,13 +122,13 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
                 } else if (usernamePassword.contains(originalUsernamePassword) || guestPassword.contains(originalGuestPassword)) {
                     testResult.setPassed(false);
                     testResult.setMessage("Your application has insecure cryptographic storage!");
-                } else if (usernamePassword.length() < 56 || guestPassword.length() < 56) {
-                    testResult.setPassed(false);
-                    testResult.setMessage("The output size of your cryptographic function seems a bit small, might not withstand a brute-force or rainbow table attack!");
                 } else if (isPasswordCreatedWithInsecureHashAlgorithm(usernamePassword, originalUsernamePassword) ||
                     isPasswordCreatedWithInsecureHashAlgorithm(guestPassword, originalGuestPassword)) {
                     testResult.setPassed(false);
                     testResult.setMessage("Your application has insecure cryptographic storage!");
+                } else if (usernamePassword.length() < 56 || guestPassword.length() < 56) {
+                    testResult.setPassed(false);
+                    testResult.setMessage("The output size of your cryptographic function seems a bit small, might not withstand a brute-force or rainbow table attack!");
                 } else if (!isPasswordCreatedWithInsecureHashAlgorithm(usernamePassword, originalUsernamePassword) ||
                     !isPasswordCreatedWithInsecureHashAlgorithm(guestPassword, originalGuestPassword)) {
                     testResult.setPassed(true);
