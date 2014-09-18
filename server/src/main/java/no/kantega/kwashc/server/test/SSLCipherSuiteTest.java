@@ -41,78 +41,72 @@ import java.security.cert.X509Certificate;
 
 
 /**
- * test if SSL based communication allows insecure and supports the latest Java 8 ciphers.
+ * test if SSL/TLS based communication allows insecure and supports Perfect Forward Secrecy using the latest Java 8
+ * ciphers. The test goes as follows:
  *
- * Solution:
+ * 1. Checks for availability of insecure and anonymous ciphers
+ * 2. Checks if Perfect Forward Secrecy ciphers are supported.
+ * 3. Checks if the newest Forward Secrecy ciphers in Java 8 are supported.
+ *
+ * Solution, part 1:
  *
  * Exclude the following ciphers
  *
  * <excludeCipherSuites>
- *     <excludeCipherSuite>SSL_RSA_WITH_3DES_EDE_CBC_SHA</excludeCipherSuite>
- *     <excludeCipherSuite>SSL_DHE_RSA_WITH_DES_CBC_SHA</excludeCipherSuite>
- *     <excludeCipherSuite>SSL_DHE_DSS_WITH_DES_CBC_SHA</excludeCipherSuite>
+ * <excludeCipherSuite>SSL_RSA_WITH_3DES_EDE_CBC_SHA</excludeCipherSuite>
+ * <excludeCipherSuite>SSL_DHE_RSA_WITH_DES_CBC_SHA</excludeCipherSuite>
+ * <excludeCipherSuite>SSL_DHE_DSS_WITH_DES_CBC_SHA</excludeCipherSuite>
+ * <excludeCipherSuite>SSL_RSA_WITH_NULL_MD5</excludeCipherSuite>
+ * <excludeCipherSuite>SSL_RSA_WITH_NULL_SHA</excludeCipherSuite>
+ * <excludeCipherSuite>SSL_DH_anon_EXPORT_WITH_DES40_CBC_SHA</excludeCipherSuite>
+ * <excludeCipherSuite>SSL_DH_anon_EXPORT_WITH_RC4_40_MD5</excludeCipherSuite>
+ * <excludeCipherSuite>TLS_KRB5_EXPORT_WITH_DES_CBC_40_MD5</excludeCipherSuite>
+ * <excludeCipherSuite>TLS_KRB5_EXPORT_WITH_DES_CBC_40_SHA</excludeCipherSuite>
+ * <excludeCipherSuite>TLS_DH_anon_WITH_AES_128_GCM_SHA256</excludeCipherSuite>
  * </excludeCipherSuites>
  *
- * The best solution is to only include the ones needed. This might be a very restrictive solution, as you might
- * exclude access for a lot of clients. The following list solves the test (from http://www.mozilla.org/projects/security/pki/nss/ssl/fips-ssl-ciphersuites.html):
+ * Solution, part 2:
  *
- * <includeCipherSuites>
- * <includeCipherSuite>TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_DHE_DSS_WITH_AES_128_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_DHE_DSS_WITH_AES_256_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_DHE_RSA_WITH_AES_128_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_DHE_RSA_WITH_AES_256_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_RSA_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_RSA_WITH_AES_128_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_RSA_WITH_AES_256_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_ECDH_RSA_WITH_AES_128_CBC_SHA</includeCipherSuite>
- * <includeCipherSuite>TLS_ECDH_RSA_WITH_AES_256_CBC_SHA</includeCipherSuite>
- * </includeCipherSuites>
+ * Make sure there are are som basic TLS_DHE_* TLS_ECDHE_* ciphers available. These should be present i Java 6+.
+ *
+ * Solution, part 3:
+ *
+ * Only works with Java 8, as we check for Java 8 only Perfect Forward Secrecy ciphers.
  *
  * Referanses:
- *
+ * <p/>
  * http://wiki.eclipse.org/Jetty/Howto/CipherSuites
  * http://www.techstacks.com/howto/j2se5_ssl_cipher_strength.html
  * http://cephas.net/blog/2007/10/02/using-a-custom-socket-factory-with-httpclient/
+ * https://blogs.oracle.com/java-platform-group/entry/java_8_will_use_tls
+ * server/cipher/*.txt: FUll list of ciphers supported by different Java versions.
  *
  * @author Espen A. Fossen, (www.kantega.no)
- *
  */
 public class SSLCipherSuiteTest extends AbstractTest {
 
     @Override
     public String getName() {
-        return "SSL Connection Cipher Strength Test";
+        return "SSL/TLS Connection Cipher Strength Test";
     }
 
     @Override
     public String getDescription() {
-        return "Test if a weak Cipher is  allowed for an SSL connection.";
+        return "Test if a weak Cipher is  allowed for an SSL/TLS connection.";
     }
 
-	@Override
-	public String getInformationURL() {
-		return "https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet";
-	}
+    @Override
+    public String getInformationURL() {
+        return "https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet";
+    }
 
-	@Override
+    @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
 
         int httpsPort;
-        try{
+        try {
             httpsPort = new Integer(site.getSecureport());
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             testResult.setPassed(false);
             testResult.setMessage("No HTTPS port specified, test not run!");
             return testResult;
@@ -126,28 +120,24 @@ public class SSLCipherSuiteTest extends AbstractTest {
 
             HttpResponse response = checkClientForCiphers(site, httpsPort, httpclient, ciphers);
 
-            if(response.getStatusLine().getStatusCode() == 200){
+            if (response.getStatusLine().getStatusCode() == 200) {
                 testResult.setPassed(false);
-                testResult.setMessage("Your application accepts weak SSL/TLS cipher suites!");
+                testResult.setMessage("Your application accepts weak/anonymous SSL/TLS cipher suites!");
             }
 
         } catch (NoSuchAlgorithmException e) {
-            testResult.setPassed(false);
-            testResult.setMessage("Cipher suites used for connection not available in local environment!");
-            return testResult;
+            return exitMissingCipherSuites(testResult);
         } catch (KeyManagementException e) {
-            testResult.setPassed(false);
-            testResult.setMessage("Certificate configuration does not seem to be correct, check certificate on remote environment!");
-            return testResult;
+            return exitIncorrectCertificate(testResult);
         } catch (IOException e) {
-            if(e.getMessage().contains("peer not authenticated")){
+            if (e.getMessage().contains("peer not authenticated")) {
 
                 HttpClient httpclient2 = HttpClientUtil.getHttpClient();
                 try {
-                    String[] ciphers = new String[]{"TLS_DHE_RSA_WITH_AES_128_CBC_SHA", "TLS_DHE_DSS_WITH_AES_128_CBC_SHA", "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256", "TLS_DHE_DSS_WITH_AES_128_CBC_SHA256"};
+                    String[] ciphers = new String[]{"TLS_DHE_RSA_WITH_AES_128_CBC_SHA", "TLS_DHE_DSS_WITH_AES_128_CBC_SHA", "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256", "TLS_DHE_DSS_WITH_AES_128_CBC_SHA256", "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256","TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256", "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA", "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA"};
                     HttpResponse response = checkClientForCiphers(site, httpsPort, httpclient2, ciphers);
 
-                    if(response.getStatusLine().getStatusCode() == 200){
+                    if (response.getStatusLine().getStatusCode() == 200) {
 
                         HttpClient httpclient3 = HttpClientUtil.getHttpClient();
                         try {
@@ -155,51 +145,41 @@ public class SSLCipherSuiteTest extends AbstractTest {
 
                             HttpResponse response2 = checkClientForCiphers(site, httpsPort, httpclient3, ciphers2);
 
-                            if(response2.getStatusLine().getStatusCode() == 200){
+                            if (response2.getStatusLine().getStatusCode() == 200) {
                                 testResult.setPassed(true);
-                                testResult.setMessage("Top score, you do not support weak ciphers and the best available Perfect Forward Secrecy ciphers are present.");
+                                testResult.setMessage("Top score, no weak/anonymous ciphers and supporting the best available Perfect Forward Secrecy ciphers are present.");
                             } else {
-                                testResult.setPassed(false);
-                                testResult.setMessage("The server did not respond with an HTTP 200 when it should, contact tutor.");
+                                exitWrongHttpCode(testResult);
                             }
                             return testResult;
                         } catch (NoSuchAlgorithmException e1) {
-                            testResult.setPassed(false);
-                            testResult.setMessage("Cipher suites used for connection not available in local environment!");
-                            return testResult;
+                            return exitMissingCipherSuites(testResult);
                         } catch (KeyManagementException e1) {
-                            testResult.setPassed(false);
-                            testResult.setMessage("Certificate configuration does not seem to be correct, check certificate on remote environment!");
-                            return testResult;
+                            return exitIncorrectCertificate(testResult);
                         } catch (IOException e1) {
                             testResult.setPassed(false);
-                            testResult.setMessage("Almost there, your application does not allow SSL/TLS connection with weak ciphers and allows Perfect Forward Secrecy, but there are still stronger ciphers available!");
+                            testResult.setMessage("Almost there, no weak/anonymous ciphers and allows Perfect Forward Secrecy, but there are still stronger ciphers available!");
                             return testResult;
                         } finally {
                             httpclient3.getConnectionManager().shutdown();
                         }
                     } else {
-                        testResult.setPassed(false);
-                        testResult.setMessage("The server did not respond with an HTTP 200 when it should, contact tutor.");
+                        exitWrongHttpCode(testResult);
                     }
                     return testResult;
                 } catch (NoSuchAlgorithmException e1) {
-                    testResult.setPassed(false);
-                    testResult.setMessage("Cipher suites used for connection not available in local environment!");
-                    return testResult;
+                    return exitMissingCipherSuites(testResult);
                 } catch (KeyManagementException e1) {
-                    testResult.setPassed(false);
-                    testResult.setMessage("Certificate configuration does not seem to be correct, check certificate on remote environment!");
-                    return testResult;
+                    return exitIncorrectCertificate(testResult);
                 } catch (IOException e1) {
                     testResult.setPassed(false);
-                    testResult.setMessage("Looking better, your application does not allow SSL/TLS connection with weak ciphers, but does not supportPerfect Forward Secrecy!");
+                    testResult.setMessage("Looking better, your application does not allow SSL/TLS connection with anonymous/weak ciphers, but does not support Perfect Forward Secrecy!");
                     return testResult;
                 } finally {
                     httpclient2.getConnectionManager().shutdown();
                 }
 
-            }else{
+            } else {
                 testResult.setPassed(false);
                 testResult.setMessage("Actual testing failed, check that the connection is working!");
             }
@@ -210,9 +190,26 @@ public class SSLCipherSuiteTest extends AbstractTest {
         return testResult;
     }
 
+    private void exitWrongHttpCode(TestResult testResult) {
+        testResult.setPassed(false);
+        testResult.setMessage("The server did not respond with an HTTP 200 when it should, contact tutor.");
+    }
+
+    private TestResult exitIncorrectCertificate(TestResult testResult) {
+        testResult.setPassed(false);
+        testResult.setMessage("Certificate configuration does not seem to be correct, check certificate on remote environment!");
+        return testResult;
+    }
+
+    private TestResult exitMissingCipherSuites(TestResult testResult) {
+        testResult.setPassed(false);
+        testResult.setMessage("Cipher suites used for connection not available in local environment, contact tutor.");
+        return testResult;
+    }
+
     private HttpResponse checkClientForCiphers(Site site, int httpsPort, HttpClient httpclient, String[] ciphers) throws NoSuchAlgorithmException, KeyManagementException, IOException {
         SSLContext sslcontext = SSLContext.getInstance("TLS");
-        sslcontext.init(null, new TrustManager[] {allowAllTrustManager}, null);
+        sslcontext.init(null, new TrustManager[]{allowAllTrustManager}, null);
 
         SSLSocketFactory sf = new SSLSocketFactory(sslcontext, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
@@ -231,7 +228,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
         Scheme sch = new Scheme("https", httpsPort, sf);
         httpclient.getConnectionManager().getSchemeRegistry().register(sch);
 
-        HttpGet request = new HttpGet("https://" + url.getHost() + ":"+site.getSecureport() +url.getPath() + "blog");
+        HttpGet request = new HttpGet("https://" + url.getHost() + ":" + site.getSecureport() + url.getPath() + "blog");
 
         return httpclient.execute(request);
     }
@@ -239,10 +236,10 @@ public class SSLCipherSuiteTest extends AbstractTest {
     TrustManager allowAllTrustManager = new X509TrustManager() {
 
 
-        public void checkClientTrusted(X509Certificate[] chain,String authType) throws CertificateException {
+        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
         }
 
-        public void checkServerTrusted(X509Certificate[] chain,String authType) throws CertificateException {
+        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
         }
 
         public X509Certificate[] getAcceptedIssuers() {
