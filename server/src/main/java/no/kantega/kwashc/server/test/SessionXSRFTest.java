@@ -67,6 +67,8 @@ public class SessionXSRFTest extends AbstractTest {
         // Replace sessions by replacing cookies:
         WebClient client1 = ((HtmlUnitTestingEngineImpl)tester1.getTestingEngine()).getWebClient();
         WebClient client2 = ((HtmlUnitTestingEngineImpl)tester2.getTestingEngine()).getWebClient();
+
+        // TODO: Consider only coping jsessionId cookie, not all cookies, as these might be used as an protection mechanism.
         client1.setCookieManager(client2.getCookieManager());
 
         // fill in form
