@@ -42,10 +42,10 @@ import java.util.List;
  * Output must be ASCII characters only
  * Output should not contain the original password as a substring
  * Output size must be larger then 56 char (224 bit)
- * Output cannot be just an MD2, MD5 or SHA-1 hash
+ * Output cannot be just an MD2, MD5, SHA-1, SHA-224 orSHA-256 hash
  *
  * Solution:
- * Store password with SHA-224 or better, alternately any "function" with output size of 56 char or more
+ * Store password with SHA-512 or better, alternately any "function" with output size of 56 char or more (bad solution)
  *
  * @author Espen A. Fossen, (www.kantega.no)
  */
@@ -158,10 +158,10 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
 		    return true;
 	    }
 
-        List<String> hashAlgorithms = Arrays.asList("MD2","MD5","SHA-1");
+        List<String> hashAlgorithms = Arrays.asList("MD2", "MD5", "SHA-1", "SHA-224", "SHA-256");
         for (String algorithm : hashAlgorithms) {
             String hash = generateHash(algorithm, originalPassword);
-            if(hash.equals(storedPassword)) return true;
+            if (hash.equals(storedPassword)) return true;
         }
         return false;
 
