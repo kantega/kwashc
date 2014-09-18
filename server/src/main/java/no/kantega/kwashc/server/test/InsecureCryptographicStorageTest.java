@@ -42,10 +42,10 @@ import java.util.List;
  * Output must be ASCII characters only
  * Output should not contain the original password as a substring
  * Output size must be larger then 56 char (224 bit)
- * Output cannot be just an MD2, MD5, SHA-1, SHA-224 orSHA-256 hash
+ * Output cannot be just an MD2, MD5, SHA-1, SHA-224 or SHA-256 hash
  *
  * Solution:
- * Store password with SHA-512 or better, alternately any "function" with output size of 56 char or more (bad solution)
+ * Store password with PBKDF2WithHmacSHA1 or better, alternately any "function" with output size of 56 char or more (bad solution)
  *
  * @author Espen A. Fossen, (www.kantega.no)
  */
