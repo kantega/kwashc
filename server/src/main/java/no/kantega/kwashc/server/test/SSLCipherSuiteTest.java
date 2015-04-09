@@ -41,12 +41,12 @@ import java.security.cert.X509Certificate;
 
 
 /**
- * test if SSL/TLS based communication allows insecure and supports Perfect Forward Secrecy using the latest Java 8
- * ciphers. The test goes as follows:
+ * Test if SSL/TLS based communication allows insecure/weak ciphers and supports the best available Perfect Forward
+ * Secrecy ciphers. The test goes as follows:
  *
- * 1. Checks for availability of insecure and anonymous ciphers
- * 2. Checks if Perfect Forward Secrecy ciphers are supported.
- * 3. Checks if the newest Forward Secrecy ciphers in Java 8 are supported.
+ * 1. Checks for availability of insecure, anonymous, weak ciphers
+ * 2. Checks if Perfect Forward Secrecy ciphers with key length less then 1024 are present.
+ * 3. Checks if the best Forward Secrecy ciphers are available.
  *
  * Solution, part 1:
  *
@@ -63,15 +63,21 @@ import java.security.cert.X509Certificate;
  * <excludeCipherSuite>TLS_KRB5_EXPORT_WITH_DES_CBC_40_MD5</excludeCipherSuite>
  * <excludeCipherSuite>TLS_KRB5_EXPORT_WITH_DES_CBC_40_SHA</excludeCipherSuite>
  * <excludeCipherSuite>TLS_DH_anon_WITH_AES_128_GCM_SHA256</excludeCipherSuite>
+ * <excludeCipherSuite>TLS_ECDHE_ECDSA_WITH_RC4_128_SHA</excludeCipherSuite>
+ * <excludeCipherSuite>TLS_ECDHE_RSA_WITH_RC4_128_SHA</excludeCipherSuite>
+ * <excludeCipherSuite>TLS_RSA_WITH_RC4_128_SHA</excludeCipherSuite>
+ * <excludeCipherSuite>TLS_ECDH_ECDSA_WITH_RC4_128_SHA</excludeCipherSuite>
+ * <excludeCipherSuite>TLS_ECDH_RSA_WITH_RC4_128_SHA</excludeCipherSuite>
+ * <excludeCipherSuite>TLS_RSA_WITH_RC4_128_MD5</excludeCipherSuite>
  * </excludeCipherSuites>
  *
  * Solution, part 2:
  *
- * Make sure there are are som basic TLS_DHE_* TLS_ECDHE_* ciphers available. These should be present i Java 6+.
+ * Make sure there are all TLS_DHE_DSS_WITH* based ciphers are excluded.
  *
  * Solution, part 3:
  *
- * Only works with Java 8, as we check for Java 8 only Perfect Forward Secrecy ciphers.
+ * Make sure only Perfect Forward Secrecy ciphers with key length of > 1024 are available.
  *
  * Referanses:
  * <p/>
@@ -79,6 +85,7 @@ import java.security.cert.X509Certificate;
  * http://www.techstacks.com/howto/j2se5_ssl_cipher_strength.html
  * http://cephas.net/blog/2007/10/02/using-a-custom-socket-factory-with-httpclient/
  * https://blogs.oracle.com/java-platform-group/entry/java_8_will_use_tls
+ * https://www.ssllabs.com/ssltest/viewClient.html?name=Java&version=8u31
  * server/cipher/*.txt: FUll list of ciphers supported by different Java versions.
  *
  * @author Espen A. Fossen, (www.kantega.no)
@@ -132,7 +139,8 @@ public class SSLCipherSuiteTest extends AbstractTest {
                     "TLS_RSA_WITH_RC4_128_SHA",
                     "TLS_ECDH_ECDSA_WITH_RC4_128_SHA",
                     "TLS_ECDH_RSA_WITH_RC4_128_SHA",
-                    "TLS_RSA_WITH_RC4_128_MD5"};
+                    "TLS_RSA_WITH_RC4_128_MD5"
+            };
 
             HttpResponse response = checkClientForCiphers(site, httpsPort, httpclient, ciphers);
 
@@ -150,14 +158,31 @@ public class SSLCipherSuiteTest extends AbstractTest {
 
                 HttpClient httpclient2 = HttpClientUtil.getHttpClient();
                 try {
-                    String[] ciphers = new String[]{"TLS_DHE_RSA_WITH_AES_128_CBC_SHA", "TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA", "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256", "TLS_DHE_DSS_WITH_AES_128_CBC_SHA256", "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256","TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256", "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA", "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA"};
+                    String[] ciphers = new String[]{
+                            "TLS_DHE_DSS_WITH_AES_128_CBC_SHA",
+                            "TLS_DHE_DSS_WITH_AES_128_CBC_SHA256",
+                            "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256",
+                            "TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA"};
                     HttpResponse response = checkClientForCiphers(site, httpsPort, httpclient2, ciphers);
 
                     if (response.getStatusLine().getStatusCode() == 200) {
 
                         HttpClient httpclient3 = HttpClientUtil.getHttpClient();
                         try {
-                            String[] ciphers2 = new String[]{"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256", "TLS_RSA_WITH_AES_128_GCM_SHA256", "TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256", "TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256", "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256", "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256"};
+                            String[] ciphers2 = new String[]{
+                                    "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
+                                    "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
+                                    "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256",
+                                    "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
+                                    "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
+                                    "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
+                                    "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+                                    "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+                                    "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
+                                    "TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA",
+                                    "TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA",
+                                    "TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA"
+                            };
 
                             HttpResponse response2 = checkClientForCiphers(site, httpsPort, httpclient3, ciphers2);
 
@@ -174,7 +199,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
                             return exitIncorrectCertificate(testResult);
                         } catch (IOException e1) {
                             testResult.setPassed(false);
-                            testResult.setMessage("Almost there, no weak/anonymous ciphers and allows Perfect Forward Secrecy, but there are still stronger ciphers available!");
+                            testResult.setMessage("Almost there, no weak/anonymous ciphers and allows Perfect Forward Secrecy, but some of your ciphers require DSA keys, which are effectively limited to 1024 bits!");
                             return testResult;
                         } finally {
                             httpclient3.getConnectionManager().shutdown();
