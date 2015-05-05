@@ -34,15 +34,18 @@ public class Comment implements Comparable<Comment> {
 
     private String comment;
 
+    private String homepage;
+
     private Date created;
 
-    public Comment(User author, String title, String comment) {
+    public Comment(User author, String homepage, String title, String comment) {
         this.author = author;
         this.comment = comment;
         this.title = title;
         this.created = new Date();
         this.ID = nextID.getAndIncrement();
-    }
+        this.homepage = homepage;
+        }
 
     public int getID() {
         return ID;
@@ -74,6 +77,10 @@ public class Comment implements Comparable<Comment> {
 
     public int compareTo(Comment o) {
         return created.compareTo(o.getCreated());
+    }
+
+    public String getHomepage() {
+        return homepage;
     }
 
     @Override

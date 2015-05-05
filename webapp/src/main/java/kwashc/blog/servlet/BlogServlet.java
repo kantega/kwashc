@@ -43,10 +43,11 @@ public class BlogServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String title = req.getParameter("title");
         String comment = req.getParameter("comment");
+        String homepage = req.getParameter("homepage");
 
         User user = (User) req.getSession(true).getAttribute("USER");
 
-        Database.addComment(new Comment(user, title, comment));
+        Database.addComment(new Comment(user, homepage, title, comment));
 
         // redirect to avoid double-posts
         resp.sendRedirect("/blog");

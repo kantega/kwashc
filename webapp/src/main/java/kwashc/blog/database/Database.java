@@ -43,7 +43,7 @@ public class Database {
         // system user
         users.put("system", new User("system", "xik74659bs7zw6t59sw6508w"));
 
-        comments.add(new Comment(user, "Test message", "This is a test message, already residing in the database."));
+        comments.add(new Comment(user, "http://www.google.com/", "Test message", "This is a test message, already residing in the database."));
     }
 
 

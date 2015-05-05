@@ -60,7 +60,10 @@
 
         <h4 class="postTitle">${comment.title}</h4>
 
-        <div class="postBody">${comment.comment}</div>
+        <div class="postBody">
+            <a href=<c:out value="${comment.homepage}"/>>Home page</a><br/>
+            ${comment.comment}
+            </div>
     </div>
 </c:forEach>
 
@@ -72,7 +75,10 @@
             <label for="title">Title:</label><br/>
             <input class="title" type="text" size="40" id="title" name="title"/>
         </p>
-
+        <p>
+            <label for="homepage">Home page:</label><br/>
+            <input class="homepage" type="text" size="40" id="homepage" name="homepage"/>
+        </p>
         <p>
             <label for="comment">Comment:</label><br/>
             <textarea class="text" cols="50" rows="6" id="comment" name="comment"></textarea>
