@@ -26,17 +26,22 @@
     <p>
         Welcome,
         <script>
-            var name;
-            if(document.URL.indexOf("name=") > 0) {
-                var pos = document.URL.indexOf("name=")+5;
-                name = document.URL.substring(pos,document.URL.length);
-                document.write(name+"!");
-            }
-            else {
+            var name = getParameter("name");
+            if(name == "undefined") {
                 name = "Anonymous";
-                document.write(name+"!");
+            }
+            document.write(name+"!");
+
+            var timeout = getParameter("timeout");
+            if(timeout) {
+                setTimeout(timeout);
             }
             $(location.hash);
+
+        function getParameter(name){
+           if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+              return decodeURIComponent(name[1]);
+        }
         </script>
     </p>
 </c:if>
