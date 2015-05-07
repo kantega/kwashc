@@ -41,6 +41,7 @@ public final class TestRepository {
         add(new BackdoorTest());
 		add(new XSSTest());
         add(new ValidationTest());
+		add(new APITest());
 		add(new InsecureCryptographicStorageTest());
 		// Test only works with a server with JVM > 6:
 		if (getMajorJVMVersion() > 6) add(new SSLProtocolTest());
