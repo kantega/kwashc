@@ -5,6 +5,13 @@ import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
 /**
+ * Tests if the RESTful API at /blog/api/comments/list leaks passwords, or if the JSON is served with the incorrect
+ * Content-type: text/html. This would allow XSS on some browsers, as the JSON is parsed as HTML.
+ *
+ * Solution:
+ * 1) Remove passwords from the JSON serialization. This should often be done by creating simpler POJO representations
+ * of the domain objects, which is then serialized. Here we can add @JsonIgnore to the getPassword() method in User.
+ * 2) CommentsAPIService explicitly overrides Content-Type on the response. Fix ("application/json") or remove.
  *
  * @author Jon Are Rakvaag (Politiets IKT-tjenester)
  */
