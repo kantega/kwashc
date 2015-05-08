@@ -35,16 +35,27 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 /**
- * Test if the web application servlet container and underlying SSL/TLS Protocol implementation support TLS 1.2.
- * <p/>
- * Solution: Running Jetty 8+ with oracle-jdk 1.7+. Old versions of oracle/sun jdk do not support it.
- * <p/>
+ * Test if the web application servlet container and underlying SSL/TLS Protocol implementation support TLS 1.2, and
+ * does not allow usage of SSL 3.0 protocol.
+ *
+ * Solution, part 1: Either use Oracle JDK 8u31, JDK 7u75 or JDK 6u91 which has SSLv3.0 disabled by default, or add the
+ * following to jetty-maven-plugin config:
+ *
+ * <excludeProtocols>
+ *     <excludeProtocol>SSLv3</excludeProtocol>
+ * </excludeProtocols>
+ *
+ * Solution, part 2: Running Jetty 8+ with oracle-jdk 1.7+. Old versions of oracle/sun jdk do not support TLSv 1.2.
+ *
+ *
  * References:
  * http://en.wikipedia.org/wiki/Transport_Layer_Security#Browser_implementations
+ * http://www.oracle.com/technetwork/java/javase/documentation/cve-2014-3566-2342133.html
  *
  * @author Espen A. Fossen, (www.kantega.no)
  */
@@ -81,42 +92,36 @@ public class SSLProtocolTest extends AbstractTest {
 
         try {
 
-            SSLContext sslcontext = SSLContext.getInstance("TLS");
-            sslcontext.init(null, new TrustManager[]{allowAllTrustManager}, null);
-
-            SSLSocketFactory sf = new SSLSocketFactory(sslcontext, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-            SSLSocket socket = (SSLSocket) sf.createSocket();
-            socket.setEnabledProtocols(new String[]{"TLSv1.2"});
-
-            HttpParams params = new BasicHttpParams();
-            params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 1000);
-            params.setParameter(CoreConnectionPNames.SO_TIMEOUT, 1000);
-
-            URL url = new URL(site.getAddress());
-
-            InetSocketAddress address = new InetSocketAddress(url.getHost(), httpsPort);
-            sf.connectSocket(socket, address, null, params);
-
-            Scheme sch = new Scheme("https", httpsPort, sf);
-            httpclient.getConnectionManager().getSchemeRegistry().register(sch);
-
-            HttpGet request = new HttpGet("https://" + url.getHost() + ":" + site.getSecureport() + url.getPath() + "blog");
-
-            HttpResponse response = httpclient.execute(request);
+            HttpClient httpClient = HttpClientUtil.getHttpClient();
+            HttpResponse response = checkClient(site, httpsPort, httpClient, new String[]{"SSLv3"}, null);
 
             if (response.getStatusLine().getStatusCode() == 200) {
-                testResult.setPassed(true);
-                testResult.setMessage("That`s better, you application supports secure SSL/TLS protocol TLSv1.2!");
+                testResult.setPassed(false);
+                testResult.setMessage("Your application accepts an insecure SSL protocol!");
+            } else {
+                testResult.setPassed(false);
+                testResult.setMessage("Actual testing failed, check that the connection is working!");
             }
+
         } catch (KeyManagementException e) {
             testResult.setPassed(false);
             testResult.setMessage("Certificate configuration does not seem to be correct, check certificate on remote environment!");
             return testResult;
         } catch (IOException e) {
             if (e.getMessage().contains("peer not authenticated")) {
-                testResult.setPassed(false);
-                testResult.setMessage("Your application does not support secure SSL/TLS Protocols!");
+
+                HttpClient httpClient = HttpClientUtil.getHttpClient();
+                HttpResponse response = checkClient(site, httpsPort, httpClient, new String[]{"TLSv1.2"}, null);
+
+                if (response.getStatusLine().getStatusCode() == 200) {
+                    testResult.setPassed(true);
+                    testResult.setMessage("That`s better, you application supports secure SSL/TLS protocol TLSv1.2!");
+                } else {
+                    testResult.setPassed(false);
+                    testResult.setMessage("Your application does not support secure SSL/TLS Protocols!");
+                }
                 return testResult;
+
             } else {
                 testResult.setPassed(false);
                 testResult.setMessage("Actual testing failed, check that the connection is working!");
@@ -127,6 +132,38 @@ public class SSLProtocolTest extends AbstractTest {
 
         return testResult;
     }
+
+    private HttpResponse checkClient(Site site, int httpsPort, HttpClient httpclient, String[] protocols, String[] ciphers) throws NoSuchAlgorithmException, KeyManagementException, IOException {
+        SSLContext sslcontext = SSLContext.getInstance("TLS");
+        sslcontext.init(null, new TrustManager[]{allowAllTrustManager}, null);
+
+        SSLSocketFactory sf = new SSLSocketFactory(sslcontext, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+
+        HttpParams params = new BasicHttpParams();
+        params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 1000);
+        params.setParameter(CoreConnectionPNames.SO_TIMEOUT, 1000);
+
+        SSLSocket socket = (SSLSocket) sf.createSocket(params);
+        if (protocols != null) {
+            socket.setEnabledProtocols(protocols);
+        }
+        if (ciphers != null) {
+            socket.setEnabledCipherSuites(ciphers);
+        }
+
+        URL url = new URL(site.getAddress());
+
+        InetSocketAddress address = new InetSocketAddress(url.getHost(), httpsPort);
+        sf.connectSocket(socket, address, null, params);
+
+        Scheme sch = new Scheme("https", httpsPort, sf);
+        httpclient.getConnectionManager().getSchemeRegistry().register(sch);
+
+        HttpGet request = new HttpGet("https://" + url.getHost() + ":" + site.getSecureport() + url.getPath() + "blog");
+
+        return httpclient.execute(request);
+    }
+
 
     TrustManager allowAllTrustManager = new X509TrustManager() {
 
