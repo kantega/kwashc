@@ -73,7 +73,8 @@ public class InputValidationTest extends AbstractTest {
                     "mouse pointer over the link.");
         } else {
             testResult.setPassed(true);
-            testResult.setMessage("No errors found.");
+            testResult.setMessage("No errors found. Hopefully you parsed the homepage parameter as a java.net.URL." +
+                    "Blacklisting scary input like 'javascript:' isn't very effective in the real world.");
         }
 
         return testResult;

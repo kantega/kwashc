@@ -25,7 +25,7 @@ import no.kantega.kwashc.server.model.TestResult;
  * rewritten without fixing the vulnerabilities.
  *
  * Solution: Remove or fix the offending JS calls:
- * 1) The name parameter is URI decoded, and then written to the DOM as html. Fix either.
+ * 1) The name parameter is URI decoded, and then written to the DOM as html. Fix either, or better yet both.
  * 2) Never call setTimeout() with user supplied data! The function calls eval(), which will execute any JS, even if escaped!
  *
  * @author Jon Are Rakvaag (Politiets IKT-tjenester)
@@ -75,8 +75,11 @@ public class XSSTest extends AbstractTest {
 					"Try clicking <a href=\"" + site.getAddress() +	"blog?timeout=alert(2)\" target=\"_blank\">here</a>");
 		} else{
 			testResult.setPassed(true);
-			testResult.setMessage("No errors, we hope. This test is a bit fragile, since we can't execute JavaScript in the test framework." +
-					"Ask if you are unsure.");
+			testResult.setMessage("No errors, we hope." +
+					"You should have fixed blog.jsp: 1) Removed the explicit URI decoding of the parameter " +
+					"(decodeURIComponent()) and/or used $('#someId').text(name) rather than document.write(name). 2) " +
+					"Parsed 'timeout' as an int before calling setTimeout(theParsedInt). Escaping won't work here! Better yet, " +
+					"you should have deleted it, as it isn't used anywhere.	");
 		}
 		return testResult;
     }
