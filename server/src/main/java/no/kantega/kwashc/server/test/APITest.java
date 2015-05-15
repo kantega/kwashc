@@ -35,7 +35,7 @@ class APITest extends AbstractTest {
     @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
 
-        String sensitiveInfo = "\"password\":\"";
+        String sensitiveInfo = "\"assword\":\"";
         String apiUrl = site.getAddress() + "blog/api/comments/list/";
 
         WebTester tester = new WebTester();
@@ -54,9 +54,10 @@ class APITest extends AbstractTest {
 
         } else if(isHtmlContentType) {
             testResult.setPassed(false);
-            testResult.setMessage("Good! The sensitive info is gone. But the http response has Content-Type: text/html. " +
-                    "Some browsers will parse the JSON response as HTML. This allows for stored XSS if a victim is " +
-                    "fooled to visit the <a href='" + apiUrl + "' target=\"_blank\">API directly</a>.");
+            testResult.setMessage("Good! It looks like your API doesn't leak passwords or password hashes anymore. " +
+                    "But the http response has Content-Type: text/html. Some browsers will parse the JSON response as " +
+                    "HTML. This allows for stored XSS if a victim is fooled to visit the " +
+                    "<a href='" + apiUrl + "' target=\"_blank\">API directly</a>.");
         } else {
             testResult.setPassed(true);
             testResult.setMessage("No problems found. Good work!");
