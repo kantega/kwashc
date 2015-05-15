@@ -28,11 +28,17 @@ import java.io.IOException;
  * vector using "javascript:alert('Evil script')". The attribute is also not properly contained in brackets in the jsp,
  * so an input of "abc onmouseover=alert('evil script')" will also work.
  *
- * Solution: Perhaps the URL should be validated (parsed), since URLs can be strictly typed?
+ * Solution: The easiest solution is to validate the user supplied URLs by parsing them as the strictly typed
+ * java.net.URL.
+ *
+ * You should also 1) contain the attribute in quotes, and 2) properly escape the HTML attribute. The latter is
+ * difficult without introducing a framework such as OWASP ESAPI, which has tools for escaping data for a number of
+ * different contexts. JSTL's fn.escapeAsXml() *might* provide some coverage, and *might* not break valid URLs. The test
+ * doesn't cover these two subjects.
  *
  * @author Jon Are Rakvaag (Politiets IKT-tjenester)
  */
-public class ValidationTest extends AbstractTest {
+public class InputValidationTest extends AbstractTest {
 
     @Override
     public String getName() {

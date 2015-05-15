@@ -49,7 +49,7 @@ class BackdoorTest extends AbstractTest {
 
             if(!responseBody.contains("You asked for a protected resource. Please log in:")) {
                 testResult.setPassed(false);
-                testResult.setMessage("It's possible to log in the the special password 'backdoor' for any user. No points!");
+                testResult.setMessage("It's possible to log in with the special password 'backdoor' for any user. No points!");
             } else {
                 testResult.setPassed(true);
                 testResult.setMessage("The backdoor doesn't work anymore! Good work!");

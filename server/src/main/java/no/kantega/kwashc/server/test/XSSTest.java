@@ -34,12 +34,12 @@ public class XSSTest extends AbstractTest {
 	
     @Override
     public String getName() {
-        return "XSS test";
+        return "Cross-site scripting (XSS) test";
     }
 
     @Override
     public String getDescription() {
-        return "Tests if the site is vulnerable for various XSS vulnerabilities.";
+        return "Tests if the site is vulnerable for various cross-site scripting (XSS) vulnerabilities.";
     }
 
 	@Override
@@ -62,20 +62,21 @@ public class XSSTest extends AbstractTest {
 		if(isNameVulnerable && isTimeoutVulnerable){
 			testResult.setPassed(false);
 			testResult.setMessage("It's possible to create arbitrary html elements using the name and timeout parameters. " +
-					"Try clicking <a href=\"" + site.getAddress() + "blog?name=<img src=x onerror=alert(1)>\">here</a> " +
-					"or <a href=\"" + site.getAddress() + "blog?timeout=alert(2)\">here</a>. Some browsers will filter " +
+					"Try clicking <a href=\"" + site.getAddress() + "blog?name=<img src=x onerror=alert(1)>\" target=\"_blank\">here</a> " +
+					"or <a href=\"" + site.getAddress() + "blog?timeout=alert(2)\" target=\"_blank\">here</a>. Some browsers will filter " +
 					"the attacks. Try Firefox.");
 		}
 		else if(isNameVulnerable) {
 			testResult.setPassed(false);
 			testResult.setMessage("It's possible to create arbitrary html elements using the name parameter. " +
-					"Try clicking <a href=\"" + site.getAddress() +	"blog?name=<img src=x onerror=alert(1)>\">here</a>");
+					"Try clicking <a href=\"" + site.getAddress() +	"blog?name=<img src=x onerror=alert(1)>\" target=\"_blank\">here</a>");
 		} else if(isTimeoutVulnerable){
 			testResult.setMessage("It's possible to create arbitrary html elements using the timeout parameter. " +
-					"Try clicking <a href=\"" + site.getAddress() +	"blog?timeout=alert(2)\">here</a>");
+					"Try clicking <a href=\"" + site.getAddress() +	"blog?timeout=alert(2)\" target=\"_blank\">here</a>");
 		} else{
 			testResult.setPassed(true);
-			testResult.setMessage("No errors, we hope. This test is a bit fragile, since we can't execute JavaScript in the test framework.");
+			testResult.setMessage("No errors, we hope. This test is a bit fragile, since we can't execute JavaScript in the test framework." +
+					"Ask if you are unsure.");
 		}
 		return testResult;
     }
