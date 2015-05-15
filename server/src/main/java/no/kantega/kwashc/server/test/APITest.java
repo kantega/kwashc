@@ -35,7 +35,7 @@ class APITest extends AbstractTest {
     @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
 
-        String sensitiveInfo = "\"assword\":\"";
+        String sensitiveInfo = "assword\":\"";
         String apiUrl = site.getAddress() + "blog/api/comments/list/";
 
         WebTester tester = new WebTester();
