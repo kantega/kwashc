@@ -61,6 +61,7 @@ Create Eclipse project with correct path for depenencies
     Anders Båtstrand   idea, framework and tests
     Espen A. Fossen    framework and additional tests
     Øystein Øie        framework and additional tests
+    Jon Are Rakvåg     additional tests
     Frode Standal      additional tests
     Espen Hjertø       web design
 
