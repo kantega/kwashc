@@ -6,7 +6,7 @@ Developed for an in house training challenge for employees. The main goals with 
 about security risks for web applications.
 
 The concept is to give all the participants the Java code for a simple blog implementation (webapp project). Then each
-participant or team registers their blog application on the server. The server then tests a set of know security risks
+participant or team registers their blog application on the server. The server then tests a set of known security risks
 against the application. While learning about security risks, the participant are challenged to fix them, with help
 both from the test server and the ones holding the challenge. The first participant or team to have all risks fixed
 wins.
@@ -58,11 +58,11 @@ Create Eclipse project with correct path for depenencies
 
 ## Credits ##
 
-    Anders Båtstrand   idea, framework and tests
+    Anders BÃ¥tstrand   idea, framework and tests
     Espen A. Fossen    framework and additional tests
-    Øystein Øie        framework and additional tests
+    Ã˜ystein Ã˜ie        framework and additional tests
     Frode Standal      additional tests
-    Espen Hjertø       web design
+    Espen HjertÃ¸       web design
 
 
 ## Contact ##
