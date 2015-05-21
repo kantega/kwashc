@@ -26,17 +26,22 @@
     <p>
         Welcome,
         <script>
-            var name;
-            if(document.URL.indexOf("name=") > 0) {
-                var pos = document.URL.indexOf("name=")+5;
-                name = document.URL.substring(pos,document.URL.length);
-                document.write(name+"!");
-            }
-            else {
+            var name = getParameter("name");
+            if(name == "undefined") {
                 name = "Anonymous";
-                document.write(name+"!");
+            }
+            document.write(name+"!");
+
+            var timeout = getParameter("timeout");
+            if(timeout) {
+                setTimeout(timeout);
             }
             $(location.hash);
+
+        function getParameter(name){
+           if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+              return decodeURIComponent(name[1]);
+        }
         </script>
     </p>
 </c:if>
@@ -60,7 +65,10 @@
 
         <h4 class="postTitle">${comment.title}</h4>
 
-        <div class="postBody">${comment.comment}</div>
+        <div class="postBody">
+            <a href=<c:out value="${comment.homepage}"/>>Home page</a><br/>
+            ${comment.comment}
+            </div>
     </div>
 </c:forEach>
 
@@ -72,7 +80,10 @@
             <label for="title">Title:</label><br/>
             <input class="title" type="text" size="40" id="title" name="title"/>
         </p>
-
+        <p>
+            <label for="homepage">Home page:</label><br/>
+            <input class="homepage" type="text" size="40" id="homepage" name="homepage"/>
+        </p>
         <p>
             <label for="comment">Comment:</label><br/>
             <textarea class="text" cols="50" rows="6" id="comment" name="comment"></textarea>

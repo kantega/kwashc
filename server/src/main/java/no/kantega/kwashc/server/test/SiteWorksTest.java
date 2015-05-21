@@ -119,6 +119,10 @@ public class SiteWorksTest extends AbstractTest {
 	    tester.assertTextPresent("Happy day test: " + titleUUID2);
 	    tester.assertTextPresent("Happy day comment: " + commentUUID2);
 
+		//Checking the RESTful API
+		tester.gotoPage(site.getAddress() + "blog/api/comments/list/");
+		tester.assertTextPresent(commentUUID2);
+
         //Checking the redirect servlet
         tester.gotoPage(site.getAddress() + "/redirect?url=http://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project");
         tester.assertTextPresent("OWASP Top Ten Project");
