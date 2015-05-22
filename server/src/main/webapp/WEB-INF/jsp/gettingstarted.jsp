@@ -83,8 +83,8 @@
     <h3>Option 4: IntelliJ IDEA & Maven</h3>
 
     <ul>
-        <li>Download and install <a target="_blank" href="http://maven.apache.org/download.html">Maven</a></li>
-        <li>Download and install <a target="_blank" href="http://www.jetbrains.com/idea/free_java_ide.html">IDEA</a>
+        <li>Download and install <a target="_blank" href="https://maven.apache.org/download.html">Maven</a></li>
+        <li>Download and install <a target="_blank" href="https://www.jetbrains.com/idea/download/">IDEA</a>
         </li>
         <li>Open Project -> select webapp/pom.xml</li>
         <li>Click 'Maven Project' on Right menu bar -> webapp -> Plugins -> Right click jetty:run -> Run Maven Build</li>
@@ -99,13 +99,24 @@
     <h3>Option 5: Eclipse</h3>
 
     <ul>
-        <li>Download and install <a target="_blank" href="http://www.eclipse.org/downloads/moreinfo/java.php">Eclipse for Java Developers</a></li>
+        <li>Download and install <a target="_blank" href="https://www.eclipse.org/ide/">Eclipse for Java</a></li>
         <li>Import -> Maven -> Existing Maven Projects</li>
-        <li>Root Directoy: Select webapp path -> Next -> Finish</li>
+        <li>Root Directoy: Select <strong>webapp</strong> directory -> Next -> Finish</li>
         <li>Under 'Project Explorer Window' Select project root, then go to Run Menu -> Run As -> Maven Build (first
             one)
         </li>
         <li>Write 'install jetty:run' in Goals -> Run</li>
+        <li>Access blog application with browser on <a target="_blank" href="http://localhost:8080">localhost:8080</a>
+        </li>
+        <li><a href="/site/new">Register</a> your site</li>
+    </ul>
+
+    <h3>Option 6: NetBeans</h3>
+
+    <ul>
+        <li>Download and install <a target="_blank" href="https://netbeans.org/downloads/">NetBeans for Java SE</a></li>
+        <li>File -> Open Project -> Select <strong>webapp</strong> directory -> Open Project</li>
+        <li>Under 'Project' window select webapp, then under 'Navigator' window select 'jetty <strong>run</strong>'</li>
         <li>Access blog application with browser on <a target="_blank" href="http://localhost:8080">localhost:8080</a>
         </li>
         <li><a href="/site/new">Register</a> your site</li>
