@@ -19,29 +19,68 @@
 <jsp:include page="/WEB-INF/jsp/serverheader.jsp"/>
 <div class="contentPadding bigtext">
 
-    <br>To get started you need to do the following:<br>
+    <h2>Getting Started</h2>
 
     <ul>
-        <li>Download <a href="source/KWASHC-webapp.zip">KWASHC Blog Webapp</a></li>
-        <li>Extract KWASHC-webapp.zip to a local directory</li>
+        <li>Download <a href="source/KWASHC-webapp.zip">KWASHC Blog Webapp</a> and extract to a local directory</li>
         <li>The rest of the setup can be done in several ways, choose you potion:
         </li>
     </ul>
 
-    <h3>Option 1: Native Maven</h3>
+    <h3>Option 1: Maven</h3>
 
     <ul>
-        <li>Download and install <a target="_blank" href="http://maven.apache.org/download.html">Maven</a></li>
-        <li>cd webapp</li>
-        <li>mvn clean install</li>
-        <li>mvn install jetty:run</li>
-        <li>Access blog application with browser on <a target="_blank" href="http://localhost:8080">localhost:8080</a>
+        <li>Go to <strong>webapp</strong> directory and run:
+            <ul>
+                <li>mvn clean install</li>
+                <li>mvn install jetty:run</li>
+            </ul>
         </li>
+        <li>Access blog application with browser on <a target="_blank" href="http://localhost:8080">localhost:8080</a></li>
+        <li><a href="/site/new">Register</a> your site</li>
+    </ul>
+
+    <h3>Option 2: Maven Wrapper</h3>
+
+    <ul>
+        <li>Go to <strong>webapp</strong> directory and install Maven by running:
+            <ul>
+                <li>mvnw.cmd (Windows)</li>
+                <li>./mvnw (Linux/Mac)</li>
+            </ul>
+        </li>
+        <li>The run:
+            <ul>
+                <li>mvnw(.cmd) clean install</li>
+                <li>mvnw(.cmd) -f webapp/pom.xml jetty:run</li>
+            </ul>
+        </li>
+        <li>Access blog application with browser on <a target="_blank" href="http://localhost:8080">localhost:8080</a></li>
+        <li><a href="/site/new">Register</a> your site</li>
+    </ul>
+
+    <h3>Option 3: Docker Compose</h3>
+
+    <ul>
+        <li>Install Docker Compose:
+            <ul>
+                <li>pip install -U docker-compose</li>
+            </ul>
+
+        </li>
+        <li>Go to <strong>webapp</strong> directory and run:
+            <ul>
+                <li>docker-compose pull</li>
+                <li>docker-compose build</li>
+                <li>docker-compose up</li>
+            </ul>
+        </li>
+        <li>Access blog application with browser on <a target="_blank" href="http://localhost:8080">localhost:8080</a></li>
         <li><a href="/site/new">Register</a> your site</li>
     </ul>
 
 
-    <h3>Option 2: IntelliJ IDEA & Maven</h3>
+    <h3>Option 4: IntelliJ IDEA & Maven</h3>
 
     <ul>
         <li>Download and install <a target="_blank" href="http://maven.apache.org/download.html">Maven</a></li>
@@ -57,7 +96,7 @@
         <li><a href="/site/new">Register</a> your site</li>
     </ul>
 
-    <h3>Option 3: Stand-alone Eclipse</h3>
+    <h3>Option 5: Eclipse</h3>
 
     <ul>
         <li>Download and install <a target="_blank" href="http://www.eclipse.org/downloads/moreinfo/java.php">Eclipse for Java Developers</a></li>
@@ -66,23 +105,6 @@
         <li>Under 'Project Explorer Window' Select project root, then go to Run Menu -> Run As -> Maven Build (first
             one)
         </li>
-        <li>Write 'install jetty:run' in Goals -> Run</li>
-        <li>Access blog application with browser on <a target="_blank" href="http://localhost:8080">localhost:8080</a>
-        </li>
-        <li><a href="/site/new">Register</a> your site</li>
-    </ul>
-
-    <h3>Option 4: Eclipse & Maven installed</h3>
-
-    <ul>
-        <li>cd webapps</li>
-        <li>mvn -Declipse.workspace="path to your Eclipse Workspace" eclipse:configure-workspace</li>
-        <li>mvn eclipse:eclipse</li>
-        <li>Start Eclipse</li>
-        <li>File > Import > Existing Projects into Workspace</li>
-        <li>Root Directoy: Select webapp path -> Finish</li>
-        <li>Under Project Explorer Window Select project root, then go to Run Menu -> Run Configurations, double click Maven Build</li>
-        <li>Under Base directory -> Browser Workspace -> Select webapp</li>
         <li>Write 'install jetty:run' in Goals -> Run</li>
         <li>Access blog application with browser on <a target="_blank" href="http://localhost:8080">localhost:8080</a>
         </li>
