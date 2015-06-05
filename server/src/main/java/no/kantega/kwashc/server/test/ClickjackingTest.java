@@ -23,13 +23,15 @@ import no.kantega.kwashc.server.model.TestResult;
 /**
  * Tests if it is possible to embed the blog in a page on the server.
  * <p/>
- * Solution: Add X-Frame-Options to the header, and write a short javascript that checks if the site is embedded. Something like this:
+ * Solution: Add frame-ancestors directive in Content Security Policy (CSP), X-Frame-Options to the header, and write a
+ *           short javascript that checks if the site is embedded. Something like this:
  * <p/>
  * <script>if (top!=self) top.location.href=self.location.href</script>
  * <p/>
- * Note: This solution is NOT recommended, but is enough to beat the test for now. Read more at https://www.owasp.org/index.php/Clickjacking#Limitations
+ * Note: This solution is NOT recommended, but is enough to beat the test for now. Read more at https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet
  *
  * @author Anders Båstrand, (www.kantega.no)
+ * @author Espen A. Fossen, (www.kantega.no)
  */
 public class ClickjackingTest extends AbstractTest {
 
@@ -56,13 +58,18 @@ public class ClickjackingTest extends AbstractTest {
 
 		tester.beginAt(site.getAddress());
 
-		String header = tester.getHeader("X-Frame-Options");
+		String frameOptionsHeader = tester.getHeader("X-Frame-Options");
+		String contentSecurityPolicyHeader1 = tester.getHeader("Content-Security-Policy");
+		String contentSecurityPolicyHeader2 = tester.getHeader("X-Content-Security-Policy");
+		String contentSecurityPolicyHeader3 = tester.getHeader("X-WebKit-CSP");
 
-		boolean headerSolution = false;
+
+		boolean deprecatedHeaderSolution = false;
+		boolean contentSecurityPolicySolution = false;
 		boolean javascriptSolution = false;
 
-		if (header != null && (header.equalsIgnoreCase("deny") || header.equalsIgnoreCase("sameorigin"))) {
-			headerSolution = true;
+		if (frameOptionsHeader != null && (frameOptionsHeader.equalsIgnoreCase("deny") || frameOptionsHeader.equalsIgnoreCase("sameorigin"))) {
+			deprecatedHeaderSolution = true;
 		}
 
 		// tries to go to page showing iframe instead
@@ -71,18 +78,37 @@ public class ClickjackingTest extends AbstractTest {
 			javascriptSolution = true;
 		}
 
-		if (javascriptSolution && headerSolution) {
+		if(checkContentSecurityPolicy(contentSecurityPolicyHeader1) || checkContentSecurityPolicy(contentSecurityPolicyHeader2) || checkContentSecurityPolicy(contentSecurityPolicyHeader3)){
+			contentSecurityPolicySolution = true;
+		}
+
+		if (javascriptSolution && deprecatedHeaderSolution && contentSecurityPolicySolution) {
 			testResult.setPassed(true);
-			testResult.setMessage("You jumped out of the evil iframe, AND used the header value (you used '" + header + "'). Double protection. " +
-					"Excellent!");
+            testResult.setMessage("You jumped out of the evil iframe, added an frame-ancestors directive in Content Security Policy (CSP) AND set an X-Frame-Options to '" + frameOptionsHeader + "'. Triple protection. Excellent!!");
+            return testResult;
+        } else if (javascriptSolution && contentSecurityPolicySolution) {
+			testResult.setPassed(true);
+			testResult.setMessage("You jumped out of the evil iframe, AND added an frame-ancestors directive in Content Security Policy (CSP). Double protection. Excellent!");
+			return testResult;
+        } else if (contentSecurityPolicySolution && deprecatedHeaderSolution) {
+            testResult.setPassed(false);
+            testResult.setMessage("Good! You added an frame-ancestors directive in Content Security Policy (CSP), AND set an X-Frame-Options to '" + frameOptionsHeader + "'. But what if the user is using an old browser?");
+            return testResult;
+		} else if (javascriptSolution && deprecatedHeaderSolution) {
+			testResult.setPassed(false);
+			testResult.setMessage("You jumped out of the evil iframe, AND set an X-Frame-Options to '" + frameOptionsHeader + "'. Unfortunately X-Frame-Options is deprecated, what about using some Content Security Policy (CSP)?");
 			return testResult;
 		} else if (javascriptSolution) {
 			testResult.setPassed(false);
 			testResult.setMessage("You jumped out of the evil iframe. Well done! But what if the user does not have javascript?");
 			return testResult;
-		} else if (headerSolution) {
+		} else if (deprecatedHeaderSolution) {
 			testResult.setPassed(false);
-			testResult.setMessage("Good! You have set X-Frame-Options to " + header + ". But what if the user is using an old browser?");
+			testResult.setMessage("Your on the right track. You have set X-Frame-Options to " + frameOptionsHeader + ". Unfortunately X-Frame-Options is deprecated, and what if the user is using an old browser?");
+			return testResult;
+		} else if (contentSecurityPolicySolution) {
+			testResult.setPassed(true);
+			testResult.setMessage("Good! You have set the frame-ancestors directive in Content Security Policy (CSP). But what if the user is using an old browser?");
 			return testResult;
 		} else {
 			testResult.setPassed(false);
@@ -91,4 +117,8 @@ public class ClickjackingTest extends AbstractTest {
 			return testResult;
 		}
 	}
+
+	private boolean checkContentSecurityPolicy(String contentSecurityPolicyHeader) {
+        return contentSecurityPolicyHeader != null && contentSecurityPolicyHeader.contains("frame-ancestors");
+    }
 }
