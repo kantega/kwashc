@@ -83,8 +83,8 @@ public class DirectAdminLinkTest extends AbstractTest {
 		// new session
 		tester.beginAt(site.getAddress() + "admin");
 
-		tester.setTextField("username", "guest");
-		tester.setTextField("password", "guest");
+		tester.setTextField("username", "username");
+		tester.setTextField("password", "password");
 
 		tester.clickButton("formSubmitButton");
 
@@ -97,8 +97,8 @@ public class DirectAdminLinkTest extends AbstractTest {
 		tester.clickLink("delete." + title);
 
 		// we are redirected to log inn page
-		tester.setTextField("username", "guest");
-		tester.setTextField("password", "guest");
+		tester.setTextField("username", "username");
+		tester.setTextField("password", "password");
 
 		tester.clickButton("formSubmitButton");
 

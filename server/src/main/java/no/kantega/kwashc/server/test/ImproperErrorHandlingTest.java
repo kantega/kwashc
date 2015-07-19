@@ -80,7 +80,7 @@ public class ImproperErrorHandlingTest extends AbstractTest {
         String responseBody2 = "";
 
         try {
-            HttpGet request = new HttpGet(site.getAddress() + "j_security_check?username=guest&password=%E6%E6%27");
+            HttpGet request = new HttpGet(site.getAddress() + "j_security_check?username=username&password=%E6%E6%27");
             HttpResponse response = httpclient.execute(request);
             int statusCode = response.getStatusLine().getStatusCode();
             HttpEntity entity = response.getEntity();

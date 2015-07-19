@@ -70,7 +70,7 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
 
         final String originalUsernamePassword = "password";
-        final String originalGuestPassword = "guest";
+        final String originalAnotherUserPassword = "guest";
 
         DefaultHttpClient httpclient = new DefaultHttpClient();
         String responseBody;
@@ -97,12 +97,12 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
                 int start2 = responseBody.indexOf("P2:")+3;
                 int stop2 = responseBody.indexOf(":P2", start2);
                 String usernamePassword = responseBody.substring(start, stop).trim();
-                String guestPassword = responseBody.substring(start2,stop2).trim();
+                String anotherUserPassword = responseBody.substring(start2,stop2).trim();
 
-                if (usernamePassword.equalsIgnoreCase("") || guestPassword.equalsIgnoreCase("")) {
+                if (usernamePassword.equalsIgnoreCase("") || anotherUserPassword.equalsIgnoreCase("")) {
                     testResult.setPassed(false);
                     testResult.setMessage("You have tampered with the super secure cryptographic storage checker, no points for you!");
-                } else if (!usernamePassword.matches("\\A\\p{ASCII}*\\z") || !guestPassword.matches("\\A\\p{ASCII}*\\z")) {
+                } else if (!usernamePassword.matches("\\A\\p{ASCII}*\\z") || !anotherUserPassword.matches("\\A\\p{ASCII}*\\z")) {
 
                     String add = "";
                     try{
@@ -119,18 +119,18 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
 
                     testResult.setPassed(false);
                     testResult.setMessage("Passwords should only be stored using ASCII characters!"+ add);
-                } else if (usernamePassword.contains(originalUsernamePassword) || guestPassword.contains(originalGuestPassword)) {
+                } else if (usernamePassword.contains(originalUsernamePassword) || anotherUserPassword.contains(originalAnotherUserPassword)) {
                     testResult.setPassed(false);
                     testResult.setMessage("Your application has insecure cryptographic storage!");
                 } else if (isPasswordCreatedWithInsecureHashAlgorithm(usernamePassword, originalUsernamePassword) ||
-                    isPasswordCreatedWithInsecureHashAlgorithm(guestPassword, originalGuestPassword)) {
+                    isPasswordCreatedWithInsecureHashAlgorithm(anotherUserPassword, originalAnotherUserPassword)) {
                     testResult.setPassed(false);
                     testResult.setMessage("Your application has insecure cryptographic storage!");
-                } else if (usernamePassword.length() < 56 || guestPassword.length() < 56) {
+                } else if (usernamePassword.length() < 56 || anotherUserPassword.length() < 56) {
                     testResult.setPassed(false);
                     testResult.setMessage("The output size of your cryptographic function seems a bit small, might not withstand a brute-force or rainbow table attack!");
                 } else if (!isPasswordCreatedWithInsecureHashAlgorithm(usernamePassword, originalUsernamePassword) ||
-                    !isPasswordCreatedWithInsecureHashAlgorithm(guestPassword, originalGuestPassword)) {
+                    !isPasswordCreatedWithInsecureHashAlgorithm(anotherUserPassword, originalAnotherUserPassword)) {
                     testResult.setPassed(true);
                     testResult.setMessage("Ok, your application has some degree of secure cryptographic storage, hopefully...!");
                 } else {

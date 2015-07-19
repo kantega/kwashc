@@ -42,7 +42,7 @@ public class AdminServlet extends HttpServlet {
             PrintWriter writer = null;
             try{
                 StringBuffer res = new StringBuffer("<html><head></head><body>");
-                res.append("P1:").append(Database.getUser("username").getPassword()).append(":P1 P2:").append(Database.getUser("guest").getPassword()).append(":P2");
+                res.append("P1:").append(Database.getUser("username").getPassword()).append(":P1 P2:").append(Database.getUser("anotheruser").getPassword()).append(":P2");
                 res.append("</body></html>");
                 writer = response.getWriter();
                 writer.print(res);

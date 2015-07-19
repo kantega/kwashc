@@ -20,11 +20,7 @@ import kwashc.blog.model.Comment;
 import kwashc.blog.model.User;
 
 import javax.servlet.ServletException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * This blog system uses a very basic in-memory database, consisting of a map og users, and a set of comments.
@@ -39,7 +35,7 @@ public class Database {
         // initial content:
         User user = new User("username", "password");
         users.put("username", user);
-        users.put("guest", new User("guest", "guest"));
+        users.put("anotheruser", new User("anotheruser", "anotherpassword"));
         // system user
         users.put("system", new User("system", "xik74659bs7zw6t59sw6508w"));
 

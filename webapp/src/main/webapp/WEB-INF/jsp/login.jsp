@@ -45,7 +45,7 @@
 <p>Two users should exist: </p>
 
 <pre>username/password</pre>
-<pre>guest/guest</pre>
+<pre>anotheruser/anotherpassword</pre>
 
 
 <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
