@@ -23,12 +23,16 @@ import no.kantega.kwashc.server.model.TestResult;
 /**
  * Tests if it is possible to embed the blog in a page on the server.
  * <p/>
- * Solution: Add frame-ancestors directive in Content Security Policy (CSP), X-Frame-Options to the header, and write a
- *           short javascript that checks if the site is embedded. Something like this:
+ * Solution: Add frame-ancestors directive in Content Security Policy (CSP) and X-Frame-Options to the header;
+ * BlogServlet.class or add a filter with:
+ *  resp.setHeader("X-FRAME-OPTIONS", "deny");
+ *  resp.setHeader("Content-Security-Policy", "frame-ancestors");
+ *
+ * and write a short javascript that checks if the site is embedded. Something like this:
  * <p/>
  * <script>if (top!=self) top.location.href=self.location.href</script>
  * <p/>
- * Note: This solution is NOT recommended, but is enough to beat the test for now. Read more at https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet
+ * Read more at https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet
  *
  * @author Anders Båstrand, (www.kantega.no)
  * @author Espen A. Fossen, (www.kantega.no)
