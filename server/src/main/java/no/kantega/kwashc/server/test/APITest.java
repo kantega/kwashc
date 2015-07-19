@@ -4,6 +4,8 @@ import net.sourceforge.jwebunit.junit.WebTester;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
+import java.util.UUID;
+
 /**
  * Tests if the RESTful API at /blog/api/comments/list leaks passwords, or if the JSON is served with the incorrect
  * Content-type: text/html. This would allow XSS on some browsers, as the JSON is parsed as HTML.
@@ -38,9 +40,18 @@ class APITest extends AbstractTest {
         String sensitiveInfo = "assword\":\"";
         String apiUrl = site.getAddress() + "blog/api/comments/list/";
 
+        String random = UUID.randomUUID().toString();
+
         WebTester tester = new WebTester();
+        tester.beginAt(site.getAddress());
+
+        tester.setTextField("title", random);
+        String commentTest = "RESTAPI";
+        tester.setTextField("comment", commentTest);
+        tester.clickButton("commentFormSubmit");
+
         tester.beginAt(apiUrl);
-        tester.assertTextPresent("\"comment\":\"This is a test message");
+        tester.assertTextPresent("\"comment\":\"ApiTest");
 
         String source = tester.getPageSource();
 
