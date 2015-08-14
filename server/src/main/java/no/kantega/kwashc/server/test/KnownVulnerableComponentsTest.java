@@ -25,13 +25,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Tests if jquery is updated to the latest version. The version being used (1.6.1), is vulnerable to
+ * Tests if jquery is updated to the latest version. The version being used (1.6.2), is vulnerable to
  * Cross Site Scripting (ref. http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2011-4969&cid=2).
  *
  * Example of exploit: http://localhost:8080/blog#<img src=/ onerror=alert(1)>
  *
  * Solution:
- * Update to lastest version of jQuery (1.10.2).
+ * Update to latest version of jQuery (https://jquery.com/download/).
  * Requiring latest version is just for simplicity, updating to version 1.6.3 or later is sufficient.
  *
  * @author Øystein Øie, (www.kantega.no)
@@ -88,7 +88,7 @@ public class KnownVulnerableComponentsTest extends AbstractTest
         }
 
         String version = matcher.group(1);
-        if(version.equalsIgnoreCase("1.6.1"))
+        if(version.equalsIgnoreCase("1.6.2"))
         {
             testResult.setPassed(false);
             testResult.setMessage("The application includes vulnerable components. " +
@@ -97,7 +97,7 @@ public class KnownVulnerableComponentsTest extends AbstractTest
         {
             testResult.setPassed(false);
             testResult.setMessage("The blog needs to support older versions of IE, try using the latest version 1.x of jquery.");
-        } else if(version.equalsIgnoreCase("1.11.1"))
+        } else if(version.equalsIgnoreCase("1.11.3"))
         {
             testResult.setPassed(true);
             testResult.setMessage("jQuery is successfully updated to the latest version!");
