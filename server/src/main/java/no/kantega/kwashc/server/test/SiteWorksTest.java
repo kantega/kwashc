@@ -125,13 +125,13 @@ public class SiteWorksTest extends AbstractTest {
 		tester.assertTextPresent(commentUUID2);
 
         //Checking the redirect servlet
-        tester.gotoPage(site.getAddress() + "/redirect?url=http://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project");
-        tester.assertTextPresent("OWASP Top Ten Project");
+		tester.gotoPage(site.getAddress() + "/redirect?url=http://motherfuckingwebsite.com/");
+		tester.assertTextPresent("This is a motherfucking website.");
 
 		testResult.setPassed(true);
 	    testResult.setMessage("Site works like a charm!");
 
-		appendDuration(testResult, startTime);
+		setDuration(testResult, startTime);
         return testResult;
     }
 }

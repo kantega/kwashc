@@ -85,7 +85,7 @@ Index: webapp/src/main/java/kwashc/blog/servlet/RedirectServlet.java
 -        String url = req.getParameter("url");
 +	    String url = req.getParameter("url");
 +	    // whitelist
-+	    if (url.startsWith("http://www.owasp.org")) {
++	    if (url.startsWith("http://motherfuckingwebsite.com")) {
  
 +		    /**
 +		     * We want to see what people are clicking on, so we save the stat here:
