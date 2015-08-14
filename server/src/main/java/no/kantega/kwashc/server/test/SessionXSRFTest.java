@@ -54,6 +54,7 @@ public class SessionXSRFTest extends AbstractTest {
 
     @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
+        long startTime = System.nanoTime();
 
         String random = UUID.randomUUID().toString();
 
@@ -85,11 +86,13 @@ public class SessionXSRFTest extends AbstractTest {
         if (frontPage.contains(random)) {
             testResult.setPassed(false);
             testResult.setMessage("You allowed posting using a form generated in another session!");
+            setDuration(testResult, startTime);
             return testResult;
         }
 
         testResult.setPassed(true);
         testResult.setMessage("No attacks found.");
+        setDuration(testResult, startTime);
         return testResult;
 
     }

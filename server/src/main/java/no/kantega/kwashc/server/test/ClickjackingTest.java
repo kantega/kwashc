@@ -58,6 +58,7 @@ public class ClickjackingTest extends AbstractTest {
 
 	@Override
 	protected TestResult testSite(final Site site, final TestResult testResult) throws Throwable {
+		long startTime = System.nanoTime();
 		WebTester tester = new WebTester();
 
 		tester.beginAt(site.getAddress());
@@ -86,39 +87,43 @@ public class ClickjackingTest extends AbstractTest {
 			contentSecurityPolicySolution = true;
 		}
 
-		if (javascriptSolution && deprecatedHeaderSolution && contentSecurityPolicySolution) {
-			testResult.setPassed(true);
-            testResult.setMessage("You jumped out of the evil iframe, added an frame-ancestors directive in Content Security Policy (CSP) AND set an X-Frame-Options to '" + frameOptionsHeader + "'. Triple protection. Excellent!!");
-            return testResult;
-        } else if (javascriptSolution && contentSecurityPolicySolution) {
-			testResult.setPassed(true);
-			testResult.setMessage("You jumped out of the evil iframe, AND added an frame-ancestors directive in Content Security Policy (CSP). Double protection. Excellent!");
-			return testResult;
-        } else if (contentSecurityPolicySolution && deprecatedHeaderSolution) {
-            testResult.setPassed(false);
-            testResult.setMessage("Good! You added an frame-ancestors directive in Content Security Policy (CSP), AND set an X-Frame-Options to '" + frameOptionsHeader + "'. But what if the user is using an old browser?");
-            return testResult;
-		} else if (javascriptSolution && deprecatedHeaderSolution) {
-			testResult.setPassed(false);
-			testResult.setMessage("You jumped out of the evil iframe, AND set an X-Frame-Options to '" + frameOptionsHeader + "'. Unfortunately X-Frame-Options is deprecated, what about using some Content Security Policy (CSP)?");
-			return testResult;
-		} else if (javascriptSolution) {
-			testResult.setPassed(false);
-			testResult.setMessage("You jumped out of the evil iframe. Well done! But what if the user does not have javascript?");
-			return testResult;
-		} else if (deprecatedHeaderSolution) {
-			testResult.setPassed(false);
-			testResult.setMessage("Your on the right track. You have set X-Frame-Options to " + frameOptionsHeader + ". Unfortunately X-Frame-Options is deprecated, and what if the user is using an old browser?");
-			return testResult;
-		} else if (contentSecurityPolicySolution) {
-			testResult.setPassed(true);
-			testResult.setMessage("Good! You have set the frame-ancestors directive in Content Security Policy (CSP). But what if the user is using an old browser?");
-			return testResult;
-		} else {
-			testResult.setPassed(false);
-			testResult.setMessage("You have made it possible to embedd your site in an iframe. See for yourself at " +
-					"<a href=\"/site/" + site.getId() + "/clickjacking\">this page</a>.");
-			return testResult;
+		try {
+			if (javascriptSolution && deprecatedHeaderSolution && contentSecurityPolicySolution) {
+                testResult.setPassed(true);
+                testResult.setMessage("You jumped out of the evil iframe, added an frame-ancestors directive in Content Security Policy (CSP) AND set an X-Frame-Options to '" + frameOptionsHeader + "'. Triple protection. Excellent!!");
+                return testResult;
+            } else if (javascriptSolution && contentSecurityPolicySolution) {
+                testResult.setPassed(true);
+                testResult.setMessage("You jumped out of the evil iframe, AND added an frame-ancestors directive in Content Security Policy (CSP). Double protection. Excellent!");
+                return testResult;
+            } else if (contentSecurityPolicySolution && deprecatedHeaderSolution) {
+                testResult.setPassed(false);
+                testResult.setMessage("Good! You added an frame-ancestors directive in Content Security Policy (CSP), AND set an X-Frame-Options to '" + frameOptionsHeader + "'. But what if the user is using an old browser?");
+                return testResult;
+            } else if (javascriptSolution && deprecatedHeaderSolution) {
+                testResult.setPassed(false);
+                testResult.setMessage("You jumped out of the evil iframe, AND set an X-Frame-Options to '" + frameOptionsHeader + "'. Unfortunately X-Frame-Options is deprecated, what about using some Content Security Policy (CSP)?");
+                return testResult;
+            } else if (javascriptSolution) {
+                testResult.setPassed(false);
+                testResult.setMessage("You jumped out of the evil iframe. Well done! But what if the user does not have javascript?");
+                return testResult;
+            } else if (deprecatedHeaderSolution) {
+                testResult.setPassed(false);
+                testResult.setMessage("Your on the right track. You have set X-Frame-Options to " + frameOptionsHeader + ". Unfortunately X-Frame-Options is deprecated, and what if the user is using an old browser?");
+                return testResult;
+            } else if (contentSecurityPolicySolution) {
+                testResult.setPassed(true);
+                testResult.setMessage("Good! You have set the frame-ancestors directive in Content Security Policy (CSP). But what if the user is using an old browser?");
+                return testResult;
+            } else {
+                testResult.setPassed(false);
+                testResult.setMessage("You have made it possible to embedd your site in an iframe. See for yourself at " +
+                        "<a href=\"/site/" + site.getId() + "/clickjacking\">this page</a>.");
+                return testResult;
+            }
+		} finally {
+			setDuration(testResult, startTime);
 		}
 	}
 

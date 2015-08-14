@@ -41,6 +41,9 @@ public class TestResult extends AbstractPersistable<Long> {
 	@Basic
     private String message;
 
+    @Basic
+    private String duration;
+
     @ManyToOne
     private Site site;
 
@@ -78,5 +81,13 @@ public class TestResult extends AbstractPersistable<Long> {
 
     public void setSite(Site site) {
         this.site = site;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

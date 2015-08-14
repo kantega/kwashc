@@ -52,6 +52,7 @@ public class FailureToRestrictUrlTest extends AbstractTest {
 
 	@Override
 	protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
+		long startTime = System.nanoTime();
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		String responseBody = "";
 
@@ -82,6 +83,7 @@ public class FailureToRestrictUrlTest extends AbstractTest {
 			httpclient.getConnectionManager().shutdown();
 		}
 
+		setDuration(testResult, startTime);
 		return testResult;
 	}
 }

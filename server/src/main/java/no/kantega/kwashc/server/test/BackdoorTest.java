@@ -33,6 +33,7 @@ class BackdoorTest extends AbstractTest {
 
     @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
+        long startTime = System.nanoTime();
         final String backdoorPassword = "backdoor";
 
         String responseBody;
@@ -54,6 +55,7 @@ class BackdoorTest extends AbstractTest {
                 testResult.setPassed(true);
                 testResult.setMessage("The backdoor doesn't work anymore! Good work!");
             }
+            setDuration(testResult, startTime);
             return testResult;
     }
 }

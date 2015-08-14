@@ -109,6 +109,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
 
     @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
+        long startTime = System.nanoTime();
 
         int httpsPort;
         try {
@@ -116,6 +117,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
         } catch (NumberFormatException e) {
             testResult.setPassed(false);
             testResult.setMessage("No HTTPS port specified, test not run!");
+            setDuration(testResult, startTime);
             return testResult;
         }
 
@@ -226,6 +228,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
             }
         } finally {
             httpclient.getConnectionManager().shutdown();
+            setDuration(testResult, startTime);
         }
 
         return testResult;

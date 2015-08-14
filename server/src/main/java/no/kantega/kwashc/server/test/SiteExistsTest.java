@@ -37,7 +37,8 @@ public class SiteExistsTest extends AbstractTest {
 		return null;
 	}
 
-	protected TestResult testSite(Site site, final TestResult result) throws IOException {
+	protected TestResult testSite(Site site, final TestResult testResult) throws IOException {
+		long startTime = System.nanoTime();
 
 		WebTester tester = new WebTester();
 		tester.beginAt(site.getAddress());
@@ -45,13 +46,13 @@ public class SiteExistsTest extends AbstractTest {
 		int response = tester.getTestingEngine().getServerResponseCode();
 
 		if (response == 200) {
-			result.setPassed(true);
-			result.setMessage("Server at " + site.getAddress() + " did respond with 200.");
-			return result;
+			testResult.setPassed(true);
+			testResult.setMessage("Server at " + site.getAddress() + " did respond with 200.");
 		} else {
-			result.setPassed(false);
-			result.setMessage("Server at " + site.getAddress() + " did NOT respond with 200. It responded: " + response + ".");
-			return result;
+			testResult.setPassed(false);
+			testResult.setMessage("Server at " + site.getAddress() + " did NOT respond with 200. It responded: " + response + ".");
 		}
+		setDuration(testResult, startTime);
+		return testResult;
 	}
 }

@@ -20,6 +20,8 @@ import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import org.apache.log4j.Logger;
 
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * All tests should extend this
@@ -59,4 +61,27 @@ public abstract class AbstractTest {
 	}
 
 	protected abstract TestResult testSite(final Site site, final TestResult testResult) throws Throwable;
+
+	protected void setDuration(TestResult testResult, long startTime) {
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		final long sec = TimeUnit.NANOSECONDS.toSeconds(duration);
+		final long ms = TimeUnit.NANOSECONDS.toMillis(duration - TimeUnit.SECONDS.toMillis(sec));
+		testResult.setDuration(String.format("%01d.%03d", sec, ms));
+	}
+
+	protected void appendDuration(TestResult testResult, long startTime) {
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);
+		final long sec = TimeUnit.NANOSECONDS.toSeconds(duration);
+		final long ms = TimeUnit.NANOSECONDS.toMillis(duration - TimeUnit.SECONDS.toMillis(sec));
+
+		if(testResult.getDuration() == null){
+			testResult.setDuration(String.format(" %01d.%03d", sec, ms));
+		} else {
+			testResult.setDuration(testResult.getDuration() + String.format(" %01d.%03d", sec, ms));
+
+		}
+	}
+
 }

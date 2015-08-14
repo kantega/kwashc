@@ -36,7 +36,7 @@ class APITest extends AbstractTest {
 
     @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
-
+        long startTime = System.nanoTime();
         String sensitiveInfo = "assword\":\"";
         String apiUrl = site.getAddress() + "blog/api/comments/list/";
 
@@ -73,6 +73,8 @@ class APITest extends AbstractTest {
             testResult.setPassed(true);
             testResult.setMessage("No problems found. Good work!");
         }
+        setDuration(testResult, startTime);
         return testResult;
     }
+
 }

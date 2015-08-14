@@ -49,6 +49,7 @@ public class XSSTest extends AbstractTest {
 
 	@Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
+		long startTime = System.nanoTime();
 
 		WebTester tester = new WebTester();
 		tester.beginAt(site.getAddress());
@@ -81,6 +82,7 @@ public class XSSTest extends AbstractTest {
 					"Parsed 'timeout' as an int before calling setTimeout(theParsedInt). Escaping won't work here! Better yet, " +
 					"you should have deleted it, as it isn't used anywhere.	");
 		}
+		setDuration(testResult, startTime);
 		return testResult;
     }
 

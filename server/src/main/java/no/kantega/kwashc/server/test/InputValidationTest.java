@@ -57,6 +57,7 @@ public class InputValidationTest extends AbstractTest {
 
 	@Override
     protected TestResult testSite(Site site, TestResult testResult) throws IOException {
+        long startTime = System.nanoTime();
 
         String evilJS = "javascript:alert(1)";
 
@@ -77,6 +78,7 @@ public class InputValidationTest extends AbstractTest {
                     "Blacklisting scary input like 'javascript:' isn't very effective in the real world.");
         }
 
+        setDuration(testResult, startTime);
         return testResult;
     }
 }

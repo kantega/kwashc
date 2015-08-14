@@ -41,6 +41,7 @@ public class SiteWorksTest extends AbstractTest {
 
 	@Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
+        long startTime = System.nanoTime();
 
         WebTester tester = new WebTester();
         tester.beginAt(site.getAddress());
@@ -119,7 +120,7 @@ public class SiteWorksTest extends AbstractTest {
 	    tester.assertTextPresent("Happy day test: " + titleUUID2);
 	    tester.assertTextPresent("Happy day comment: " + commentUUID2);
 
-		//Checking the RESTful API
+		//Checking the RESTful APIkwrite
 		tester.gotoPage(site.getAddress() + "blog/api/comments/list/");
 		tester.assertTextPresent(commentUUID2);
 
@@ -127,9 +128,10 @@ public class SiteWorksTest extends AbstractTest {
         tester.gotoPage(site.getAddress() + "/redirect?url=http://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project");
         tester.assertTextPresent("OWASP Top Ten Project");
 
-	    testResult.setPassed(true);
+		testResult.setPassed(true);
 	    testResult.setMessage("Site works like a charm!");
 
+		appendDuration(testResult, startTime);
         return testResult;
     }
 }

@@ -39,7 +39,7 @@
             </c:otherwise>
         </c:choose>
         <a class="bigtext" href="<c:url value="/test/site/${site.id}/execute=${result.test.identifikator}"/>"
-           title="Run this test only!">${result.test.name}</a>
+           title="Run this test only!">${result.test.name} (${result.duration} seconds)</a>
         <br> ${result.message}
     </div>
     </div>

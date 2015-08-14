@@ -48,6 +48,7 @@ public class OutputEncoding extends AbstractTest {
 
 	@Override
     protected TestResult testSite(Site site, TestResult testResult) throws IOException {
+        long startTime = System.nanoTime();
 
         WebTester tester = new WebTester();
 
@@ -62,6 +63,7 @@ public class OutputEncoding extends AbstractTest {
         if (tester.getTestingEngine().hasElement("evilDiv")) {
             testResult.setPassed(false);
             testResult.setMessage("You allowed html tags to be reflected back on the user!");
+            setDuration(testResult, startTime);
             return testResult;
         }
 
@@ -71,13 +73,14 @@ public class OutputEncoding extends AbstractTest {
         if (tester.getTestingEngine().hasElement("evilDiv")) {
             testResult.setPassed(false);
             testResult.setMessage("You allowed html tags to be reflected back on all users!");
+            setDuration(testResult, startTime);
             return testResult;
         }
 
         testResult.setPassed(true);
         testResult.setMessage("No errors found.");
 
+        setDuration(testResult, startTime);
         return testResult;
-
     }
 }

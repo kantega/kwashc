@@ -16,21 +16,11 @@
 
 package no.kantega.kwashc.server.test;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 import net.sourceforge.jwebunit.api.IElement;
-import net.sourceforge.jwebunit.htmlunit.HtmlUnitTestingEngineImpl;
 import net.sourceforge.jwebunit.junit.WebTester;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.UUID;
 
 /**
@@ -64,6 +54,7 @@ public class InsecureDirectObjectReferenceTest extends AbstractTest {
 
 	@Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable{
+        long startTime = System.nanoTime();
 
         String random = UUID.randomUUID().toString();
 
@@ -90,6 +81,7 @@ public class InsecureDirectObjectReferenceTest extends AbstractTest {
             testResult.setMessage("You successfully prevented unauthorised editing!");
         }
 
+        setDuration(testResult, startTime);
         return testResult;
 
     }

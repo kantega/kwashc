@@ -59,6 +59,7 @@ public class DirectAdminLinkTest extends AbstractTest {
 
 	@Override
 	protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
+		long startTime = System.nanoTime();
 
 		// create two sessions:
 		WebTester tester = new WebTester();
@@ -109,12 +110,14 @@ public class DirectAdminLinkTest extends AbstractTest {
 
 			testResult.setPassed(false);
 			testResult.setMessage("You let an innocent (admin) user click a link, get a login page, and, after login, deleting a comment without knowing it.");
+			setDuration(testResult, startTime);
 			return testResult;
 
 		}
 
 		testResult.setPassed(true);
 		testResult.setMessage("No attacks found.");
+		setDuration(testResult, startTime);
 		return testResult;
 	}
 }

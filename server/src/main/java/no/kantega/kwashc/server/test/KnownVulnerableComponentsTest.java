@@ -60,6 +60,7 @@ public class KnownVulnerableComponentsTest extends AbstractTest
     @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable
     {
+        long startTime = System.nanoTime();
         WebTester tester = new WebTester();
 
         tester.beginAt(site.getAddress());
@@ -69,6 +70,7 @@ public class KnownVulnerableComponentsTest extends AbstractTest
         {
             testResult.setPassed(false);
             testResult.setMessage("jQuery functionality removed from source. Remember: do not change functionality!");
+            setDuration(testResult, startTime);
             return testResult;
         }
 
@@ -81,6 +83,7 @@ public class KnownVulnerableComponentsTest extends AbstractTest
         {
             testResult.setPassed(false);
             testResult.setMessage("Unable to find script-tag for jquery in html. Include jquery by using the \"src\"-attribute");
+            setDuration(testResult, startTime);
             return testResult;
         }
 
@@ -104,6 +107,7 @@ public class KnownVulnerableComponentsTest extends AbstractTest
             testResult.setMessage("Seems like jquery has been tried updated, but you should update to the latest 1.x version of jquery.");
         }
 
+        setDuration(testResult, startTime);
         return testResult;
     }
 }

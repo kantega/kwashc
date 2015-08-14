@@ -54,6 +54,7 @@ public class BasicXSRFTest extends AbstractTest {
 
 	@Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
+        long startTime = System.nanoTime();
 
         String random = UUID.randomUUID().toString();
 
@@ -73,11 +74,13 @@ public class BasicXSRFTest extends AbstractTest {
         if (frontPage.contains(random)) {
             testResult.setPassed(false);
             testResult.setMessage("You allowed posting from outside the site!");
+            setDuration(testResult, startTime);
             return testResult;
         }
 
         testResult.setPassed(true);
         testResult.setMessage("No attacks found.");
+        setDuration(testResult, startTime);
         return testResult;
     }
 }
