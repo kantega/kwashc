@@ -51,7 +51,7 @@ class APITest extends AbstractTest {
         tester.clickButton("commentFormSubmit");
 
         tester.beginAt(apiUrl);
-        tester.assertTextPresent("\"comment\":\"ApiTest");
+        tester.assertTextPresent("\"comment\":\""+commentTest+"\"");
 
         String source = tester.getPageSource();
 
