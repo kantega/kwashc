@@ -38,7 +38,7 @@ import no.kantega.kwashc.server.model.TestResult;
  * @author Anders Båstrand, (www.kantega.no)
  * @author Espen A. Fossen, (www.kantega.no)
  */
-public class ClickjackingTest extends AbstractTest {
+public class ClickjackingTest extends AbstractCSPTest {
 
 	@Override
 	public String getName() {
@@ -80,17 +80,16 @@ public class ClickjackingTest extends AbstractTest {
 
 		tester.beginAt(site.getAddress());
 
-		String frameOptionsHeader = tester.getHeader("X-Frame-Options");
-		String contentSecurityPolicyHeader1 = tester.getHeader("Content-Security-Policy");
-		String contentSecurityPolicyHeader2 = tester.getHeader("X-Content-Security-Policy");
-		String contentSecurityPolicyHeader3 = tester.getHeader("X-WebKit-CSP");
-
+		String frameHeader = tester.getHeader(FRAME_OPTIONS);
+		String cspHeader1 = tester.getHeader(CSP1);
+		String cspHeader2 = tester.getHeader(CSP2);
+		String cspHeader3 = tester.getHeader(CSP3);
 
 		boolean deprecatedHeaderSolution = false;
 		boolean contentSecurityPolicySolution = false;
 		boolean javascriptSolution = false;
 
-		if (frameOptionsHeader != null && (frameOptionsHeader.equalsIgnoreCase("deny") || frameOptionsHeader.equalsIgnoreCase("sameorigin"))) {
+		if (frameHeader != null && (frameHeader.equalsIgnoreCase("deny") || frameHeader.equalsIgnoreCase("sameorigin"))) {
 			deprecatedHeaderSolution = true;
 		}
 
@@ -100,7 +99,7 @@ public class ClickjackingTest extends AbstractTest {
 			javascriptSolution = true;
 		}
 
-		if(checkContentSecurityPolicy(contentSecurityPolicyHeader1) || checkContentSecurityPolicy(contentSecurityPolicyHeader2) || checkContentSecurityPolicy(contentSecurityPolicyHeader3)){
+		if(checkContentSecurityPolicy(cspHeader1) || checkContentSecurityPolicy(cspHeader2) || checkContentSecurityPolicy(cspHeader3)){
 			contentSecurityPolicySolution = true;
 		}
 
