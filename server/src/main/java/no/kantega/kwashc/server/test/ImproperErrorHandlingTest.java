@@ -98,9 +98,9 @@ public class ImproperErrorHandlingTest extends AbstractTest {
                 int statusCode2 = response2.getStatusLine().getStatusCode();
                 HttpEntity entity2 = response2.getEntity();
                 responseBody2 = EntityUtils.toString(entity2);
-                if(responseBody2.contains("Jetty") || responseBody2.contains("jetty")){
+                if(responseBody2.toLowerCase().contains("jetty")){
                     testResult.setPassed(false);
-                    testResult.setMessage("Your application has improved error handling, but still leaks information!");
+                    testResult.setMessage("Your application has improved error handling, but still leaks information about the web server used!");
                 } else if(statusCode2 == 404 || statusCode2 == 200){
                     testResult.setPassed(true);
                     testResult.setMessage("Ok, your application handles errors codes and tries not to leak information!");
