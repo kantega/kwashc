@@ -23,27 +23,31 @@
 
     <ul>
         <li>Download <a href="source/KWASHC-webapp.zip">KWASHC Blog Webapp</a> and extract to a local directory</li>
+        <li>Download and install <a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">Java</a></li>
+        <li>Setup Environment variables for Java</li>
+        <ul>
+            <li>Windows: Follow <a href="http://www.itcsolutions.eu/2010/11/29/set-environment-variables-in-windows-7-for-java/">this guide.</a></li>
+            <li>MacOS X: Run the following:<br>
+                <code>echo export "JAVA_HOME=\$(/usr/libexec/java_home)" >> ~/.bash_profile</code><br>
+                Then restart your shell. If that did not work <a href="http://www.mkyong.com/java/how-to-set-java_home-environment-variable-on-mac-os-x/">follow this guide</a></li>
+            <li>Linux (Ubuntu):<br>
+                <code>echo export "JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> ~/.bashrc</code><br>
+                Then restart your shell. If that did not work, try Google.
+            </li>
+        </ul>
+        <li>
+            Open a (Windows Command Shell (CMD.exe)|MacOS Terminal|Bash|Zsh) an try to run:<br>
+            <code>java -version</code><br>
+            If that worked, your ready to go. If not go back to <b>Setup Environment variables</b> and try again or ask someone for help.
+        </li>
         <li>The rest of the setup can be done in several ways, choose you potion:
         </li>
     </ul>
 
-    <h3>Option 1: Maven</h3>
+    <h3>Option 1: Maven NOT installed</h3>
 
     <ul>
-        <li>Go to <strong>webapp</strong> directory and run:
-            <ul>
-                <li>mvn clean install</li>
-                <li>mvn install jetty:run</li>
-            </ul>
-        </li>
-        <li>Access blog application with browser on <a target="_blank" href="http://localhost:8080">localhost:8080</a></li>
-        <li><a href="/site/new">Register</a> your site</li>
-    </ul>
-
-    <h3>Option 2: Maven Wrapper</h3>
-
-    <ul>
-        <li>Go to <strong>webapp</strong> directory and install Maven by running:
+        <li>Using the shell/terminal, go to <strong>webapp</strong> directory and install Maven by running:
             <ul>
                 <li>mvnw.cmd (Windows)</li>
                 <li>./mvnw (Linux/Mac)</li>
@@ -59,10 +63,24 @@
         <li><a href="/site/new">Register</a> your site</li>
     </ul>
 
-    <h3>Option 3: Docker Compose</h3>
+    <h3>Option 2: Maven already installed</h3>
 
     <ul>
-        <li>Install Docker Compose:
+        <li>Using the shell/terminal, go to <strong>webapp</strong> directory and run:
+            <ul>
+                <li>mvn clean install</li>
+                <li>mvn install jetty:run</li>
+            </ul>
+        </li>
+        <li>Access blog application with browser on <a target="_blank" href="http://localhost:8080">localhost:8080</a></li>
+        <li><a href="/site/new">Register</a> your site</li>
+    </ul>
+
+
+    <h3>Option 3: <a href="https://docs.docker.com/installation/">Docker</a> (Must already be installed)</h3>
+
+    <ul>
+        <li>Using the shell/terminal, install <a href="https://docs.docker.com/compose/">Docker Compose</a>:
             <ul>
                 <li>pip install -U docker-compose</li>
             </ul>
