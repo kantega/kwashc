@@ -28,20 +28,20 @@ public final class TestRepository {
 		add(new SiteWorksTest());
 		add(new OutputEncoding());
 		add(new BasicXSRFTest());
+		add(new XSSTest());
 		add(new FailureToRestrictUrlTest());
 		add(new SessionXSRFTest());
+		add(new InputValidationTest());
 		// This test is currently excluded, as it has no theoretical basis. Should you find a link backing this test, please feel free to re-add it
 		// add(new DirectAdminLinkTest());
 
 		add(new ClickjackingTest());
+		add(new APITest());
 		add(new InsecureDirectObjectReferenceTest());
 		add(new InvalidatedRedirectTest());
 		add(new ImproperErrorHandlingTest());
         add(new KnownVulnerableComponentsTest());
         add(new BackdoorTest());
-		add(new XSSTest());
-        add(new InputValidationTest());
-		add(new APITest());
 		add(new InsecureCryptographicStorageTest());
 		// Test only works with a server with JVM > 6:
 		if (getMajorJVMVersion() > 6) add(new SSLProtocolTest());
