@@ -16,7 +16,9 @@
 
 package no.kantega.kwashc.server.test;
 
+import com.gargoylesoftware.htmlunit.CookieManager;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.util.Cookie;
 import net.sourceforge.jwebunit.htmlunit.HtmlUnitTestingEngineImpl;
 import net.sourceforge.jwebunit.junit.WebTester;
 import no.kantega.kwashc.server.model.Site;
@@ -69,31 +71,43 @@ public class SessionXSRFTest extends AbstractTest {
         WebClient client1 = ((HtmlUnitTestingEngineImpl)tester1.getTestingEngine()).getWebClient();
         WebClient client2 = ((HtmlUnitTestingEngineImpl)tester2.getTestingEngine()).getWebClient();
 
-        // TODO: Consider only coping jsessionId cookie, not all cookies, as these might be used as an protection mechanism.
-        client1.setCookieManager(client2.getCookieManager());
+        CookieManager cookieManager2 = client2.getCookieManager();
+        Cookie jsessionIdCookie = cookieManager2.getCookie("JSESSIONID");
 
-        // fill in form
-        tester1.setTextField("title", "CSRF post");
-        tester1.setTextField("comment", "Using another form token: " + random);
-
-        try {
-            tester1.clickButton("commentFormSubmit");
-        } catch (Exception e) {
-            // ignore
-        }
-        String frontPage = HttpClientUtil.getPageText(site.getAddress() + "blog");
-
-        if (frontPage.contains(random)) {
+        if(jsessionIdCookie == null){
             testResult.setPassed(false);
-            testResult.setMessage("You allowed posting using a form generated in another session!");
+            testResult.setMessage("The JSESSIONID cookie must be present when initilizing a user session, zero points!");
+            setDuration(testResult, startTime);
+            return testResult;
+
+        } else {
+            CookieManager newCookieManager = new CookieManager();
+            newCookieManager.addCookie(jsessionIdCookie);
+            client1.setCookieManager(newCookieManager);
+
+            // fill in form
+            tester1.setTextField("title", "CSRF post");
+            tester1.setTextField("comment", "Using another form token: " + random);
+
+            try {
+                tester1.clickButton("commentFormSubmit");
+            } catch (Exception e) {
+                // ignore
+            }
+            String frontPage = HttpClientUtil.getPageText(site.getAddress() + "blog");
+
+            if (frontPage.contains(random)) {
+                testResult.setPassed(false);
+                testResult.setMessage("You allowed posting using a form generated in another session!");
+                setDuration(testResult, startTime);
+                return testResult;
+            }
+
+            testResult.setPassed(true);
+            testResult.setMessage("No attacks found.");
             setDuration(testResult, startTime);
             return testResult;
         }
-
-        testResult.setPassed(true);
-        testResult.setMessage("No attacks found.");
-        setDuration(testResult, startTime);
-        return testResult;
 
     }
 }
