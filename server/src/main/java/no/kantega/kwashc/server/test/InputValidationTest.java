@@ -69,7 +69,7 @@ public class InputValidationTest extends AbstractTest {
 
         if (tester.getTestingEngine().getPageSource().contains(evilJS)) {
             testResult.setPassed(false);
-            testResult.setMessage("You allowed an illegal home page URL containing JavaScript! Try entering the homepage " +
+            testResult.setMessage("Your commenting system allowed an illegal home page URL containing JavaScript! Try entering the homepage " +
                     "URL 'javascript:alert(1)', and click on the link. Or 'abc onmouseover=alert(2)', and move the " +
                     "mouse pointer over the link.");
         } else {
