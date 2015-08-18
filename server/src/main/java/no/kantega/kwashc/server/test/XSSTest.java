@@ -65,7 +65,7 @@ public class XSSTest extends AbstractTest {
 			testResult.setMessage("It's possible to create arbitrary html elements using the name and timeout parameters. " +
 					"Try clicking <a href=\"" + site.getAddress() + "blog?name=<img src=x onerror=alert(1)>\" target=\"_blank\">here</a> " +
 					"or <a href=\"" + site.getAddress() + "blog?timeout=alert(2)\" target=\"_blank\">here</a>. Some browsers will filter " +
-					"the attacks. Try Firefox.");
+					"the attacks (works with Firefox 39 or older.");
 		}
 		else if(isNameVulnerable) {
 			testResult.setPassed(false);
