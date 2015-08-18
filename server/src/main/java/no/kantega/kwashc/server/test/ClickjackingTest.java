@@ -113,7 +113,7 @@ public class ClickjackingTest extends AbstractTest {
                 testResult.setMessage("Your on the right track. You have set X-Frame-Options to " + frameOptionsHeader + ". Unfortunately X-Frame-Options is deprecated, and what if the user is using an old browser?");
                 return testResult;
             } else if (contentSecurityPolicySolution) {
-                testResult.setPassed(true);
+                testResult.setPassed(false);
                 testResult.setMessage("Good! You have set the frame-ancestors directive in Content Security Policy (CSP). But what if the user is using an old browser?");
                 return testResult;
             } else {
