@@ -34,15 +34,15 @@ import org.apache.http.util.EntityUtils;
  *
  * <error-page>
  *  <error-code>404</error-code>
- *  <location>/error.jsp</location>
+ *  <location>/WEB_INF/jsp/error.jsp</location>
  * </error-page>
  * <error-page>
  *  <error-code>500</error-code>
- *  <location>/error.jsp</location>
+ *  <location>/WEB_INF/jsp/error.jsp</location>
  * </error-page>
  * <error-page>
  *  <exception-type>java.lang.Throwable</exception-type>
- *  <location>/error.jsp</location>
+ *  <location>/WEB_INF/jsp/error.jsp</location>
  * </error-page>
  *
  * Create an error.jsp that does NOT leak ANY information about the application or the server.
@@ -50,7 +50,7 @@ import org.apache.http.util.EntityUtils;
  *
  * Alternate url for provoking an error might be site.getAddress()/edit
  *
- * Referanser:
+ * References:
  * http://www.jtmelton.com/2012/01/10/year-of-security-for-java-week-2-error-handling-in-web-xml/
  *
  * @author Espen A. Fossen, (Kantega AS)
