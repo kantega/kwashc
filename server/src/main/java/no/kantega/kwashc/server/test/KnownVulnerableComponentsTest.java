@@ -75,6 +75,13 @@ public class KnownVulnerableComponentsTest extends AbstractTest
         }
 
         IElement elem = tester.getTestingEngine().getElementByID("jquery");
+        if(elem == null){
+            testResult.setPassed(false);
+            testResult.setMessage("Do not remove the id attribute from the script tags in header.jsp! Do you think we are using unicorns to test this?");
+            setDuration(testResult, startTime);
+            return testResult;
+        }
+
         String src = elem.getAttribute("src");
         Pattern pattern = Pattern.compile(".*jquery-(.*)\\.min\\.js");
         Matcher matcher = pattern.matcher(src);
