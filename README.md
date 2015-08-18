@@ -42,7 +42,7 @@ Build and run server
 
         mvn clean install
         cd server
-        mvn jetty:run
+        mvn jetty:run-forked
 
 Build and run client
 
@@ -50,7 +50,7 @@ Build and run client
         mvn clean install jetty:run
 
 
-Create Eclipse project with correct path for depenencies
+Create Eclipse project with correct path for dependencies
 
         cd webapp
         mvn eclipse:eclipse

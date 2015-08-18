@@ -42,7 +42,14 @@ import java.security.cert.X509Certificate;
 
 /**
  * Test if SSL/TLS based communication allows insecure/weak ciphers and supports the best available Perfect Forward
- * Secrecy ciphers. The test goes as follows:
+ * Secrecy ciphers.
+ *
+ * Oracle has done a good job in disabling bad/weak ciphers in recent versions. Unfortunately that makes testing for
+ * them a bit harder. To do this we need to override some settings in JDK_HOME/lib/security/java.security. To make this
+ * work properly we need to start the server using jetty:run-forked. Alternatively this could have been done using
+ * MAVEN_OPTS="-Djava.security.properties=jvm/java.security" mvn jetty:run.
+ *
+ * The actual test goes as follows:
  *
  * 1. Checks for availability of insecure, anonymous, weak ciphers
  * 2. Checks if Perfect Forward Secrecy ciphers with key length less then 1024 are present.
