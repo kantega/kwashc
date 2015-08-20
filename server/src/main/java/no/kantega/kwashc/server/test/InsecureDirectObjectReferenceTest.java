@@ -97,4 +97,9 @@ public class InsecureDirectObjectReferenceTest extends AbstractTest {
         IElement elem = admin.getElementById("edit." + title);
         return elem.getAttribute("href");
     }
+
+    @Override
+    public TestCategory getTestCategory() {
+        return TestCategory.securityFeature;
+    }
 }

@@ -130,4 +130,9 @@ public class ClickjackingTest extends AbstractTest {
 	private boolean checkContentSecurityPolicy(String contentSecurityPolicyHeader) {
         return contentSecurityPolicyHeader != null && contentSecurityPolicyHeader.contains("frame-ancestors");
     }
+
+	@Override
+	public TestCategory getTestCategory() {
+		return TestCategory.assorted;
+	}
 }

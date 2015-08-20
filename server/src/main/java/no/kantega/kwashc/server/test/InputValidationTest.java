@@ -81,4 +81,9 @@ public class InputValidationTest extends AbstractTest {
         setDuration(testResult, startTime);
         return testResult;
     }
+
+    @Override
+    public TestCategory getTestCategory() {
+        return TestCategory.xss;
+    }
 }

@@ -104,4 +104,9 @@ public class XSSTest extends AbstractTest {
 		}
 		return true;
 	}
+
+	@Override
+	public TestCategory getTestCategory() {
+		return TestCategory.xss;
+	}
 }

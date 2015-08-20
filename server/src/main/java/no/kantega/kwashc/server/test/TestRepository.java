@@ -24,28 +24,33 @@ public final class TestRepository {
 	private static final Map<String, AbstractTest> tests = new LinkedHashMap<String, AbstractTest>();
 
 	static {
+		//happy day tests
 		add(new SiteExistsTest());
 		add(new SiteWorksTest());
-		add(new OutputEncoding());
-		add(new BasicXSRFTest());
-		add(new FailureToRestrictUrlTest());
-		add(new SessionXSRFTest());
-		// This test is currently excluded, as it has no theoretical basis. Should you find a link backing this test, please feel free to re-add it
-		// add(new DirectAdminLinkTest());
 
-		add(new ClickjackingTest());
-		add(new InsecureDirectObjectReferenceTest());
-		add(new InvalidatedRedirectTest());
-		add(new ImproperErrorHandlingTest());
-        add(new KnownVulnerableComponentsTest());
-        add(new BackdoorTest());
+		//XSS
+		add(new OutputEncoding());
 		add(new XSSTest());
-        add(new InputValidationTest());
+		add(new InputValidationTest());
+
+		//CSRF
+		add(new BasicXSRFTest());
+		add(new SessionXSRFTest());
+
+		//Misconfiguration
+		add(new FailureToRestrictUrlTest());
+		add(new ImproperErrorHandlingTest());
 		add(new APITest());
+
+		//Security features
+		add(new InsecureDirectObjectReferenceTest());
+		add(new BackdoorTest());
 		add(new InsecureCryptographicStorageTest());
-		// Test only works with a server with JVM > 6:
-		if (getMajorJVMVersion() > 6) add(new SSLProtocolTest());
-		add(new SSLCipherSuiteTest());
+		add(new InvalidatedRedirectTest());
+
+		//Assorted
+		add(new ClickjackingTest());
+		add(new KnownVulnerableComponentsTest());
 	}
 
 	private static void add(AbstractTest test) {

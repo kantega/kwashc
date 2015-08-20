@@ -65,8 +65,7 @@
 		</c:when>
 		<c:otherwise>
 			<c:forEach var="result" items="${site.testResults}">
-				<div class="rounded contentPadding floatContainer">
-
+				<div class="rounded contentPadding floatContainer ${result.test.testCategory}">
 					<c:choose>
 						<c:when test="${result.passed}">
 							<img class="modelight" src="/gfx/modelight_green.png" title="Passed"/>
@@ -75,8 +74,10 @@
 							<img class="modelight" src="/gfx/modelight_red.png" title="Failed"/>
 						</c:otherwise>
 					</c:choose>
+
 					<a class="bigtext" id="execute${result.test.identifikator}Link" href="<c:url value="/test/site/${site.id}/execute=${result.test.identifikator}"/>"
-					   title="Run this test only!">${result.test.name} (${result.duration} seconds)</a><br>
+					   title="Run this test only!">${result.test.name} (${result.duration} seconds)</a>
+					   <span class="testCategoryHeader">${result.test.testCategory.name}</span><br>
 						${result.message}
 				</div>
 				<div class="clear"></div>

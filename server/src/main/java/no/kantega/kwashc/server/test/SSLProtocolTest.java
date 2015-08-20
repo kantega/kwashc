@@ -182,4 +182,9 @@ public class SSLProtocolTest extends AbstractTest {
         }
 
     };
+
+    @Override
+    public TestCategory getTestCategory() {
+        return TestCategory.assorted;
+    }
 }

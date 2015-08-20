@@ -94,6 +94,10 @@ public class SessionXSRFTest extends AbstractTest {
         testResult.setMessage("No attacks found.");
         setDuration(testResult, startTime);
         return testResult;
+    }
 
+    @Override
+    public TestCategory getTestCategory() {
+        return TestCategory.csrf;
     }
 }

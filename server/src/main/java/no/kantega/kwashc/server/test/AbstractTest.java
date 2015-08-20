@@ -36,6 +36,8 @@ public abstract class AbstractTest {
 
 	public abstract String getDescription();
 
+	public abstract TestCategory getTestCategory();
+
 	/**
 	 * Give some information on the threat behind the text. Might be null
 	 *

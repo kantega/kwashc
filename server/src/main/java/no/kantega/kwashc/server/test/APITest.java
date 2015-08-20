@@ -77,4 +77,8 @@ class APITest extends AbstractTest {
         return testResult;
     }
 
+    @Override
+    public TestCategory getTestCategory() {
+        return TestCategory.misconfiguration;
+    }
 }

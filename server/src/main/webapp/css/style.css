@@ -214,6 +214,33 @@ img.modelight{
     background: #eee;
 }
 
+.testCategoryHeader{
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    padding: 20px;
+    float: right;
+}
+
+.xss{
+    background: #69D6FA;
+}
+
+.csrf{
+    background: #69FA9E;
+}
+
+.misconfiguration{
+    background: #FA8169;
+}
+
+.securityFeature{
+    background: #E09CFF;
+}
+
+.assorted{
+    background: #FCFC7E;
+}
+
 .floatContainer{
     overflow: auto;
 }
