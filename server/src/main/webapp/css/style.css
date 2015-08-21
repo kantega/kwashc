@@ -22,7 +22,7 @@ html {
 body {
 	margin: 40px auto 100px;
 	text-align: left;
-	width: 700px;
+	width: 800px;
 	background-color: white;
 	border: 1px solid black;
     box-shadow: 0 0 70px -10px #000;
@@ -170,7 +170,7 @@ a.button, .button{
     font-size: 13px;
     font-weight: bold;
     display: block;
-float: right;
+    float: right;
 }
 
 .button.negative{
@@ -217,8 +217,12 @@ img.modelight{
 .testCategoryHeader{
     letter-spacing: -1px;
     text-transform: uppercase;
-    padding: 20px;
+    padding: 10px;
     float: right;
+}
+
+.happyDay{
+    background: #FFFFFF;
 }
 
 .xss{
