@@ -249,6 +249,21 @@ img.modelight{
     overflow: auto;
 }
 
+.description{
+    border: none;
+    background: #FFFFFF;
+}
+
+.hint{
+    border: 1px solid #FFEE00;
+    background: #FFFEED;
+}
+
+.exploit{
+    border: 1px solid #FFA0A0;
+    background: #FFEDEE;
+}
+
 .leftFloat{
     float:left;
 }

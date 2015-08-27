@@ -37,6 +37,16 @@ public class SiteExistsTest extends AbstractTest {
 		return null;
 	}
 
+	@Override
+	public String getExploit() {
+		return null;
+	}
+
+	@Override
+	public String getHint() {
+		return null;
+	}
+
 	protected TestResult testSite(Site site, final TestResult testResult) throws IOException {
 		long startTime = System.nanoTime();
 

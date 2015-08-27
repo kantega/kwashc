@@ -22,9 +22,21 @@
 <div class="contentPadding">
 <h2>${test.name}</h2>
 
-<p>${test.description}</p>
-<br>
+<div class="description contentPadding floatContainer rounded">${test.description}</div>
+
+<c:if test="${test.exploit != null}">
+    <div class="exploit contentPadding floatContainer rounded">
+    <h4>Exploit</h4>
+    ${test.exploit}
+    </div>
+</c:if>
+<c:if test="${test.hint != null}">
+    <input type="button" class="button positive leftFloat" onclick="javascript:$('#hint').toggle();" value="Toggle hint"/>
+    <br>
+    <p class="hint contentPadding floatContainer rounded" id="hint" style="display:none;">${test.hint}</p>
+</c:if>
 <c:if test="${test.informationURL != null}">
+<br>
 <p>To learn more about this threat, google it, or read at this site: <a target="_blank" href="${test.informationURL}">${test.informationURL}</a></p>
 </c:if>
 <br><br>

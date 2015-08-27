@@ -32,6 +32,16 @@ class BackdoorTest extends AbstractTest {
     }
 
     @Override
+    public String getExploit() {
+        return null;
+    }
+
+    @Override
+    public String getHint() {
+        return null;
+    }
+
+    @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
         long startTime = System.nanoTime();
         final String backdoorPassword = "backdoor";

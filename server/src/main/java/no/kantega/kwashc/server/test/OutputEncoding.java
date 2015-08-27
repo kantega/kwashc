@@ -46,7 +46,17 @@ public class OutputEncoding extends AbstractTest {
 		return "https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet";
 	}
 
-	@Override
+    @Override
+    public String getExploit() {
+        return null;
+    }
+
+    @Override
+    public String getHint() {
+        return null;
+    }
+
+    @Override
     protected TestResult testSite(Site site, TestResult testResult) throws IOException {
         long startTime = System.nanoTime();
 

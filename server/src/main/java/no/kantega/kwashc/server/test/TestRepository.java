@@ -31,22 +31,22 @@ public final class TestRepository {
 		//XSS
 		add(new OutputEncoding());
 		add(new XSSTest());
-		add(new InputValidationTest());
 
 		//CSRF
 		add(new BasicXSRFTest());
 		add(new SessionXSRFTest());
 
-		//Misconfiguration
-		add(new FailureToRestrictUrlTest());
-		add(new ImproperErrorHandlingTest());
-		add(new APITest());
-
 		//Security features
+		add(new InputValidationTest());
 		add(new InsecureDirectObjectReferenceTest());
 		add(new BackdoorTest());
 		add(new InsecureCryptographicStorageTest());
 		add(new InvalidatedRedirectTest());
+
+		//Misconfiguration
+		add(new APITest());
+		add(new FailureToRestrictUrlTest());
+		add(new ImproperErrorHandlingTest());
 
 		//Assorted
 		add(new ClickjackingTest());

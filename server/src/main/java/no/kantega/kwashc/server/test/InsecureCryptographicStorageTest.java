@@ -61,12 +61,22 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
         return "Tests if passwords are stored in a secure cryptographic way in the webapplication.";
     }
 
+    @Override
+    public String getExploit() {
+        return null;
+    }
+
 	@Override
 	public String getInformationURL() {
 		return "https://www.owasp.org/index.php/Insecure_Storage";
 	}
 
-	@Override
+    @Override
+    public String getHint() {
+        return null;
+    }
+
+    @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
         long startTime = System.nanoTime();
 

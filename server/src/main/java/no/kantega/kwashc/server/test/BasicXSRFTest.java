@@ -52,7 +52,17 @@ public class BasicXSRFTest extends AbstractTest {
 		return "https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29";
 	}
 
-	@Override
+    @Override
+    public String getExploit() {
+        return null;
+    }
+
+    @Override
+    public String getHint() {
+        return null;
+    }
+
+    @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
         long startTime = System.nanoTime();
 

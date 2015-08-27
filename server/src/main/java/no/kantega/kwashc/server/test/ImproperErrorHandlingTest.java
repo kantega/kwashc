@@ -72,7 +72,17 @@ public class ImproperErrorHandlingTest extends AbstractTest {
 		return "https://www.owasp.org/index.php/Top_10_2013-A5-Security_Misconfiguration";
 	}
 
-	@Override
+    @Override
+    public String getExploit() {
+        return null;
+    }
+
+    @Override
+    public String getHint() {
+        return null;
+    }
+
+    @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
         long startTime = System.nanoTime();
 

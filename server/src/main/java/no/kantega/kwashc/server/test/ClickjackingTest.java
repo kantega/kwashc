@@ -57,6 +57,16 @@ public class ClickjackingTest extends AbstractTest {
 	}
 
 	@Override
+	public String getExploit() {
+		return null;
+	}
+
+	@Override
+	public String getHint() {
+		return null;
+	}
+
+	@Override
 	protected TestResult testSite(final Site site, final TestResult testResult) throws Throwable {
 		long startTime = System.nanoTime();
 		WebTester tester = new WebTester();

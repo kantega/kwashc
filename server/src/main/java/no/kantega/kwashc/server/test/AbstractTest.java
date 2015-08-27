@@ -36,6 +36,10 @@ public abstract class AbstractTest {
 
 	public abstract String getDescription();
 
+	public abstract String getExploit();
+
+	public abstract String getHint();
+
 	public abstract TestCategory getTestCategory();
 
 	/**
