@@ -29,27 +29,27 @@ import org.apache.http.util.EntityUtils;
  * This shows that even if you application handles all exceptions properly, the servlet container might not.
  * <p/>
  * Solution:
- *
+ * <p/>
  * Add the following to web.xml
- *
+ * <p/>
  * <error-page>
- *  <error-code>404</error-code>
- *  <location>/error.jsp</location>
+ * <error-code>404</error-code>
+ * <location>/error.jsp</location>
  * </error-page>
  * <error-page>
- *  <error-code>500</error-code>
- *  <location>/error.jsp</location>
+ * <error-code>500</error-code>
+ * <location>/error.jsp</location>
  * </error-page>
  * <error-page>
- *  <exception-type>java.lang.Throwable</exception-type>
- *  <location>/error.jsp</location>
+ * <exception-type>java.lang.Throwable</exception-type>
+ * <location>/error.jsp</location>
  * </error-page>
- *
+ * <p/>
  * Create an error.jsp that does NOT leak ANY information about the application or the server.
  * Alternate solution is to upgrade Jetty to 8.0.3+.
- *
+ * <p/>
  * Alternate url for provoking an error might be site.getAddress()/edit
- *
+ * <p/>
  * Referanser:
  * http://www.jtmelton.com/2012/01/10/year-of-security-for-java-week-2-error-handling-in-web-xml/
  *
@@ -59,27 +59,36 @@ public class ImproperErrorHandlingTest extends AbstractTest {
 
     @Override
     public String getName() {
-        return "Improper Error Handling Test";
+        return "Improper Error Handling";
     }
 
     @Override
     public String getDescription() {
-        return "Test if webapp handles errors properly when application is forced to throw a stack trace.";
+        return DESCRIPTION_SECURITY_MISCONFIGURATION + "<br><br>Detailed errors are interesting to an attacker for " +
+                "the same reasons they are interesting for the developer. They tell us went wrong where, and give a " +
+                "clear picture of the execution path and the application's inner workings. This might be what the " +
+                "attacker needs to modify the current attack to be successful, or find a new attack vector." +
+                "<br><br>Detailed errors and stack traces should be confined to the application log, while the end user " +
+                "(or the attacker) should be served with more general, while still informative and user friendly error " +
+                "messages.";
     }
 
-	@Override
-	public String getInformationURL() {
-		return "https://www.owasp.org/index.php/Top_10_2013-A5-Security_Misconfiguration";
-	}
+    @Override
+    public String getInformationURL() {
+        return "https://www.owasp.org/index.php/Top_10_2013-A5-Security_Misconfiguration";
+    }
 
     @Override
     public String getExploit() {
-        return null;
+        return "Trigger an exception by visiting <a href='http://localhost:8080/j_security_check?username=username" +
+                "&password=%E6%E6%27'>http://localhost:8080/j_security_check?username=username&password=%E6%E6%27</a>" +
+                ". The detailed Exception should not be displayed to the potential attacker.";
     }
 
     @Override
     public String getHint() {
-        return null;
+        return "See <a href='http://www.tutorialspoint.com/servlets/servlets-exception-handling" +
+                ".htm'>tutorialspoint</a> for an example of Servlets exception handling.";
     }
 
     @Override
@@ -97,27 +106,26 @@ public class ImproperErrorHandlingTest extends AbstractTest {
             HttpEntity entity = response.getEntity();
             responseBody = EntityUtils.toString(entity);
 
-            if (responseBody.contains("Exception") || responseBody.contains("exception")
-                    || responseBody.contains("Caused by") || responseBody.contains("caused by")) {
+            if (responseBody.contains("Exception") || responseBody.contains("exception") || responseBody.contains
+                    ("Caused by") || responseBody.contains("caused by")) {
                 testResult.setPassed(false);
-                testResult.setMessage("Your application has improper error handling!");
-            } else if(statusCode == 500 || statusCode == 200){
+                testResult.setMessage("The application gives an attacker very useful feedback on attempted attacks " +
+                        "by displaying detailed error messages and stack traces.");
+            } else if (statusCode == 500 || statusCode == 200) {
 
                 HttpGet request2 = new HttpGet(site.getAddress() + "...");
                 HttpResponse response2 = httpclient.execute(request2);
                 int statusCode2 = response2.getStatusLine().getStatusCode();
-                HttpEntity entity2 = response2.getEntity();
-                responseBody2 = EntityUtils.toString(entity2);
-                if(responseBody2.contains("Jetty") || responseBody2.contains("jetty")){
-                    testResult.setPassed(false);
-                    testResult.setMessage("Your application has improved error handling, but still leaks information!");
-                } else if(statusCode2 == 404 || statusCode2 == 200){
+
+                if (statusCode2 == 404 || statusCode2 == 200) {
                     testResult.setPassed(true);
-                    testResult.setMessage("Ok, your application handles errors codes and tries not to leak information!");
+                    testResult.setMessage("Ok, your application handles errors codes and tries not to leak " +
+                            "information!");
                 }
             } else {
                 testResult.setPassed(false);
-                testResult.setMessage("The test didn't work properly, are you providing a proper and secure error handling?");
+                testResult.setMessage("The test didn't work properly, are you providing a proper and secure error " +
+                        "handling?");
             }
         } finally {
             httpclient.getConnectionManager().shutdown();

@@ -26,79 +26,87 @@ import org.apache.http.util.EntityUtils;
 
 /**
  * Tests triggers a NumberFormatException in an unrestricted part of the admin servlet
- *
+ * <p/>
  * The actual restrict url error is because of missing protection of the /blog/admin url in web.xml.
- *
+ * <p/>
  * Solution: Restrict url behind LoginServlet.
  *
  * @author Espen A. Fossen, (www.kantega.no)
  */
 public class FailureToRestrictUrlTest extends AbstractTest {
 
-	@Override
-	public String getName() {
-		return "Failure to Restrict URL Test";
-	}
+    @Override
+    public String getName() {
+        return "Failure to Restrict URLs";
+    }
 
-	@Override
-	public String getDescription() {
-		return "Test if the blog webapp restricts URL's properly. Be careful not to give away any information to a potential attacker!";
-	}
+    @Override
+    public String getDescription() {
+        return DESCRIPTION_SECURITY_MISCONFIGURATION + "<br><br>SecurityFilter is supposed to protect the blog's " +
+                "admin" +
+                " functionality as configured in web.xml, by being invoked when someone tries to access the admin " +
+                "URLs. Filters like this, or frameworks such as Spring Security works beautifully, but requires " +
+                "careful configuration to avoid leaving alternative unprotected routes to the functionality.";
+    }
 
-	@Override
-	public String getInformationURL() {
-		return "https://www.owasp.org/index.php/Top_10_2010-A8-Failure_to_Restrict_URL_Access";
-	}
+    @Override
+    public String getInformationURL() {
+        return "https://www.owasp.org/index.php/Top_10_2010-A8-Failure_to_Restrict_URL_Access";
+    }
 
-	@Override
-	public String getExploit() {
-		return null;
-	}
+    @Override
+    public String getExploit() {
+        return "Go to <a href='http://localhost:8080/blog/admin?commentToDelete=123'>http://localhost:8080/blog/admin" +
+                "?commentToDelete=123</a> (or where ever the blog is served) using an unauthenticated session. You " +
+                "should not be able to access this URL without logging in.";
+    }
 
-	@Override
-	public String getHint() {
-		return null;
-	}
+    @Override
+    public String getHint() {
+        return "web.xml configures which URLs are restricted by SecurityFilter, and which URLs AdminServlet is " +
+				"accessible from.";
+    }
 
-	@Override
-	protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
-		long startTime = System.nanoTime();
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-		String responseBody = "";
+    @Override
+    protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
+        long startTime = System.nanoTime();
+        DefaultHttpClient httpclient = new DefaultHttpClient();
+        String responseBody = "";
 
-		try {
-			HttpGet request = new HttpGet(site.getAddress() + "/blog/admin?commentToDelete=00121212123123123123123123123123123343435436456745675647456564444444454554");
-			HttpResponse response = httpclient.execute(request);
-			int statusCode = response.getStatusLine().getStatusCode();
-			HttpEntity entity = response.getEntity();
-			responseBody = EntityUtils.toString(entity);
+        try {
+            HttpGet request = new HttpGet(site.getAddress() +
+					"/blog/admin?commentToDelete" +
+					"=00121212123123123123123123123123123343435436456745675647456564444444454554");
+            HttpResponse response = httpclient.execute(request);
+            int statusCode = response.getStatusLine().getStatusCode();
+            HttpEntity entity = response.getEntity();
+            responseBody = EntityUtils.toString(entity);
+            String generalError = "Your application fails to restrict privileged URLs properly!";
 
-			if (statusCode == 500 && responseBody.contains("Exception")) {
-				testResult.setPassed(false);
-				testResult.setMessage("Your application fails to restrict URL's properly!");
-			} else if (statusCode == 500) {
-				testResult.setPassed(false);
-				testResult.setMessage("Your application fails to restrict URL's properly!");
-			} else if (statusCode == 404) {
-				testResult.setPassed(false);
-				testResult.setMessage("Your application restricts URL's properly, but there is still some improper error handling!");
-			} else if (statusCode == 200 && responseBody.contains("You asked for a protected resource")) {
-				testResult.setPassed(true);
-				testResult.setMessage("Ok, your application restricts URL's properly.");
-			} else {
-				testResult.setPassed(false);
-				testResult.setMessage("Your application fails to restrict URL's properly!");
-			}
-		} finally {
-			httpclient.getConnectionManager().shutdown();
-		}
+            if (statusCode == 500) {
+                testResult.setPassed(false);
+                testResult.setMessage(generalError);
+            } else if (statusCode == 404) {
+                testResult.setPassed(true);
+                testResult.setMessage("Your application restricts URLs properly, but are you sure no one was using " +
+						"/blog/admin?");
+            } else if (statusCode == 200 && responseBody.contains("You asked for a protected resource")) {
+                testResult.setPassed(true);
+                testResult.setMessage("Your application restricts URLs properly!");
+            } else {
+                testResult.setPassed(false);
+                testResult.setMessage(generalError);
+            }
+        } finally {
+            httpclient.getConnectionManager().shutdown();
+        }
 
-		setDuration(testResult, startTime);
-		return testResult;
-	}
+        setDuration(testResult, startTime);
+        return testResult;
+    }
 
-	@Override
-	public TestCategory getTestCategory() {
-		return TestCategory.misconfiguration;
-	}
+    @Override
+    public TestCategory getTestCategory() {
+        return TestCategory.misconfiguration;
+    }
 }

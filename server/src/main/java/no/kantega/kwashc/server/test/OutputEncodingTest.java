@@ -29,7 +29,7 @@ import java.io.IOException;
  *
  * @author Anders Båtstrand, (www.kantega.no)
  */
-public class OutputEncoding extends AbstractTest {
+public class OutputEncodingTest extends AbstractTest {
 
     @Override
     public String getName() {
