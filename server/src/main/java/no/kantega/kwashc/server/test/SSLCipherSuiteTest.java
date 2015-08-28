@@ -304,7 +304,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
 
     @Override
     public TestCategory getTestCategory() {
-        return TestCategory.assorted;
+        return TestCategory.crypto;
     }
 
 }

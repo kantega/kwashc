@@ -5,7 +5,8 @@ package no.kantega.kwashc.server.test;
  */
 public enum TestCategory {
     happyDay("Happy day"), xss("Cross Site Scripting (XSS)"), csrf("Cross Site Request Forgery (CSRF)"),
-    misconfiguration("Misconfiguration"), securityFeature("Security feature"), assorted("Assorted");
+    misconfiguration("Misconfiguration"), securityFeature("Security feature"), assorted("Assorted"),
+    crypto("Cryptography");
 
     private final String name;
 

@@ -195,6 +195,6 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
 
     @Override
     public TestCategory getTestCategory() {
-        return TestCategory.securityFeature;
+        return TestCategory.crypto;
     }
 }

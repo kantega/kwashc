@@ -42,12 +42,14 @@ public final class TestRepository {
 		// rewritten to make sense. E.g. ownership to posts, and authorization for editing them.
 		add(new BackdoorTest());
 		add(new InvalidatedRedirectTest());
-		add(new InsecureCryptographicStorageTest());
 
 		//Misconfiguration
 		add(new APITest());
 		add(new FailureToRestrictUrlTest());
 		add(new ImproperErrorHandlingTest());
+
+		//Crypto
+		add(new InsecureCryptographicStorageTest());
 
 		//Assorted
 		add(new ClickjackingTest());
