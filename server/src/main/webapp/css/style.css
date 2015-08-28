@@ -249,6 +249,14 @@ img.modelight{
     overflow: auto;
 }
 
+.wide{
+    width: 100%;
+}
+
+.noMargin{
+    margin: 0px;
+}
+
 .description{
     border: none;
     background: #FFFFFF;

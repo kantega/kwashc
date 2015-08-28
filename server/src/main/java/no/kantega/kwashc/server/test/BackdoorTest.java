@@ -6,10 +6,11 @@ import no.kantega.kwashc.server.model.TestResult;
 
 /**
  * Test if the backdoor placed in LoginServlet by a malicious programmer is present.
- *
+ * <p/>
  * Solution: Find and remove the unicode trick in one of the comments in LoginServlet. While it will be displayed as a
- * comment in any IDE, the java compiler will decode this as "if(password.equals("backdoor")) password = user.getPassword();"
- *
+ * comment in any IDE, the java compiler will decode this as "if(password.equals("backdoor")) password = user
+ * .getPassword();"
+ * <p/>
  * See http://obfuscat.ion.land
  *
  * @author Jon Are Rakvaag (Politiets IKT-tjenester)
@@ -23,50 +24,52 @@ class BackdoorTest extends AbstractTest {
 
     @Override
     public String getDescription() {
-        return "A malicious programmer has created a backdoor allowing him to log in as any user. This test checks if it is present";
+        return "A malicious programmer has created a backdoor, making it possible for him (or the NSA) to log in as "
+                + "any user at any time, without knowing the user's actual password. ";
     }
 
     @Override
     public String getInformationURL() {
-        return "https://www.owasp.org/index.php/Malicious_Developers_and_Enterprise_Java_Rootkits";
+        return "http://obfuscat.ion.land";
     }
 
     @Override
     public String getExploit() {
-        return null;
+        return "The special password 'backdoor' works for any user, regardless of what the actual password is. Try "
+                + "logging in as <i>username</i> or <i>system</i> (click 'Admin' at the bottom of the blog).";
     }
 
     @Override
     public String getHint() {
-        return null;
+        return "The obfuscated backdoor is hidden in LogInServlet. Your IDE might be as confused as you are.";
     }
 
     @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
         long startTime = System.nanoTime();
-        final String backdoorPassword = "backdoor";
 
         String responseBody;
 
-            WebTester tester = new WebTester();
-            tester.setIgnoreFailingStatusCodes(true);
-            tester.beginAt(site.getAddress());
-            tester.clickLinkWithExactText("Admin");
-            tester.setTextField("username", "username");
-            tester.setTextField("password", backdoorPassword);
-            tester.clickButton("formSubmitButton");
+        WebTester tester = new WebTester();
+        tester.setIgnoreFailingStatusCodes(true);
+        tester.beginAt(site.getAddress());
+        tester.clickLinkWithExactText("Admin");
+        tester.setTextField("username", "username");
+        tester.setTextField("password", "backdoor");
+        tester.clickButton("formSubmitButton");
 
-            responseBody = tester.getPageSource();
+        responseBody = tester.getPageSource();
 
-            if(!responseBody.contains("You asked for a protected resource. Please log in:")) {
-                testResult.setPassed(false);
-                testResult.setMessage("It's possible to log in with the special password 'backdoor' for any user. No points!");
-            } else {
-                testResult.setPassed(true);
-                testResult.setMessage("The backdoor doesn't work anymore! Good work!");
-            }
-            setDuration(testResult, startTime);
-            return testResult;
+        if (!responseBody.contains("You asked for a protected resource. Please log in:")) {
+            testResult.setPassed(false);
+            testResult.setMessage("A malicious programmer has created a backdoor making it possible to log in as any " +
+                    "user with the special password 'backdoor'");
+        } else {
+            testResult.setPassed(true);
+            testResult.setMessage("The backdoor doesn't work anymore! Good work!");
+        }
+        setDuration(testResult, startTime);
+        return testResult;
     }
 
     @Override

@@ -22,7 +22,10 @@
 <div class="contentPadding">
 <h2>${test.name}</h2>
 
-<div class="description contentPadding floatContainer rounded">${test.description}</div>
+<div class="description contentPadding floatContainer rounded">
+    <h4>Info</h4>
+    ${test.description}
+</div>
 
 <c:if test="${test.exploit != null}">
     <div class="exploit contentPadding floatContainer rounded">
@@ -31,9 +34,13 @@
     </div>
 </c:if>
 <c:if test="${test.hint != null}">
-    <input type="button" class="button positive leftFloat" onclick="javascript:$('#hint').toggle();" value="Toggle hint"/>
-    <br>
-    <p class="hint contentPadding floatContainer rounded" id="hint" style="display:none;">${test.hint}</p>
+    <div class="floatContainer wide">
+        <input type="button" class="button positive leftFloat noMargin" onclick="javascript:$('#hint').toggle();" value="Toggle hint"/>
+    </div>
+    <div class="hint contentPadding floatContainer rounded" id="hint" style="display:none;">
+        <h4>Hint</h4>
+        ${test.hint}
+    </div>
 </c:if>
 <c:if test="${test.informationURL != null}">
 <br>

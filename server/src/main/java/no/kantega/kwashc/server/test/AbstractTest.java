@@ -42,6 +42,11 @@ public abstract class AbstractTest {
 
 	public abstract TestCategory getTestCategory();
 
+	protected final static String DESCRIPTION_SECURITY_MISCONFIGURATION = "Security misconfiguration covers all " +
+			"security issues arising from improper configuration and setup of the application, frameworks, application" +
+			" server, web server, database server, or platform. Security misconfiguration currently ranks #5 in the " +
+			"OWASP Top 10 application security risks. ";
+
 	/**
 	 * Give some information on the threat behind the text. Might be null
 	 *
