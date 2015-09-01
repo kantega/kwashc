@@ -25,22 +25,27 @@ import no.kantega.kwashc.server.model.TestResult;
  * rewritten without fixing the vulnerabilities.
  *
  * Solution: Remove or fix the offending JS calls:
- * 1) The name parameter is URI decoded, and then written to the DOM as html. Fix either, or better yet both.
+ * 1) The name parameter is URI decoded, and then written to the DOM as html, rather than text. Fix either, or better yet both.
  * 2) Never call setTimeout() with user supplied data! The function calls eval(), which will execute any JS, even if escaped!
  *
  * @author Jon Are Rakvaag (Politiets IKT-tjenester)
  */
-public class XSSTest extends AbstractTest {
+public class DOMXSSTest extends AbstractTest {
 	
     @Override
     public String getName() {
-        return "Cross-site scripting (XSS) test";
+        return "DOM and JavaScript based cross-site scripting (XSS)";
     }
 
     @Override
     public String getDescription() {
-        return "Tests if the site is vulnerable for various cross-site scripting (XSS) vulnerabilities.";
-    }
+        return DESCRIPTION_XSS +
+				"<br><br>JavaScript functions can create XSS vulnerabilities in two ways:<ol><li>Writing user input " +
+				"as html to the DOM<li>" +
+				"Using user input in certain unsafe functions, such as functions based on <i>eval(): " +
+				"setInterval(), setTimeout()</i> and <i>new Function()</i>. These functions parse and execute any " +
+				"javascript contained in the input.</li></ol>";
+	}
 
 	@Override
 	public String getInformationURL() {
@@ -49,12 +54,21 @@ public class XSSTest extends AbstractTest {
 
 	@Override
 	public String getExploit() {
-		return null;
+		return "Some browsers will filter these attacks. Try using Firefox. " +
+				"<ol><li><a href='http://localhost:8080/blog?name=%3Cimg%20src=x%20onerror=alert%281%29%3E' target" +
+				"='_blank'>" +
+				"http://localhost:8080/blog?name=&lt;img src=x onerror=alert(1)&gt;</a></li>" +
+				"<li><a href='http://localhost:8080/blog?timeout=alert%282%29' target='_blank'>" +
+				"http://localhost:8080/blog?timeout=alert(2)</a></li>" +
+				"</ol>";
 	}
 
 	@Override
 	public String getHint() {
-		return null;
+		return "<ol><li>The name parameter is URI decoded, and then written to the DOM as html, rather than text. " +
+				"Fix either, or better yet both.</li>" +
+				"<li>Never call setTimeout() with user supplied data! The function calls eval(), which will execute " +
+				"any JS, even if escaped! Remember: Eval is evil!</li></ol>";
 	}
 
 	@Override
@@ -72,25 +86,24 @@ public class XSSTest extends AbstractTest {
 
 		if(isNameVulnerable && isTimeoutVulnerable){
 			testResult.setPassed(false);
-			testResult.setMessage("It's possible to create arbitrary html elements using the name and timeout parameters. " +
-					"Try clicking <a href=\"" + site.getAddress() + "blog?name=<img src=x onerror=alert(1)>\" target=\"_blank\">here</a> " +
-					"or <a href=\"" + site.getAddress() + "blog?timeout=alert(2)\" target=\"_blank\">here</a>. Some browsers will filter " +
-					"the attacks. Try Firefox.");
+			testResult.setMessage("It's possible to create arbitrary html elements using the name parameter, or use " +
+					"the timeout parameter to execute arbitrary javascript directly. Both lead to XSS vulnerabilities.");
 		}
 		else if(isNameVulnerable) {
 			testResult.setPassed(false);
-			testResult.setMessage("It's possible to create arbitrary html elements using the name parameter. " +
-					"Try clicking <a href=\"" + site.getAddress() +	"blog?name=<img src=x onerror=alert(1)>\" target=\"_blank\">here</a>");
+			testResult.setMessage("It's possible to create arbitrary html elements using the name parameter. This is " +
+					"a XSS vulnerability.");
 		} else if(isTimeoutVulnerable){
-			testResult.setMessage("It's possible to create arbitrary html elements using the timeout parameter. " +
-					"Try clicking <a href=\"" + site.getAddress() +	"blog?timeout=alert(2)\" target=\"_blank\">here</a>");
+			testResult.setPassed(false);
+			testResult.setMessage("It's possible to use the timeout parameter to execute arbitrary javascript " +
+					"directly. This is a XSS vulnerability.");
 		} else{
 			testResult.setPassed(true);
 			testResult.setMessage("No errors, we hope." +
 					"You should have fixed blog.jsp: 1) Removed the explicit URI decoding of the parameter " +
 					"(decodeURIComponent()) and/or used $('#someId').text(name) rather than document.write(name). 2) " +
-					"Parsed 'timeout' as an int before calling setTimeout(theParsedInt). Escaping won't work here! Better yet, " +
-					"you should have deleted it, as it isn't used anywhere.	");
+					"Parsed 'timeout' as an int before calling setTimeout(theParsedInt). Escaping won't work here! " +
+					"Better yet, you should have deleted it, as it isn't used anywhere.");
 		}
 		setDuration(testResult, startTime);
 		return testResult;

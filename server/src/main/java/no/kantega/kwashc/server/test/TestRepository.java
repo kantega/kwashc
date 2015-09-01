@@ -30,7 +30,7 @@ public final class TestRepository {
 
 		//XSS
 		add(new OutputEncodingTest());
-		add(new XSSTest());
+		add(new DOMXSSTest());
 
 		//CSRF
 		add(new BasicXSRFTest());
