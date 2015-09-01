@@ -31,16 +31,17 @@ import org.apache.http.util.EntityUtils;
  *
  * @author Frode Standal, (Kantega AS)
  */
-public class InvalidatedRedirectTest extends AbstractTest {
+public class UnvalidatedRedirectTest extends AbstractTest {
 
     @Override
     public String getName() {
-        return "Invalidated Redirect Test";
+        return "Unvalidated redirects";
     }
 
     @Override
     public String getDescription() {
-        return "Test if webapp is vulnerable to phishing attacks.";
+        return "Unvalidated redirects and forwards is a type of vulnerability which exploits the victim's trust in " +
+                "your domain name or website. It's seldom a direct attack on your site, but on your users.";
     }
 
 	@Override
@@ -50,12 +51,17 @@ public class InvalidatedRedirectTest extends AbstractTest {
 
     @Override
     public String getExploit() {
-        return null;
+        return "Visit <a href='http://localhost:8080/redirect?somePadding=thiIsSomePaddingWhichDoesNotDuAnything&url" +
+                "=https://www.youtube" +
+                ".com/watch?v=AYcxSyPLUU4&morePadding=neitherDoesThisItOnlyMakesItDifficultToReadAndPossiblyTruncated" +
+                "&morePadding=morePaddingmorePaddingmorePaddingmorePaddingmorePaddingmorePaddingmorePaddingmorePaddingmorePadding'>" +
+                "your perfectly safe blog</a>. This link could be sent to the victim using social media or an email.";
     }
 
     @Override
     public String getHint() {
-        return null;
+        return "Create a whitelist of domains you trust in RedirectServlet. For this test, hardcoding " +
+                "localhost and owasp.org will be ok. java.net.URL will give you some useful tools for parsing the URL.";
     }
 
     @Override
@@ -67,14 +73,16 @@ public class InvalidatedRedirectTest extends AbstractTest {
         try {
             HttpGet request = new HttpGet(site.getAddress() + "/redirect?url=http://www.kantega.no");
             HttpResponse response = httpclient.execute(request);
-            int statusCode = response.getStatusLine().getStatusCode();
             HttpEntity entity = response.getEntity();
             responseBody = EntityUtils.toString(entity);
 
 	        // OBS: In case we are sent to the front page, we must check for something more specific than the wprd Kantega
             if (responseBody.contains("Nesten litt magisk - Kantega")) {
                 testResult.setPassed(false);
-                testResult.setMessage("Your application is vulnerable to phishing attacks due to invalidated redirects");
+                testResult.setMessage("The blog can be used in phishing attacks, since it has a redirect service " +
+                        "which doesn't discriminate what URLs it redirects to. An attacker might trick a victim into " +
+                        "thinking he's visiting your trusted blog, while in reality being forwarded to something " +
+                        "malicious.");
             } else {
                 testResult.setPassed(true);
                 testResult.setMessage("Ok, your application validates redirects properly.");

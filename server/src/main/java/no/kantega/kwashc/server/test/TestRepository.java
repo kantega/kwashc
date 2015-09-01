@@ -41,7 +41,7 @@ public final class TestRepository {
 		//add(new InsecureDirectObjectReferenceTest()); //currently identical to failure to restrict URL. Must be
 		// rewritten to make sense. E.g. ownership to posts, and authorization for editing them.
 		add(new BackdoorTest());
-		add(new InvalidatedRedirectTest());
+		add(new UnvalidatedRedirectTest());
 
 		//Misconfiguration
 		add(new APITest());

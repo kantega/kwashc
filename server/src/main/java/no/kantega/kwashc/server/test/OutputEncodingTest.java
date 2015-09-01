@@ -38,22 +38,29 @@ public class OutputEncodingTest extends AbstractTest {
 
     @Override
     public String getDescription() {
-        return "Tests the blog for output encoding errors.";
+        return DESCRIPTION_XSS + "<br><br>The comment and title variables are included directly in the html without " +
+                "any escaping of html characters. This creates a XSS vulnerability." +
+                "<br><br>Validating the fields for illegal values <i>could</i> also help, but might be hampered by " +
+                "functional constraints. It is clearly legitimate for normal users to be discussing JavaScript or " +
+                "maths, and banning potentially &quot;dangerous&quot; characters like &lt;, &gt;, ' or &quot; isn't " +
+                "acceptable.";
     }
 
-	@Override
+    @Override
 	public String getInformationURL() {
 		return "https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet";
 	}
 
     @Override
     public String getExploit() {
-        return null;
+        return "Missing output encoding of the comment and title variables allows an attacker to include fully " +
+                "functional html, including active content. Write a comment or a title containing <i>&lt;img src=x " +
+                "onerror=\"alert('This is a malicious script excecuting')\"&gt;</i>.";
     }
 
     @Override
     public String getHint() {
-        return null;
+        return "The JSTL tag library already included can do basic html escaping. Use &lt;c:out value=.../&gt;";
     }
 
     @Override
@@ -72,7 +79,8 @@ public class OutputEncodingTest extends AbstractTest {
         // this might be reflected back in the form, or on the front page
         if (tester.getTestingEngine().hasElement("evilDiv")) {
             testResult.setPassed(false);
-            testResult.setMessage("You allowed html tags to be reflected back on the user!");
+            testResult.setMessage("User input is included directly in the html without any " +
+                    "escaping of html characters. This creates a XSS vulnerability.");
             setDuration(testResult, startTime);
             return testResult;
         }
@@ -82,7 +90,8 @@ public class OutputEncodingTest extends AbstractTest {
 
         if (tester.getTestingEngine().hasElement("evilDiv")) {
             testResult.setPassed(false);
-            testResult.setMessage("You allowed html tags to be reflected back on all users!");
+            testResult.setMessage("Iser input is included directly in the html without any " +
+                    "escaping of html characters. This creates a XSS vulnerability.");
             setDuration(testResult, startTime);
             return testResult;
         }

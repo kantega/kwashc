@@ -123,6 +123,9 @@ h2 {
 h3 {
 	margin-top: 10px;
 }
+h4 {
+    font-weight: bold;
+}
 
 form {
 	width: auto;

@@ -57,8 +57,8 @@ public class FailureToRestrictUrlTest extends AbstractTest {
     @Override
     public String getExploit() {
         return "Go to <a href='http://localhost:8080/blog/admin?commentToDelete=123'>http://localhost:8080/blog/admin" +
-                "?commentToDelete=123</a> (or where ever the blog is served) using an unauthenticated session. You " +
-                "should not be able to access this URL without logging in.";
+                "?commentToDelete=123</a> using an unauthenticated session. You should not be able to access this URL" +
+                " without logging in.";
     }
 
     @Override

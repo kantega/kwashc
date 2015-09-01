@@ -42,6 +42,12 @@ public abstract class AbstractTest {
 
 	public abstract TestCategory getTestCategory();
 
+	protected final static String DESCRIPTION_XSS = "Cross Site Scripting (XSS) vulnerabilities allows an attacker to" +
+			" inject malicious scripts into your web site, which are then executed by the victim's browser as if they " +
+			"were part of the part of the page you intended. This happens when unvalidated user input is included in the" +
+			" html without proper escaping, or when it used in certain dangerous JavaScript functions.XSS currently " +
+			"ranks #3 in the OWASP Top 10 application security risks";
+
 	protected final static String DESCRIPTION_SECURITY_MISCONFIGURATION = "Security misconfiguration covers all " +
 			"security issues arising from improper configuration and setup of the application, frameworks, application" +
 			" server, web server, database server, or platform. Security misconfiguration currently ranks #5 in the " +
