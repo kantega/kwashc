@@ -33,8 +33,7 @@ public final class TestRepository {
 		add(new DOMXSSTest());
 
 		//CSRF
-		add(new BasicXSRFTest());
-		add(new SessionXSRFTest());
+		add(new CSRFTest());
 
 		//Security features
 		add(new InputValidationTest());
