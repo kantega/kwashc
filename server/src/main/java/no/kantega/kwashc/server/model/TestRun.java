@@ -18,16 +18,13 @@ package no.kantega.kwashc.server.model;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * All test runs are saved here, for statistics. No connections to other tables, to allow deletion there.
  *
- * @author Anders Båstrand, (www.kantega.no)
+ * @author Anders Bï¿½strand, (www.kantega.no)
  */
 @Entity
 public class TestRun extends AbstractPersistable<Long> {
@@ -41,8 +38,8 @@ public class TestRun extends AbstractPersistable<Long> {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timeRun;
 
-	@Basic
-	private boolean passed;
+	@Enumerated(EnumType.STRING)
+	private ResultEnum resultEnum;
 
 	@Basic
 	private String message;
@@ -51,7 +48,7 @@ public class TestRun extends AbstractPersistable<Long> {
 		this.testIdentifikator = testResult.getTest().getIdentifikator();
 		this.site = testResult.getSite().getName();
 		this.timeRun = new Date();
-		this.passed = testResult.isPassed();
+		this.resultEnum = testResult.getResultEnum();
 		this.message = testResult.getMessage();
 	}
 
@@ -71,8 +68,8 @@ public class TestRun extends AbstractPersistable<Long> {
 		return timeRun;
 	}
 
-	public boolean isPassed() {
-		return passed;
+	public ResultEnum getResultEnum() {
+		return resultEnum;
 	}
 
 	public String getMessage() {

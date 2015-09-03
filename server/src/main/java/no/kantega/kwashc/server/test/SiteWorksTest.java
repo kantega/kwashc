@@ -17,6 +17,7 @@
 package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -138,7 +139,7 @@ public class SiteWorksTest extends AbstractTest {
 		tester.gotoPage(site.getAddress() + "/redirect?url=http://motherfuckingwebsite.com/");
 		tester.assertTextPresent("This is a motherfucking website.");
 
-		testResult.setPassed(true);
+		testResult.setResultEnum(ResultEnum.passed);
 	    testResult.setMessage("Site works like a charm!");
 
 		setDuration(testResult, startTime);

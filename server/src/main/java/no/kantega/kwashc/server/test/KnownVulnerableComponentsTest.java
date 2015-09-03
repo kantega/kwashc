@@ -18,6 +18,7 @@ package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.api.IElement;
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -78,8 +79,8 @@ public class KnownVulnerableComponentsTest extends AbstractTest
 
         if(!source.contains("$(location.hash)"))
         {
-            testResult.setPassed(false);
-            testResult.setMessage("jQuery functionality removed from source. Remember: do not change functionality!");
+            testResult.setResultEnum(ResultEnum.partial);
+            testResult.setMessage("jQuery functionality removed from source. Remember: do not change functionality!"); //TODO: this is a pass!
             setDuration(testResult, startTime);
             return testResult;
         }
@@ -91,7 +92,7 @@ public class KnownVulnerableComponentsTest extends AbstractTest
 
         if(!matcher.matches())
         {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("Unable to find script-tag for jquery in html. Include jquery by using the \"src\"-attribute");
             setDuration(testResult, startTime);
             return testResult;
@@ -100,20 +101,20 @@ public class KnownVulnerableComponentsTest extends AbstractTest
         String version = matcher.group(1);
         if(version.equalsIgnoreCase("1.6.2"))
         {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("The application includes vulnerable components. " +
                     "Try to search for known vulnerable components that is used in the application.");
         } else if(version.matches("2.*"))
         {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("The blog needs to support older versions of IE, try using the latest version 1.x of jquery.");
         } else if(version.equalsIgnoreCase("1.11.3"))
         {
-            testResult.setPassed(true);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("jQuery is successfully updated to the latest version!");
         } else
         {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("Seems like jquery has been tried updated, but you should update to the latest 1.x version of jquery.");
         }
 

@@ -16,6 +16,7 @@
 
 package no.kantega.kwashc;
 
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import no.kantega.kwashc.server.test.AbstractTest;
@@ -76,10 +77,10 @@ public class TestSuiteTest {
 	}
 
 	private void assertTestOK(TestResult testResult) {
-		assertTrue("The test '" + testResult.getTest().getName() + "' failed: " + testResult.getMessage(), testResult.isPassed());
+		assertTrue("The test '" + testResult.getTest().getName() + "' failed: " + testResult.getMessage(), testResult.getResultEnum() == ResultEnum.passed);
 	}
 
-	private void assertTestNotOK(TestResult testResult) {
-		assertFalse("The test '" + testResult.getTest().getName() + "' should have failed: " + testResult.getMessage(), testResult.isPassed());
+	private void assertTestNotOK(TestResult testResult) { //TODO: Test partial
+		assertFalse("The test '" + testResult.getTest().getName() + "' should have failed: " + testResult.getMessage(), testResult.getResultEnum() == ResultEnum.passed);
 	}
 }

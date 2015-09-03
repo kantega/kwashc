@@ -50,8 +50,11 @@
 <c:if test="${result != null}">
     <div class="rounded contentPadding floatContainer">
         <c:choose>
-            <c:when test="${result.passed}">
+            <c:when test="${result.resultEnum == 'passed'}">
                 <img class="modelight" src="/gfx/modelight_green.png" title="Passed"/>
+            </c:when>
+            <c:when test="${result.resultEnum == 'partial'}">
+                <img class="modelight" src="/gfx/modelight_yellow.png" title="Partial"/>
             </c:when>
             <c:otherwise>
                 <img class="modelight" src="/gfx/modelight_red.png" title="Failed"/>

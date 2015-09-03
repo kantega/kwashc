@@ -16,6 +16,7 @@
 
 package no.kantega.kwashc.server.test;
 
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import org.apache.http.HttpEntity;
@@ -108,7 +109,7 @@ public class ImproperErrorHandlingTest extends AbstractTest {
 
             if (responseBody.contains("Exception") || responseBody.contains("exception") || responseBody.contains
                     ("Caused by") || responseBody.contains("caused by")) {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("The application gives an attacker very useful feedback on attempted attacks " +
                         "by displaying detailed error messages and stack traces.");
             } else if (statusCode == 500 || statusCode == 200) {
@@ -118,12 +119,12 @@ public class ImproperErrorHandlingTest extends AbstractTest {
                 int statusCode2 = response2.getStatusLine().getStatusCode();
 
                 if (statusCode2 == 404 || statusCode2 == 200) {
-                    testResult.setPassed(true);
+                    testResult.setResultEnum(ResultEnum.passed);
                     testResult.setMessage("Ok, your application handles errors codes and tries not to leak " +
                             "information!");
                 }
             } else {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("The test didn't work properly, are you providing a proper and secure error " +
                         "handling?");
             }

@@ -16,6 +16,7 @@
 
 package no.kantega.kwashc.server.test;
 
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import org.apache.http.HttpEntity;
@@ -78,13 +79,13 @@ public class UnvalidatedRedirectTest extends AbstractTest {
 
 	        // OBS: In case we are sent to the front page, we must check for something more specific than the wprd Kantega
             if (responseBody.contains("Nesten litt magisk - Kantega")) {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("The blog can be used in phishing attacks, since it has a redirect service " +
                         "which doesn't discriminate what URLs it redirects to. An attacker might trick a victim into " +
                         "thinking he's visiting your trusted blog, while in reality being forwarded to something " +
                         "malicious.");
             } else {
-                testResult.setPassed(true);
+                testResult.setResultEnum(ResultEnum.passed);
                 testResult.setMessage("Ok, your application validates redirects properly.");
             }
         } finally {

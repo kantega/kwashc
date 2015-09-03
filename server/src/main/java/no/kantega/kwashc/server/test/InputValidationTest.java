@@ -17,6 +17,7 @@
 package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -99,12 +100,12 @@ public class InputValidationTest extends AbstractTest {
         tester.clickButton("commentFormSubmit");
 
         if (tester.getTestingEngine().getPageSource().contains(evilJS)) {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("Input validation of user supplied data is a core security feature for any " +
                     "application. The blog currently accepts a homepage URL as part of the comments, without ensuring" +
                     " that this is in fact a proper URL.");
         } else {
-            testResult.setPassed(true);
+            testResult.setResultEnum(ResultEnum.passed);
             testResult.setMessage("You appear to be validating the user supplied URLs! Hopefully you parsed the " +
                     "homepage parameter as a java.net.URL.Blacklisting scary input like 'javascript:' isn't very " +
                     "effective in the real world.");

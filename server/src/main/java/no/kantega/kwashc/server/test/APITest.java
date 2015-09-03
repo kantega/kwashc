@@ -1,6 +1,7 @@
 package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -81,19 +82,19 @@ class APITest extends AbstractTest {
         boolean isHtmlContentType = tester.getHeader("Content-type").contains("html");
 
         if (containsSensitiveInfo) {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("The RESTFul API leaks very sensitive info! See if you can " +
                     "<a href='" + apiUrl + "' target=\"_blank\">spot it</a>!");
 
         } else if (isHtmlContentType) {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.partial);
             testResult.setMessage("Good! It looks like your API doesn't leak passwords or password hashes anymore. " +
                     "But the http response has Content-Type: text/html. Some browsers will parse the JSON response as" +
                     " " +
                     "HTML. This allows for stored XSS if a victim is fooled to visit the " +
                     "<a href='" + apiUrl + "' target=\"_blank\">API directly</a>.");
         } else {
-            testResult.setPassed(true);
+            testResult.setResultEnum(ResultEnum.passed);
             testResult.setMessage("No problems found. Good work!");
         }
         setDuration(testResult, startTime);

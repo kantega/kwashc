@@ -16,6 +16,7 @@
 
 package no.kantega.kwashc.server.controller;
 
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestRun;
 import no.kantega.kwashc.server.repository.SiteRepository;
@@ -90,7 +91,7 @@ public class FrontPageController {
         List<TestRun> testRuns = testRunRepository.findAll();
 
         for(TestRun testRun : testRuns) {
-            if(testRun.isPassed()) {
+            if(testRun.getResultEnum() == ResultEnum.passed) {
                 String testRunSite = testRun.getSite();
                 String test = testRun.getTestIdentifikator();
                 List<String> remainingTests = helpMap.get(testRunSite);

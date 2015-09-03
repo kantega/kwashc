@@ -1,6 +1,7 @@
 package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -61,11 +62,11 @@ class BackdoorTest extends AbstractTest {
         responseBody = tester.getPageSource();
 
         if (!responseBody.contains("You asked for a protected resource. Please log in:")) {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("A malicious programmer has created a backdoor making it possible to log in as any " +
                     "user with the special password 'backdoor'");
         } else {
-            testResult.setPassed(true);
+            testResult.setResultEnum(ResultEnum.passed);
             testResult.setMessage("The backdoor doesn't work anymore! Good work!");
         }
         setDuration(testResult, startTime);

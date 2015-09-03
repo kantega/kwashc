@@ -17,6 +17,7 @@
 package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -56,10 +57,10 @@ public class SiteExistsTest extends AbstractTest {
 		int response = tester.getTestingEngine().getServerResponseCode();
 
 		if (response == 200) {
-			testResult.setPassed(true);
+			testResult.setResultEnum(ResultEnum.passed);
 			testResult.setMessage("Server at " + site.getAddress() + " did respond with 200.");
 		} else {
-			testResult.setPassed(false);
+			testResult.setResultEnum(ResultEnum.failed);
 			testResult.setMessage("Server at " + site.getAddress() + " did NOT respond with 200. It responded: " + response + ".");
 		}
 		setDuration(testResult, startTime);

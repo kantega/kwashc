@@ -19,6 +19,7 @@ package no.kantega.kwashc.server.test;
 import com.gargoylesoftware.htmlunit.WebClient;
 import net.sourceforge.jwebunit.htmlunit.HtmlUnitTestingEngineImpl;
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import org.apache.http.NameValuePair;
@@ -92,15 +93,15 @@ public class CSRFTest extends AbstractTest {
         long startTime = System.nanoTime();
 
         if(allowsPostingWithoutTokens(site)) {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("The blog has a CSRF vulnerability allowing an attacker to fabricate arbitrary " +
                     "comments which victims can be tricked into posting just by visiting a malicious third party site!");
         } else if (allowsPostingWithTokenFromOtherSession(site)) {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.partial);
             testResult.setMessage("It's possible to steal a form token created in another session, and use that in the " +
                     "CSRF attack against other users. Tokens must be unique for the session!");
         } else {
-            testResult.setPassed(true);
+            testResult.setResultEnum(ResultEnum.passed);
             testResult.setMessage("No CSRF vulnerabilities found.");
         }
 

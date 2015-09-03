@@ -16,6 +16,7 @@
 
 package no.kantega.kwashc.server.test;
 
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import org.apache.http.HttpEntity;
@@ -84,17 +85,17 @@ public class FailureToRestrictUrlTest extends AbstractTest {
             String generalError = "Your application fails to restrict privileged URLs properly!";
 
             if (statusCode == 500) {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage(generalError);
             } else if (statusCode == 404) {
-                testResult.setPassed(true);
-                testResult.setMessage("Your application restricts URLs properly, but are you sure no one was using " +
+                testResult.setResultEnum(ResultEnum.passed);
+                testResult.setMessage("Your application restricts URLs properly, but can you be sure no one was using " +
 						"/blog/admin?");
             } else if (statusCode == 200 && responseBody.contains("You asked for a protected resource")) {
-                testResult.setPassed(true);
+                testResult.setResultEnum(ResultEnum.passed);
                 testResult.setMessage("Your application restricts URLs properly!");
             } else {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage(generalError);
             }
         } finally {

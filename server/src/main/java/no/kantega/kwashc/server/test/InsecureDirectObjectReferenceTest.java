@@ -18,6 +18,7 @@ package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.api.IElement;
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -83,11 +84,11 @@ public class InsecureDirectObjectReferenceTest extends AbstractTest {
         String frontpage = tester.getPageSource();
 
         if(frontpage.contains(random + " - edited")) {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("Unauthorised editing possible. Users should log in to be able to edit posts.");
         } else
         {
-            testResult.setPassed(true);
+            testResult.setResultEnum(ResultEnum.passed);
             testResult.setMessage("You successfully prevented unauthorised editing!");
         }
 

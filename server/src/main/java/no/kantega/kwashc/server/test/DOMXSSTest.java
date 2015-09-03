@@ -17,6 +17,7 @@
 package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -85,20 +86,20 @@ public class DOMXSSTest extends AbstractTest {
 		//the jQuery $(document.hash) vulnerability is covered by the KnownVulnerableComponentsTest.
 
 		if(isNameVulnerable && isTimeoutVulnerable){
-			testResult.setPassed(false);
+			testResult.setResultEnum(ResultEnum.failed);
 			testResult.setMessage("It's possible to create arbitrary html elements using the name parameter, or use " +
 					"the timeout parameter to execute arbitrary javascript directly. Both lead to XSS vulnerabilities.");
 		}
 		else if(isNameVulnerable) {
-			testResult.setPassed(false);
+			testResult.setResultEnum(ResultEnum.partial);
 			testResult.setMessage("It's possible to create arbitrary html elements using the name parameter. This is " +
 					"a XSS vulnerability.");
 		} else if(isTimeoutVulnerable){
-			testResult.setPassed(false);
+			testResult.setResultEnum(ResultEnum.partial);
 			testResult.setMessage("It's possible to use the timeout parameter to execute arbitrary javascript " +
 					"directly. This is a XSS vulnerability.");
 		} else{
-			testResult.setPassed(true);
+			testResult.setResultEnum(ResultEnum.passed);
 			testResult.setMessage("No errors, we hope." +
 					"You should have fixed blog.jsp: 1) Removed the explicit URI decoding of the parameter " +
 					"(decodeURIComponent()) and/or used $('#someId').text(name) rather than document.write(name). 2) " +

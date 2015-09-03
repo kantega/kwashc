@@ -16,6 +16,7 @@
 
 package no.kantega.kwashc.server.test;
 
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import org.apache.log4j.Logger;
@@ -67,7 +68,7 @@ public abstract class AbstractTest {
 			result = testSite(site, result);
 		} catch (Throwable e) {
 			logger.info("Error during test.", e);
-			result.setPassed(false);
+			result.setResultEnum(ResultEnum.failed);
 			result.setMessage("Error: " + e.getMessage());
 		}
 		return result;

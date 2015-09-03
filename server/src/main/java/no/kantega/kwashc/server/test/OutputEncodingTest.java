@@ -17,6 +17,7 @@
 package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -78,7 +79,7 @@ public class OutputEncodingTest extends AbstractTest {
 
         // this might be reflected back in the form, or on the front page
         if (tester.getTestingEngine().hasElement("evilDiv")) {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("User input is included directly in the html without any " +
                     "escaping of html characters. This creates a XSS vulnerability.");
             setDuration(testResult, startTime);
@@ -89,14 +90,14 @@ public class OutputEncodingTest extends AbstractTest {
         tester.assertElementNotPresent("evilDiv");
 
         if (tester.getTestingEngine().hasElement("evilDiv")) {
-            testResult.setPassed(false);
-            testResult.setMessage("Iser input is included directly in the html without any " +
+            testResult.setResultEnum(ResultEnum.failed);
+            testResult.setMessage("User input is included directly in the html without any " +
                     "escaping of html characters. This creates a XSS vulnerability.");
             setDuration(testResult, startTime);
             return testResult;
         }
 
-        testResult.setPassed(true);
+        testResult.setResultEnum(ResultEnum.passed);
         testResult.setMessage("No errors found.");
 
         setDuration(testResult, startTime);
