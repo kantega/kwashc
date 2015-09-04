@@ -89,4 +89,8 @@ public class TestResult extends AbstractPersistable<Long> {
     public void setDuration(String duration) {
         this.duration = duration;
     }
+
+    public String getExploit(){
+        return getTest().getExploit(site);
+    }
 }

@@ -80,9 +80,9 @@ public class ImproperErrorHandlingTest extends AbstractTest {
     }
 
     @Override
-    public String getExploit() {
-        return "Trigger an exception by visiting <a href='http://localhost:8080/j_security_check?username=username" +
-                "&password=%E6%E6%27'>http://localhost:8080/j_security_check?username=username&password=%E6%E6%27</a>" +
+    public String getExploit(Site site) {
+        return "Trigger an exception by visiting <a href='" + getBaseUrl(site) + "j_security_check?username=username" +
+                "&password=%E6%E6%27'>" + getBaseUrl(site) + "j_security_check?username=username&password=%E6%E6%27</a>" +
                 ". The detailed Exception should not be displayed to the potential attacker.";
     }
 

@@ -51,10 +51,9 @@ public class UnvalidatedRedirectTest extends AbstractTest {
 	}
 
     @Override
-    public String getExploit() {
-        return "Visit <a href='http://localhost:8080/redirect?somePadding=thiIsSomePaddingWhichDoesNotDuAnything&url" +
-                "=https://www.youtube" +
-                ".com/watch?v=AYcxSyPLUU4&morePadding=neitherDoesThisItOnlyMakesItDifficultToReadAndPossiblyTruncated" +
+    public String getExploit(Site site) {
+        return "Visit <a href='" + getBaseUrl(site) + "redirect?somePadding=thiIsSomePaddingWhichDoesNotDuAnything&url" +
+                "=https://secure.eicar.org/eicar.com.txt&morePadding=neitherDoesThisItOnlyMakesItDifficultToReadAndPossiblyTruncated" +
                 "&morePadding=morePaddingmorePaddingmorePaddingmorePaddingmorePaddingmorePaddingmorePaddingmorePaddingmorePadding'>" +
                 "your perfectly safe blog</a>. This link could be sent to the victim using social media or an email.";
     }

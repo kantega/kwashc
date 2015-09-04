@@ -27,10 +27,10 @@
     ${test.description}
 </div>
 
-<c:if test="${test.exploit != null}">
+<c:if test="${result.exploit != null}">
     <div class="exploit contentPadding floatContainer rounded">
     <h4>Exploit</h4>
-    ${test.exploit}
+    ${result.exploit}
     </div>
 </c:if>
 <c:if test="${test.hint != null}">

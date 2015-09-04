@@ -54,7 +54,7 @@ public class InsecureDirectObjectReferenceTest extends AbstractTest {
 	}
 
     @Override
-    public String getExploit() {
+    public String getExploit(Site site) {
         return null;
     }
 

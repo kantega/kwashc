@@ -20,7 +20,7 @@ class BackdoorTest extends AbstractTest {
 
     @Override
     public String getName() {
-        return "Backdoor test";
+        return "Backdoor";
     }
 
     @Override
@@ -35,9 +35,10 @@ class BackdoorTest extends AbstractTest {
     }
 
     @Override
-    public String getExploit() {
+    public String getExploit(Site site) {
         return "The special password 'backdoor' works for any user, regardless of what the actual password is. Try "
-                + "logging in as <i>username</i> or <i>system</i> (click 'Admin' at the bottom of the blog).";
+                + "logging in as <i>username</i> or <i>system</i> (click <a href='" + getBaseUrl(site) + "admin' target=" +
+                "'_blank'>'Admin' at the bottom of the blog</a>).";
     }
 
     @Override

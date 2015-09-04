@@ -41,7 +41,7 @@ public class SiteWorksTest extends AbstractTest {
 	}
 
 	@Override
-	public String getExploit() {
+	public String getExploit(Site site) {
 		return null;
 	}
 

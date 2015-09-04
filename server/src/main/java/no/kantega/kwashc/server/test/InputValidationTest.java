@@ -49,7 +49,7 @@ public class InputValidationTest extends AbstractTest {
     */
     @Override
     public String getName() {
-        return "Input validation test";
+        return "Input validation";
     }
 
     @Override
@@ -65,7 +65,7 @@ public class InputValidationTest extends AbstractTest {
 	}
 
     @Override
-    public String getExploit() {
+    public String getExploit(Site site) {
         return "In this instance, missing validation and improper escaping creates a XSS-vulnerability. Using " +
                 "Firefox, enter a comment with the homepage <i>javascript:alert(1)</i>. Click the link, and the " +
                 "embedded javascript will execute. This only shows a popup on the 'victim' browser, but it could be " +

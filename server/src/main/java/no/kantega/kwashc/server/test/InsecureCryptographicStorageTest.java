@@ -63,7 +63,7 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
     }
 
     @Override
-    public String getExploit() {
+    public String getExploit(Site site) {
         return null;
     }
 

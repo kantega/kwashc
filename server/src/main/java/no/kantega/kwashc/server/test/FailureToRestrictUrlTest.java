@@ -44,10 +44,9 @@ public class FailureToRestrictUrlTest extends AbstractTest {
     @Override
     public String getDescription() {
         return DESCRIPTION_SECURITY_MISCONFIGURATION + "<br><br>SecurityFilter is supposed to protect the blog's " +
-                "admin" +
-                " functionality as configured in web.xml, by being invoked when someone tries to access the admin " +
-                "URLs. Filters like this, or frameworks such as Spring Security works beautifully, but requires " +
-                "careful configuration to avoid leaving alternative unprotected routes to the functionality.";
+                "admin functionality as configured in web.xml, by being invoked when someone tries to access the " +
+                "admin URLs. Filters like this, or frameworks such as Spring Security works beautifully, but requires" +
+                " careful configuration to avoid leaving alternative unprotected routes to the functionality.";
     }
 
     @Override
@@ -56,8 +55,8 @@ public class FailureToRestrictUrlTest extends AbstractTest {
     }
 
     @Override
-    public String getExploit() {
-        return "Go to <a href='http://localhost:8080/blog/admin?commentToDelete=123'>http://localhost:8080/blog/admin" +
+    public String getExploit(Site site) {
+        return "Go to <a href='" + getBaseUrl(site) + "blog/admin?commentToDelete=123'>" + getBaseUrl(site) + "blog/admin" +
                 "?commentToDelete=123</a> using an unauthenticated session. You should not be able to access this URL" +
                 " without logging in.";
     }

@@ -37,7 +37,7 @@ public abstract class AbstractTest {
 
 	public abstract String getDescription();
 
-	public abstract String getExploit();
+	public abstract String getExploit(Site site);
 
 	public abstract String getHint();
 
@@ -99,6 +99,14 @@ public abstract class AbstractTest {
 		} else {
 			testResult.setDuration(testResult.getDuration() + String.format(" %01d.%03d", sec, ms));
 
+		}
+	}
+
+	protected String getBaseUrl(Site site) {
+		if(site != null && site.getAddress() != null && !site.getAddress().isEmpty()){
+			return site.getAddress();
+		} else {
+			return "http://localhost:8080/"; //fallback to default
 		}
 	}
 

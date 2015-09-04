@@ -75,7 +75,7 @@ public class CSRFTest extends AbstractTest {
 	}
 
     @Override
-    public String getExploit() {
+    public String getExploit(Site site) {
         return "This test server is in effect a third party site. It should not be able to make your browser post data " +
                 "on your behalf to your blog. This could be hidden and automated, but for testing purposes you can " +
                 "click this button:<br> "+ EXPLOIT;

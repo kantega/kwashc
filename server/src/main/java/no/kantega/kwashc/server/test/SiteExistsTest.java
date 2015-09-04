@@ -39,7 +39,7 @@ public class SiteExistsTest extends AbstractTest {
 	}
 
 	@Override
-	public String getExploit() {
+	public String getExploit(Site site) {
 		return null;
 	}
 

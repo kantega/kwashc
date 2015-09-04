@@ -27,6 +27,7 @@ class APITest extends AbstractTest {
 
     @Override
     public String getDescription() {
+
         return DESCRIPTION_SECURITY_MISCONFIGURATION + "<br><br>The blog exposes the comments as a REST service at " +
                 "blog/api/comments/list/. This is done by the Jackson framework in CommentsAPIService, which by magic" +
                 " (and insecure defaults) serializes everything it can get its hands on.";
@@ -38,12 +39,12 @@ class APITest extends AbstractTest {
     }
 
     @Override
-    public String getExploit() {
+    public String getExploit(Site site) {
         return "The REST service has two major misconfiguration issues: <br><ol><li>Information leakage: See the raw " +
-                "JSON response from the REST service, and look for information an attacker could be interested in" +
+                "JSON response from " + getHref(site) + ", and look for information an attacker could be interested in" +
                 ".<br><li> The Content-type header is incorrectly set to text/html. Some browsers will try to parse " +
                 "this a html file. This could be a XSS vulnerability. Try entering the comment <i>&lt;img src=x " +
-                "onerror=alert(2)&gt;</i>, and open the REST service in Internet Explorer (see link below). You will " +
+                "onerror=alert(2)&gt;</i>, and open " + getHref(site) + " in Internet Explorer. You will " +
                 "need to restart your server afterwards, to clear the comment from the DB, as this payload might " +
                 "cause other tests to fail.</ol>";
     }
@@ -51,8 +52,8 @@ class APITest extends AbstractTest {
     @Override
     public String getHint() {
         return "<ol><li>The Comment and subsequently the User objects are serialized to JSON by Jackson in " +
-                "CommentsAPIService. You" +
-                " should use the <i>@JsonIgnore</i> annotation to make Jackson skip sensitive variables." +
+                "CommentsAPIService. You could use the <i>@JsonIgnore</i> annotation to make Jackson skip sensitive " +
+                "variables." +
                 "<li>CommentsAPIService forces Content-Type. The correct type for JSON is 'application/json'." +
                 "</ol>";
     }
@@ -83,16 +84,13 @@ class APITest extends AbstractTest {
 
         if (containsSensitiveInfo) {
             testResult.setResultEnum(ResultEnum.failed);
-            testResult.setMessage("The RESTFul API leaks very sensitive info! See if you can " +
-                    "<a href='" + apiUrl + "' target=\"_blank\">spot it</a>!");
+            testResult.setMessage("The RESTFul API leaks very sensitive info!");
 
         } else if (isHtmlContentType) {
             testResult.setResultEnum(ResultEnum.partial);
             testResult.setMessage("Good! It looks like your API doesn't leak passwords or password hashes anymore. " +
                     "But the http response has Content-Type: text/html. Some browsers will parse the JSON response as" +
-                    " " +
-                    "HTML. This allows for stored XSS if a victim is fooled to visit the " +
-                    "<a href='" + apiUrl + "' target=\"_blank\">API directly</a>.");
+                    "HTML. This allows for stored XSS if a victim is fooled to visit " + getHref(site) + " directly.");
         } else {
             testResult.setResultEnum(ResultEnum.passed);
             testResult.setMessage("No problems found. Good work!");
@@ -104,5 +102,13 @@ class APITest extends AbstractTest {
     @Override
     public TestCategory getTestCategory() {
         return TestCategory.misconfiguration;
+    }
+
+    private String getHref(Site site) {
+        String link = "blog/api/comments/list/";
+        if(site != null && site.getAddress() != null) {
+            link = "<a href='" + site.getAddress() + "blog/api/comments/list/' target='_blank'>blog/api/comments/list/</a>";
+        }
+        return link;
     }
 }

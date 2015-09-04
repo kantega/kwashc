@@ -54,13 +54,14 @@ public class DOMXSSTest extends AbstractTest {
 	}
 
 	@Override
-	public String getExploit() {
-		return "Some browsers will filter these attacks. Try using Firefox. " +
-				"<ol><li><a href='http://localhost:8080/blog?name=%3Cimg%20src=x%20onerror=alert%281%29%3E' target" +
-				"='_blank'>" +
-				"http://localhost:8080/blog?name=&lt;img src=x onerror=alert(1)&gt;</a></li>" +
-				"<li><a href='http://localhost:8080/blog?timeout=alert%282%29' target='_blank'>" +
-				"http://localhost:8080/blog?timeout=alert(2)</a></li>" +
+	public String getExploit(Site site) {
+		String link = getBaseUrl(site);
+
+		return "Some browsers will filter these basic attacks. Try using Firefox. " +
+				"<ol><li><a href='" + link + "blog?name=%3Cimg%20src=x%20onerror=alert%281%29%3E' target" +
+				"='_blank'>" + link + "blog?name=&lt;img src=x onerror=alert(1)&gt;</a></li>" +
+				"<li><a href='" + link + "blog?timeout=alert%282%29' target='_blank'>" +
+				link + "blog?timeout=alert(2)</a></li>" +
 				"</ol>";
 	}
 

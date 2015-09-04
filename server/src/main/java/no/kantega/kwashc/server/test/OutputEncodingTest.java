@@ -53,7 +53,7 @@ public class OutputEncodingTest extends AbstractTest {
 	}
 
     @Override
-    public String getExploit() {
+    public String getExploit(Site site) {
         return "Missing output encoding of the comment and title variables allows an attacker to include fully " +
                 "functional html, including active content. Write a comment or a title containing <i>&lt;img src=x " +
                 "onerror=\"alert('This is a malicious script excecuting')\"&gt;</i>.";

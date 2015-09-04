@@ -78,7 +78,7 @@ public class SSLProtocolTest extends AbstractTest {
     }
 
     @Override
-    public String getExploit() {
+    public String getExploit(Site site) {
         return null;
     }
 
