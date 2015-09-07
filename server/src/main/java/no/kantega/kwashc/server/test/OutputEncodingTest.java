@@ -39,8 +39,8 @@ public class OutputEncodingTest extends AbstractTest {
 
     @Override
     public String getDescription() {
-        return DESCRIPTION_XSS + "<br><br>The comment and title variables are included directly in the html without " +
-                "any escaping of html characters. This creates a XSS vulnerability." +
+        return DESCRIPTION_XSS + "<br><br>Some user supplied variables in the comments section are included directly " +
+                "in the html without any escaping of html characters. This creates a XSS vulnerability." +
                 "<br><br>Validating the fields for illegal values <i>could</i> also help, but might be hampered by " +
                 "functional constraints. It is clearly legitimate for normal users to be discussing JavaScript or " +
                 "maths, and banning potentially &quot;dangerous&quot; characters like &lt;, &gt;, ' or &quot; isn't " +
@@ -56,7 +56,8 @@ public class OutputEncodingTest extends AbstractTest {
     public String getExploit(Site site) {
         return "Missing output encoding of the comment and title variables allows an attacker to include fully " +
                 "functional html, including active content. Write a comment or a title containing <i>&lt;img src=x " +
-                "onerror=\"alert('This is a malicious script excecuting')\"&gt;</i>.";
+                "onerror=\"alert('This is a malicious script excecuting')\"&gt;</i>." +
+                "<br><br>Some browsers will filter basic XSS attacks like this. Try Firefox.";
     }
 
     @Override

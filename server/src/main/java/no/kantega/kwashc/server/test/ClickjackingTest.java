@@ -61,8 +61,9 @@ public class ClickjackingTest extends AbstractTest {
 	@Override
 	public String getExploit(Site site) {
 		if(site != null) {
-			return "Visit <a href=\"/site/" + site.getId() + "/clickjacking\">this page</a>. The blog would be " +
-					"invisible in a real world attack.";
+            return "Visit <a href=\"/site/" + site.getId() + "/clickjacking\" target=\"_blank\">this page</a>. The " +
+                    "blog would be invisible in a real world attack, while the overlaying content would be placed " +
+                    "strategically to make the victim perform actions on the blog.";
 		}
 		return null;
 	}
