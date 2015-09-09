@@ -21,6 +21,7 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import org.apache.commons.codec.binary.Hex;
@@ -61,12 +62,22 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
         return "Tests if passwords are stored in a secure cryptographic way in the webapplication.";
     }
 
+    @Override
+    public String getExploit(Site site) {
+        return null;
+    }
+
 	@Override
 	public String getInformationURL() {
 		return "https://www.owasp.org/index.php/Insecure_Storage";
 	}
 
-	@Override
+    @Override
+    public String getHint() {
+        return null;
+    }
+
+    @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
         long startTime = System.nanoTime();
 
@@ -89,7 +100,7 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
             responseBody = tester.getPageSource();
 
             if(responseBody.contains("You asked for a protected resource. Please log in:")){
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("It's not possible to login to your application with the original username/password, no points for you!");
             } else if(responseBody.contains("P1:") && responseBody.contains("P2:")){
 
@@ -101,7 +112,7 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
                 String anotherUserPassword = responseBody.substring(start2,stop2).trim();
 
                 if (usernamePassword.equalsIgnoreCase("") || anotherUserPassword.equalsIgnoreCase("")) {
-                    testResult.setPassed(false);
+                    testResult.setResultEnum(ResultEnum.failed);
                     testResult.setMessage("You have tampered with the super secure cryptographic storage checker, no points for you!");
                 } else if (!usernamePassword.matches("\\A\\p{ASCII}*\\z") || !anotherUserPassword.matches("\\A\\p{ASCII}*\\z")) {
 
@@ -118,28 +129,28 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
                         // nothing really matters
                     }
 
-                    testResult.setPassed(false);
+                    testResult.setResultEnum(ResultEnum.failed);
                     testResult.setMessage("Passwords should only be stored using ASCII characters!"+ add);
                 } else if (usernamePassword.contains(originalUsernamePassword) || anotherUserPassword.contains(originalAnotherUserPassword)) {
-                    testResult.setPassed(false);
+                    testResult.setResultEnum(ResultEnum.failed);
                     testResult.setMessage("Your application has insecure cryptographic storage!");
                 } else if (isPasswordCreatedWithInsecureHashAlgorithm(usernamePassword, originalUsernamePassword) ||
                     isPasswordCreatedWithInsecureHashAlgorithm(anotherUserPassword, originalAnotherUserPassword)) {
-                    testResult.setPassed(false);
+                    testResult.setResultEnum(ResultEnum.failed);
                     testResult.setMessage("Your application has insecure cryptographic storage!");
                 } else if (usernamePassword.length() < 56 || anotherUserPassword.length() < 56) {
-                    testResult.setPassed(false);
+                    testResult.setResultEnum(ResultEnum.partial);
                     testResult.setMessage("The output size of your cryptographic function seems a bit small, might not withstand a brute-force or rainbow table attack!");
                 } else if (!isPasswordCreatedWithInsecureHashAlgorithm(usernamePassword, originalUsernamePassword) ||
                     !isPasswordCreatedWithInsecureHashAlgorithm(anotherUserPassword, originalAnotherUserPassword)) {
-                    testResult.setPassed(true);
+                    testResult.setResultEnum(ResultEnum.passed);
                     testResult.setMessage("Ok, your application has some degree of secure cryptographic storage, hopefully...!");
                 } else {
-                    testResult.setPassed(false);
+                    testResult.setResultEnum(ResultEnum.failed);
                     testResult.setMessage("You have tampered with the super secure cryptographic storage checker, no points for you!");
                 }
             } else {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("You have tampered with the super secure cryptographic storage checker, no points for you!");
 
             }
@@ -183,4 +194,8 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
         }
     }
 
+    @Override
+    public TestCategory getTestCategory() {
+        return TestCategory.crypto;
+    }
 }

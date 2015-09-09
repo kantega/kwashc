@@ -16,6 +16,7 @@
 
 package no.kantega.kwashc.server.test;
 
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import org.apache.http.HttpResponse;
@@ -115,6 +116,16 @@ public class SSLCipherSuiteTest extends AbstractTest {
     }
 
     @Override
+    public String getExploit(Site site) {
+        return null;
+    }
+
+    @Override
+    public String getHint() {
+        return null;
+    }
+
+    @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
         long startTime = System.nanoTime();
 
@@ -122,7 +133,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
         try {
             httpsPort = new Integer(site.getSecureport());
         } catch (NumberFormatException e) {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("No HTTPS port specified, test not run!");
             setDuration(testResult, startTime);
             return testResult;
@@ -154,7 +165,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
             HttpResponse response = checkClientForCiphers(site, httpsPort, httpclient, ciphers);
 
             if (response.getStatusLine().getStatusCode() == 200) {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("Your application accepts weak/anonymous SSL/TLS cipher suites!");
             }
 
@@ -196,7 +207,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
                             HttpResponse response2 = checkClientForCiphers(site, httpsPort, httpclient3, ciphers2);
 
                             if (response2.getStatusLine().getStatusCode() == 200) {
-                                testResult.setPassed(true);
+                                testResult.setResultEnum(ResultEnum.passed);
                                 testResult.setMessage("Top score, no weak/anonymous ciphers and supporting the best available Perfect Forward Secrecy ciphers are present.");
                             } else {
                                 exitWrongHttpCode(testResult);
@@ -207,7 +218,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
                         } catch (KeyManagementException e1) {
                             return exitIncorrectCertificate(testResult);
                         } catch (IOException e1) {
-                            testResult.setPassed(false);
+                            testResult.setResultEnum(ResultEnum.failed);
                             testResult.setMessage("Almost there, no weak/anonymous ciphers and allows Perfect Forward Secrecy, but some of your ciphers require DSA keys, which are effectively limited to 1024 bits!");
                             return testResult;
                         } finally {
@@ -222,7 +233,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
                 } catch (KeyManagementException e1) {
                     return exitIncorrectCertificate(testResult);
                 } catch (IOException e1) {
-                    testResult.setPassed(false);
+                    testResult.setResultEnum(ResultEnum.failed);
                     testResult.setMessage("Looking better, your application does not allow SSL/TLS connection with anonymous/weak ciphers, but does not support Perfect Forward Secrecy!");
                     return testResult;
                 } finally {
@@ -230,7 +241,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
                 }
 
             } else {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("Actual testing failed, check that the connection is working!");
             }
         } finally {
@@ -242,18 +253,18 @@ public class SSLCipherSuiteTest extends AbstractTest {
     }
 
     private void exitWrongHttpCode(TestResult testResult) {
-        testResult.setPassed(false);
+        testResult.setResultEnum(ResultEnum.failed);
         testResult.setMessage("The server did not respond with an HTTP 200 when it should, contact tutor.");
     }
 
     private TestResult exitIncorrectCertificate(TestResult testResult) {
-        testResult.setPassed(false);
+        testResult.setResultEnum(ResultEnum.failed);
         testResult.setMessage("Certificate configuration does not seem to be correct, check certificate on remote environment!");
         return testResult;
     }
 
     private TestResult exitMissingCipherSuites(TestResult testResult) {
-        testResult.setPassed(false);
+        testResult.setResultEnum(ResultEnum.failed);
         testResult.setMessage("Cipher suites used for connection not available in local environment, contact tutor.");
         return testResult;
     }
@@ -298,5 +309,10 @@ public class SSLCipherSuiteTest extends AbstractTest {
         }
 
     };
+
+    @Override
+    public TestCategory getTestCategory() {
+        return TestCategory.crypto;
+    }
 
 }

@@ -19,6 +19,7 @@ package no.kantega.kwashc.server;
 import net.sourceforge.jwebunit.junit.WebTester;
 import no.kantega.kwashc.WebappJettyStarter;
 import no.kantega.kwashc.server.controller.SiteController;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.repository.SiteRepository;
 import no.kantega.kwashc.server.test.ClickjackingTest;
@@ -44,7 +45,7 @@ public class SiteRegistrationTest {
 	@Before
 	public void startSite() throws Exception {
 		site = WebappJettyStarter.start();
-		assertTrue(new SiteExistsTest().testSite(site).isPassed());
+		assertTrue(new SiteExistsTest().testSite(site).getResultEnum() == ResultEnum.passed);
 		serverPort = ServerJettyStarter.start();
 	}
 

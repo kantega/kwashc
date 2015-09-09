@@ -18,6 +18,7 @@ package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.api.IElement;
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -52,7 +53,17 @@ public class InsecureDirectObjectReferenceTest extends AbstractTest {
 		return "https://www.owasp.org/index.php/Top_10_2013-A4-Insecure_Direct_Object_References";
 	}
 
-	@Override
+    @Override
+    public String getExploit(Site site) {
+        return null;
+    }
+
+    @Override
+    public String getHint() {
+        return null;
+    }
+
+    @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable{
         long startTime = System.nanoTime();
 
@@ -73,11 +84,11 @@ public class InsecureDirectObjectReferenceTest extends AbstractTest {
         String frontpage = tester.getPageSource();
 
         if(frontpage.contains(random + " - edited")) {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("Unauthorised editing possible. Users should log in to be able to edit posts.");
         } else
         {
-            testResult.setPassed(true);
+            testResult.setResultEnum(ResultEnum.passed);
             testResult.setMessage("You successfully prevented unauthorised editing!");
         }
 
@@ -96,5 +107,10 @@ public class InsecureDirectObjectReferenceTest extends AbstractTest {
 
         IElement elem = admin.getElementById("edit." + title);
         return elem.getAttribute("href");
+    }
+
+    @Override
+    public TestCategory getTestCategory() {
+        return TestCategory.securityFeature;
     }
 }

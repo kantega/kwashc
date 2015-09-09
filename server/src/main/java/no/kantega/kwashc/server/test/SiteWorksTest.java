@@ -17,6 +17,7 @@
 package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -36,6 +37,16 @@ public class SiteWorksTest extends AbstractTest {
 
 	@Override
 	public String getInformationURL() {
+		return null;
+	}
+
+	@Override
+	public String getExploit(Site site) {
+		return null;
+	}
+
+	@Override
+	public String getHint() {
 		return null;
 	}
 
@@ -128,10 +139,14 @@ public class SiteWorksTest extends AbstractTest {
 		tester.gotoPage(site.getAddress() + "/redirect?url=http://motherfuckingwebsite.com/");
 		tester.assertTextPresent("This is a motherfucking website.");
 
-		testResult.setPassed(true);
+		testResult.setResultEnum(ResultEnum.passed);
 	    testResult.setMessage("Site works like a charm!");
 
 		setDuration(testResult, startTime);
         return testResult;
     }
+	@Override
+	public TestCategory getTestCategory() {
+		return TestCategory.happyDay;
+	}
 }

@@ -17,6 +17,7 @@
 package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -37,6 +38,16 @@ public class SiteExistsTest extends AbstractTest {
 		return null;
 	}
 
+	@Override
+	public String getExploit(Site site) {
+		return null;
+	}
+
+	@Override
+	public String getHint() {
+		return null;
+	}
+
 	protected TestResult testSite(Site site, final TestResult testResult) throws IOException {
 		long startTime = System.nanoTime();
 
@@ -46,13 +57,17 @@ public class SiteExistsTest extends AbstractTest {
 		int response = tester.getTestingEngine().getServerResponseCode();
 
 		if (response == 200) {
-			testResult.setPassed(true);
+			testResult.setResultEnum(ResultEnum.passed);
 			testResult.setMessage("Server at " + site.getAddress() + " did respond with 200.");
 		} else {
-			testResult.setPassed(false);
+			testResult.setResultEnum(ResultEnum.failed);
 			testResult.setMessage("Server at " + site.getAddress() + " did NOT respond with 200. It responded: " + response + ".");
 		}
 		setDuration(testResult, startTime);
 		return testResult;
+	}
+	@Override
+	public TestCategory getTestCategory() {
+		return TestCategory.happyDay;
 	}
 }

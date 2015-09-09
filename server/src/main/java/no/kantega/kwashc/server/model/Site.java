@@ -126,7 +126,7 @@ public class Site extends AbstractPersistable<Long> implements Comparable<Site> 
         score = 0;
         for (TestResult test : testResults) {
 	        // just to avoid NPE when tests fail horribly:
-	        if (test != null && test.isPassed()) {
+	        if (test != null && test.getResultEnum() == ResultEnum.passed) {
 		        score++;
 	        }
         }

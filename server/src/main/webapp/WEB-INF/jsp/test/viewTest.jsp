@@ -22,25 +22,49 @@
 <div class="contentPadding">
 <h2>${test.name}</h2>
 
-<p>${test.description}</p>
-<br>
+<div class="description contentPadding floatContainer rounded">
+    <h4>Info</h4>
+    ${test.description}
+</div>
+
+<c:if test="${result.exploit != null}">
+    <div class="exploit contentPadding floatContainer rounded">
+    <h4>Exploit</h4>
+    ${result.exploit}
+    </div>
+</c:if>
+<c:if test="${test.hint != null}">
+    <div class="floatContainer wide">
+        <input type="button" class="button positive leftFloat noMargin" onclick="javascript:$('#hint').toggle();" value="Toggle hint"/>
+    </div>
+    <div class="hint contentPadding floatContainer rounded" id="hint" style="display:none;">
+        <h4>Hint</h4>
+        ${test.hint}
+    </div>
+</c:if>
 <c:if test="${test.informationURL != null}">
+<br>
 <p>To learn more about this threat, google it, or read at this site: <a target="_blank" href="${test.informationURL}">${test.informationURL}</a></p>
 </c:if>
 <br><br>
 <c:if test="${result != null}">
-    <div class="rounded contentPadding floatContainer">
+    <div class="rounded contentPadding floatContainer linkBox"
+        onmouseover="$(this).addClass('highlight');" onmouseout="$(this).removeClass('highlight');">
         <c:choose>
-            <c:when test="${result.passed}">
+            <c:when test="${result.resultEnum == 'passed'}">
                 <img class="modelight" src="/gfx/modelight_green.png" title="Passed"/>
+            </c:when>
+            <c:when test="${result.resultEnum == 'partial'}">
+                <img class="modelight" src="/gfx/modelight_yellow.png" title="Partial"/>
             </c:when>
             <c:otherwise>
                 <img class="modelight" src="/gfx/modelight_red.png" title="Failed"/>
             </c:otherwise>
         </c:choose>
-        <a class="bigtext" href="<c:url value="/test/site/${site.id}/execute=${result.test.identifikator}"/>"
-           title="Run this test only!">${result.test.name} (${result.duration} seconds)</a>
-        <br> ${result.message}
+            <span class="heading">${result.test.name} (${result.duration} seconds)</span>
+            <a id="execute${result.test.identifikator}Link" href="<c:url value="/test/site/${site.id}/execute=${result.test.identifikator}"/>"></a>
+            <span class="testCategoryHeader rounded ${result.test.testCategory}">${result.test.testCategory.name}</span><br>
+            ${result.message}
     </div>
     </div>
     <div class="buttonContainer">

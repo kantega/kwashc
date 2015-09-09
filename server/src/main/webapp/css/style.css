@@ -22,7 +22,7 @@ html {
 body {
 	margin: 40px auto 100px;
 	text-align: left;
-	width: 700px;
+	width: 800px;
 	background-color: white;
 	border: 1px solid black;
     box-shadow: 0 0 70px -10px #000;
@@ -123,6 +123,9 @@ h2 {
 h3 {
 	margin-top: 10px;
 }
+h4 {
+    font-weight: bold;
+}
 
 form {
 	width: auto;
@@ -140,9 +143,6 @@ tbody tr:nth-child(even) td.passed, tbody tr.even td.passed, td.passed {
 tbody tr:nth-child(even) td.failed, tbody tr.even td.failed, td.failed {
 	background: #ff6666;
 }
-
-
-
 
 #siteDefinition dt{
     width: 100px;
@@ -170,7 +170,7 @@ a.button, .button{
     font-size: 13px;
     font-weight: bold;
     display: block;
-float: right;
+    float: right;
 }
 
 .button.negative{
@@ -214,8 +214,87 @@ img.modelight{
     background: #eee;
 }
 
+.heading {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.highlight{
+    box-shadow: 0px 0px 7px #9696FF;
+}
+
+.linkBox {
+    position: relative;
+}
+
+.linkBox a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.testCategoryHeader{
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    padding: 10px;
+    float: right;
+}
+
+.happyDay{
+    background: #FFFFFF;
+}
+
+.xss{
+    background: #69D6FA;
+}
+
+.csrf{
+    background: #69FA9E;
+}
+
+.misconfiguration{
+    background: #FA8169;
+}
+
+.securityFeature{
+    background: #E09CFF;
+}
+
+.assorted{
+    background: #FCFC7E;
+}
+
+.crypto{
+    background: #9696FF;
+}
+
 .floatContainer{
     overflow: auto;
+}
+
+.wide{
+    width: 100%;
+}
+
+.noMargin{
+    margin: 0px;
+}
+
+.description{
+    border: none;
+    background: #FFFFFF;
+}
+
+.hint{
+    border: 1px solid #FFEE00;
+    background: #FFFEED;
+}
+
+.exploit{
+    border: 1px solid #FFA0A0;
+    background: #FFEDEE;
 }
 
 .leftFloat{

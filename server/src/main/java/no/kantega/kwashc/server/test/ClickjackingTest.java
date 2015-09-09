@@ -17,6 +17,7 @@
 package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -41,19 +42,35 @@ public class ClickjackingTest extends AbstractTest {
 
 	@Override
 	public String getName() {
-		return "Click-jacking test";
+		return "Click-jacking";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Tests the site for embedding in an iframe";
+		return "Click-jacking is an easy and effective attack for tricking a legitimate user to perform certain " +
+				"actions on your page. This is done by creating a malicious page designed to make the user click on " +
+				"certain parts or do certain button presses, while an invisible copy of your site is placed on top. " +
+				"The victim sees the specially crafted attacker page, while in reality interacting with your page. ";
 	}
 
 	@Override
 	public String getInformationURL() {
 		return "http://en.wikipedia.org/wiki/Clickjacking";
-		// This has the solution too easy to find: ;-)
-		// return "https://www.owasp.org/index.php/Clickjacking";
+	}
+
+	@Override
+	public String getExploit(Site site) {
+		if(site != null) {
+            return "Visit <a href=\"/site/" + site.getId() + "/clickjacking\" target=\"_blank\">this page</a>. The " +
+                    "blog would be invisible in a real world attack, while the overlaying content would be placed " +
+                    "strategically to make the victim perform actions on the blog.";
+		}
+		return null;
+	}
+
+	@Override
+	public String getHint() {
+		return "See the Wikipedia article.";
 	}
 
 	@Override
@@ -89,37 +106,37 @@ public class ClickjackingTest extends AbstractTest {
 
 		try {
 			if (javascriptSolution && deprecatedHeaderSolution && contentSecurityPolicySolution) {
-                testResult.setPassed(true);
+                testResult.setResultEnum(ResultEnum.passed);
                 testResult.setMessage("You jumped out of the evil iframe, added an frame-ancestors directive in Content Security Policy (CSP) AND set an X-Frame-Options to '" + frameOptionsHeader + "'. Triple protection. Excellent!!");
                 return testResult;
             } else if (javascriptSolution && contentSecurityPolicySolution) {
-                testResult.setPassed(true);
+                testResult.setResultEnum(ResultEnum.passed);
                 testResult.setMessage("You jumped out of the evil iframe, AND added an frame-ancestors directive in Content Security Policy (CSP). Double protection. Excellent!");
                 return testResult;
             } else if (contentSecurityPolicySolution && deprecatedHeaderSolution) {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.partial);
                 testResult.setMessage("Good! You added an frame-ancestors directive in Content Security Policy (CSP), AND set an X-Frame-Options to '" + frameOptionsHeader + "'. But what if the user is using an old browser?");
                 return testResult;
             } else if (javascriptSolution && deprecatedHeaderSolution) {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.partial);
                 testResult.setMessage("You jumped out of the evil iframe, AND set an X-Frame-Options to '" + frameOptionsHeader + "'. Unfortunately X-Frame-Options is deprecated, what about using some Content Security Policy (CSP)?");
                 return testResult;
             } else if (javascriptSolution) {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.partial);
                 testResult.setMessage("You jumped out of the evil iframe. Well done! But what if the user does not have javascript?");
                 return testResult;
             } else if (deprecatedHeaderSolution) {
-                testResult.setPassed(false);
-                testResult.setMessage("Your on the right track. You have set X-Frame-Options to " + frameOptionsHeader + ". Unfortunately X-Frame-Options is deprecated, and what if the user is using an old browser?");
+                testResult.setResultEnum(ResultEnum.failed);
+                testResult.setMessage("You're on the right track. You have set X-Frame-Options to " + frameOptionsHeader + ". Unfortunately X-Frame-Options is deprecated, and what if the user is using an old browser?");
                 return testResult;
             } else if (contentSecurityPolicySolution) {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.partial);
                 testResult.setMessage("Good! You have set the frame-ancestors directive in Content Security Policy (CSP). But what if the user is using an old browser?");
                 return testResult;
             } else {
-                testResult.setPassed(false);
-                testResult.setMessage("You have made it possible to embedd your site in an iframe. See for yourself at " +
-                        "<a href=\"/site/" + site.getId() + "/clickjacking\">this page</a>.");
+                testResult.setResultEnum(ResultEnum.failed);
+                testResult.setMessage("It's possible to embed the blog in an iframe. This creates a click-jacking vulnerability, " +
+						"as users can be tricked into performing actions on the blog, while they are shown something else.");
                 return testResult;
             }
 		} finally {
@@ -130,4 +147,9 @@ public class ClickjackingTest extends AbstractTest {
 	private boolean checkContentSecurityPolicy(String contentSecurityPolicyHeader) {
         return contentSecurityPolicyHeader != null && contentSecurityPolicyHeader.contains("frame-ancestors");
     }
+
+	@Override
+	public TestCategory getTestCategory() {
+		return TestCategory.assorted;
+	}
 }

@@ -20,9 +20,7 @@ import no.kantega.kwashc.server.test.AbstractTest;
 import no.kantega.kwashc.server.test.TestRepository;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 /**
  * TODO andbat: Description/responsibilities.
@@ -35,8 +33,8 @@ public class TestResult extends AbstractPersistable<Long> {
 	@Basic
     private String testIdentifikator;
 
-	@Basic
-    private boolean passed;
+    @Enumerated(EnumType.STRING)
+    private ResultEnum resultEnum;
 
 	@Basic
     private String message;
@@ -49,6 +47,7 @@ public class TestResult extends AbstractPersistable<Long> {
 
 	public TestResult(AbstractTest test) {
 		this.testIdentifikator = test.getIdentifikator();
+        resultEnum = ResultEnum.failed;
 	}
 
 	protected TestResult() {
@@ -59,12 +58,12 @@ public class TestResult extends AbstractPersistable<Long> {
 		return TestRepository.getTests().get(testIdentifikator);
 	}
 
-	public boolean isPassed() {
-        return passed;
+	public ResultEnum getResultEnum() {
+         return resultEnum;
     }
 
-    public void setPassed(boolean passed) {
-        this.passed = passed;
+    public void setResultEnum(ResultEnum resultEnum) {
+        this.resultEnum = resultEnum;
     }
 
     public String getMessage() {
@@ -89,5 +88,9 @@ public class TestResult extends AbstractPersistable<Long> {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public String getExploit(){
+        return getTest().getExploit(site);
     }
 }

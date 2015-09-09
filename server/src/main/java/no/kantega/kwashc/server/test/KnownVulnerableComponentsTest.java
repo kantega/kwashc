@@ -18,6 +18,7 @@ package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.api.IElement;
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -46,15 +47,28 @@ public class KnownVulnerableComponentsTest extends AbstractTest
     }
 
     @Override
-    public String getDescription()
-    {
-        return "Testing for known vulnerable components used in the web application.";
+    public String getDescription() {
+        return "Modern development means using quite a lot of third party software, both server and client side. Like " +
+                "any software, these components and libraries are susceptible to programming mistakes and " +
+                "vulnerabilities.";
     }
 
     @Override
-    public String getInformationURL()
-    {
+    public String getInformationURL() {
         return "https://www.owasp.org/index.php/Top_10_2013-A9-Using_Components_with_Known_Vulnerabilities";
+    }
+
+    @Override
+    public String getExploit(Site site) {
+        return "Click <a href=\"" + getBaseUrl(site) + "#<img src=x onerror=%22alert('jQuery used to" +
+                " use createElement() in selectors. This can cause XSS.')%22/>\" target=\"_blank\")\">here</a>.";
+    }
+
+    @Override
+    public String getHint() {
+        return "Old jQuery versions had an issue where jQuery selectors ($(something)) used the native JS function " +
+                "createElement(). Allowing an attacker to create arbitrary html elements creates a XSS vulnerability. " +
+                "See the exploit.";
     }
 
     @Override
@@ -64,15 +78,7 @@ public class KnownVulnerableComponentsTest extends AbstractTest
         WebTester tester = new WebTester();
 
         tester.beginAt(site.getAddress());
-        String source = tester.getPageSource();
 
-        if(!source.contains("$(location.hash)"))
-        {
-            testResult.setPassed(false);
-            testResult.setMessage("jQuery functionality removed from source. Remember: do not change functionality!");
-            setDuration(testResult, startTime);
-            return testResult;
-        }
 
         IElement elem = tester.getTestingEngine().getElementByID("jquery");
         if(elem == null){
@@ -88,33 +94,55 @@ public class KnownVulnerableComponentsTest extends AbstractTest
 
         if(!matcher.matches())
         {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("Unable to find script-tag for jquery in html. Include jquery by using the \"src\"-attribute");
             setDuration(testResult, startTime);
             return testResult;
         }
 
+        String source = tester.getPageSource();
+        boolean offendingLocationHashRemoved = !source.contains("$(location.hash)");
+
         String version = matcher.group(1);
-        if(version.equalsIgnoreCase("1.6.2"))
-        {
-            testResult.setPassed(false);
-            testResult.setMessage("The application includes vulnerable components. " +
-                    "Try to search for known vulnerable components that is used in the application.");
-        } else if(version.matches("2.*"))
-        {
-            testResult.setPassed(false);
-            testResult.setMessage("The blog needs to support older versions of IE, try using the latest version 1.x of jquery.");
-        } else if(version.equalsIgnoreCase("1.11.3"))
-        {
-            testResult.setPassed(true);
-            testResult.setMessage("jQuery is successfully updated to the latest version!");
-        } else
-        {
-            testResult.setPassed(false);
-            testResult.setMessage("Seems like jquery has been tried updated, but you should update to the latest 1.x version of jquery.");
+        try {
+            if(isApprovedVersion(version)) {
+                testResult.setResultEnum(ResultEnum.passed);
+                testResult.setMessage("jQuery has been updated to a new version!");
+            } else if(offendingLocationHashRemoved){
+                testResult.setResultEnum(ResultEnum.partial);
+                testResult.setMessage("Good! Removing the pointless $(location.hash} is good practice, but you still " +
+                        "should update jQuery to a newer version. Something else might go wrong.");
+            } else {
+                testResult.setResultEnum(ResultEnum.failed);
+                testResult.setMessage("The application includes vulnerable components. " +
+                        "Try to search for known vulnerable components that is used in the application.");
+            }
+        } catch (Exception e) {
+            testResult.setResultEnum(ResultEnum.partial);
+            testResult.setMessage("Well, this is embarrassing. We can't make out what version of jQuery you are using " +
+                    "(" + version + "). How about a nice conventional version number, like 1.8.0?");
         }
 
         setDuration(testResult, startTime);
         return testResult;
+    }
+
+    boolean isApprovedVersion(String version) {
+
+        int[] minVersionInts = {1, 6, 2};
+        String[] versionTokens = version.split("\\.");
+
+        for(int i = 0; i < 3 && i < versionTokens.length; i++) {
+            if(minVersionInts[i] < Integer.parseInt(versionTokens[i])) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    @Override
+    public TestCategory getTestCategory() {
+        return TestCategory.assorted;
     }
 }

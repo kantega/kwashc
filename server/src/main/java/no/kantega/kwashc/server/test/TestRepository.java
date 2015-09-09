@@ -24,28 +24,39 @@ public final class TestRepository {
 	private static final Map<String, AbstractTest> tests = new LinkedHashMap<String, AbstractTest>();
 
 	static {
+		//happy day tests
 		add(new SiteExistsTest());
 		add(new SiteWorksTest());
-		add(new OutputEncoding());
-		add(new BasicXSRFTest());
-		add(new XSSTest());
-		add(new FailureToRestrictUrlTest());
-		add(new SessionXSRFTest());
-		add(new InputValidationTest());
-		// This test is currently excluded, as it has no theoretical basis. Should you find a link backing this test, please feel free to re-add it
-		// add(new DirectAdminLinkTest());
 
-		add(new ClickjackingTest());
+		//XSS
+		add(new OutputEncodingTest());
+		add(new DOMXSSTest());
+
+		//CSRF
+		add(new CSRFTest());
+
+		//Security features
+		add(new InputValidationTest());
+		//add(new InsecureDirectObjectReferenceTest()); //currently identical to failure to restrict URL. Must be
+		// rewritten to make sense. E.g. ownership to posts, and authorization for editing them.
+		add(new BackdoorTest());
+		add(new UnvalidatedRedirectTest());
+
+		//Misconfiguration
 		add(new APITest());
-		add(new InsecureDirectObjectReferenceTest());
-		add(new InvalidatedRedirectTest());
+		add(new FailureToRestrictUrlTest());
 		add(new ImproperErrorHandlingTest());
-        add(new KnownVulnerableComponentsTest());
-        add(new BackdoorTest());
+
+		//Crypto
 		add(new InsecureCryptographicStorageTest());
 		// Test only works with a server with JVM > 6:
 		if (getMajorJVMVersion() > 6) add(new SSLProtocolTest());
 		add(new SSLCipherSuiteTest());
+
+		//Assorted
+		add(new ClickjackingTest());
+		add(new KnownVulnerableComponentsTest());
+
 	}
 
 	private static void add(AbstractTest test) {

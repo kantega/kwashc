@@ -17,6 +17,7 @@
 package no.kantega.kwashc.server.test;
 
 import net.sourceforge.jwebunit.junit.WebTester;
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
@@ -29,7 +30,7 @@ import java.io.IOException;
  *
  * @author Anders Båtstrand, (www.kantega.no)
  */
-public class OutputEncoding extends AbstractTest {
+public class OutputEncodingTest extends AbstractTest {
 
     @Override
     public String getName() {
@@ -38,15 +39,33 @@ public class OutputEncoding extends AbstractTest {
 
     @Override
     public String getDescription() {
-        return "Tests the blog for output encoding errors.";
+        return DESCRIPTION_XSS + "<br><br>Some user supplied variables in the comments section are included directly " +
+                "in the html without any escaping of html characters. This creates a XSS vulnerability." +
+                "<br><br>Validating the fields for illegal values <i>could</i> also help, but might be hampered by " +
+                "functional constraints. It is clearly legitimate for normal users to be discussing JavaScript or " +
+                "maths, and banning potentially &quot;dangerous&quot; characters like &lt;, &gt;, ' or &quot; isn't " +
+                "acceptable.";
     }
 
-	@Override
+    @Override
 	public String getInformationURL() {
 		return "https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet";
 	}
 
-	@Override
+    @Override
+    public String getExploit(Site site) {
+        return "Missing output encoding of the comment and title variables allows an attacker to include fully " +
+                "functional html, including active content. Write a comment or a title containing <i>&lt;img src=x " +
+                "onerror=\"alert('This is a malicious script excecuting')\"&gt;</i>." +
+                "<br><br>Some browsers will filter basic XSS attacks like this. Try Firefox.";
+    }
+
+    @Override
+    public String getHint() {
+        return "The JSTL tag library already included can do basic html escaping. Use &lt;c:out value=.../&gt;";
+    }
+
+    @Override
     protected TestResult testSite(Site site, TestResult testResult) throws IOException {
         long startTime = System.nanoTime();
 
@@ -61,8 +80,9 @@ public class OutputEncoding extends AbstractTest {
 
         // this might be reflected back in the form, or on the front page
         if (tester.getTestingEngine().hasElement("evilDiv")) {
-            testResult.setPassed(false);
-            testResult.setMessage("You allowed html tags to be reflected back on the user!");
+            testResult.setResultEnum(ResultEnum.failed);
+            testResult.setMessage("User input is included directly in the html without any " +
+                    "escaping of html characters. This creates a XSS vulnerability.");
             setDuration(testResult, startTime);
             return testResult;
         }
@@ -71,16 +91,22 @@ public class OutputEncoding extends AbstractTest {
         tester.assertElementNotPresent("evilDiv");
 
         if (tester.getTestingEngine().hasElement("evilDiv")) {
-            testResult.setPassed(false);
-            testResult.setMessage("You allowed html tags to be reflected back on all users!");
+            testResult.setResultEnum(ResultEnum.failed);
+            testResult.setMessage("User input is included directly in the html without any " +
+                    "escaping of html characters. This creates a XSS vulnerability.");
             setDuration(testResult, startTime);
             return testResult;
         }
 
-        testResult.setPassed(true);
+        testResult.setResultEnum(ResultEnum.passed);
         testResult.setMessage("No errors found.");
 
         setDuration(testResult, startTime);
         return testResult;
+    }
+
+    @Override
+    public TestCategory getTestCategory() {
+        return TestCategory.xss;
     }
 }

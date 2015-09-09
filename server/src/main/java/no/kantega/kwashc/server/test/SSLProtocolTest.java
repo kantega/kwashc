@@ -16,6 +16,7 @@
 
 package no.kantega.kwashc.server.test;
 
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import org.apache.http.HttpResponse;
@@ -77,6 +78,16 @@ public class SSLProtocolTest extends AbstractTest {
     }
 
     @Override
+    public String getExploit(Site site) {
+        return null;
+    }
+
+    @Override
+    public String getHint() {
+        return null;
+    }
+
+    @Override
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
         long startTime = System.nanoTime();
 
@@ -84,7 +95,7 @@ public class SSLProtocolTest extends AbstractTest {
         try {
             httpsPort = new Integer(site.getSecureport());
         } catch (NumberFormatException e) {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("No HTTPS port specified, test not run!");
             setDuration(testResult, startTime);
             return testResult;
@@ -98,15 +109,15 @@ public class SSLProtocolTest extends AbstractTest {
             HttpResponse response = checkClient(site, httpsPort, httpClient, new String[]{"SSLv3"}, null);
 
             if (response.getStatusLine().getStatusCode() == 200) {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("Your application accepts an insecure SSL protocol!");
             } else {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("Actual testing failed, check that the connection is working!");
             }
 
         } catch (KeyManagementException e) {
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("Certificate configuration does not seem to be correct, check certificate on remote environment!");
             return testResult;
         } catch (IOException e) {
@@ -116,16 +127,16 @@ public class SSLProtocolTest extends AbstractTest {
                 HttpResponse response = checkClient(site, httpsPort, httpClient, new String[]{"TLSv1.2"}, null);
 
                 if (response.getStatusLine().getStatusCode() == 200) {
-                    testResult.setPassed(true);
+                    testResult.setResultEnum(ResultEnum.passed);
                     testResult.setMessage("That`s better, you application supports secure SSL/TLS protocol TLSv1.2!");
                 } else {
-                    testResult.setPassed(false);
+                    testResult.setResultEnum(ResultEnum.failed);
                     testResult.setMessage("Your application does not support secure SSL/TLS Protocols!");
                 }
                 return testResult;
 
             } else {
-                testResult.setPassed(false);
+                testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("Actual testing failed, check that the connection is working!");
             }
         } finally {
@@ -182,4 +193,9 @@ public class SSLProtocolTest extends AbstractTest {
         }
 
     };
+
+    @Override
+    public TestCategory getTestCategory() {
+        return TestCategory.crypto;
+    }
 }

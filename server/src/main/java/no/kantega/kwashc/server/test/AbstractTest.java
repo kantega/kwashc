@@ -16,6 +16,7 @@
 
 package no.kantega.kwashc.server.test;
 
+import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import org.apache.log4j.Logger;
@@ -36,6 +37,23 @@ public abstract class AbstractTest {
 
 	public abstract String getDescription();
 
+	public abstract String getExploit(Site site);
+
+	public abstract String getHint();
+
+	public abstract TestCategory getTestCategory();
+
+	protected final static String DESCRIPTION_XSS = "Cross Site Scripting (XSS) vulnerabilities allows an attacker to" +
+			" inject malicious scripts into your web site, which are then executed by the victim's browser as if they " +
+			"were part of the part of the page you intended. This happens when unvalidated user input is included in the" +
+			" html without proper escaping, or when it used in certain dangerous JavaScript functions. XSS currently " +
+			"ranks #3 in the OWASP Top 10 application security risks";
+
+	protected final static String DESCRIPTION_SECURITY_MISCONFIGURATION = "Security misconfiguration covers all " +
+			"security issues arising from improper configuration and setup of the application, frameworks, application" +
+			" server, web server, database server, or platform. Security misconfiguration currently ranks #5 in the " +
+			"OWASP Top 10 application security risks. ";
+
 	/**
 	 * Give some information on the threat behind the text. Might be null
 	 *
@@ -50,7 +68,7 @@ public abstract class AbstractTest {
 			result = testSite(site, result);
 		} catch (Throwable e) {
 			logger.info("Error during test.", e);
-			result.setPassed(false);
+			result.setResultEnum(ResultEnum.failed);
 			result.setMessage("Error: " + e.getMessage());
 		}
 		return result;
@@ -81,6 +99,14 @@ public abstract class AbstractTest {
 		} else {
 			testResult.setDuration(testResult.getDuration() + String.format(" %01d.%03d", sec, ms));
 
+		}
+	}
+
+	protected String getBaseUrl(Site site) {
+		if(site != null && site.getAddress() != null && !site.getAddress().isEmpty()){
+			return site.getAddress();
+		} else {
+			return "http://localhost:8080/"; //fallback to default
 		}
 	}
 
