@@ -27,7 +27,7 @@
         <li>Setup Environment variables for Java</li>
         <ul>
             <li>Windows: Follow <a href="http://www.itcsolutions.eu/2010/11/29/set-environment-variables-in-windows-7-for-java/">this guide.</a></li>
-            <li>MacOS X: Run the following:<br>
+            <li>Mac OS X: Run the following:<br>
                 <code>echo export "JAVA_HOME=\$(/usr/libexec/java_home)" >> ~/.bash_profile</code><br>
                 Then restart your shell. If that did not work <a href="http://www.mkyong.com/java/how-to-set-java_home-environment-variable-on-mac-os-x/">follow this guide</a></li>
             <li>Linux (Ubuntu):<br>
@@ -36,7 +36,7 @@
             </li>
         </ul>
         <li>
-            Open a (Windows Command Shell (CMD.exe)|MacOS Terminal|Bash|Zsh) an try to run:<br>
+            Open a (Windows Command Shell (CMD.exe)|Mac OS X Terminal|Linux Bash) and try to run:<br>
             <code>java -version</code><br>
             If that worked, your ready to go. If not go back to <b>Setup Environment variables</b> and try again or ask someone for help.
         </li>
