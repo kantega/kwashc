@@ -59,7 +59,10 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
 
     @Override
     public String getDescription(){
-        return "Tests if passwords are stored in a secure cryptographic way in the webapplication.";
+        return "Most web applications have a need to store sensitive information, either in a database or on a file " +
+                "system somewhere. Should the information be leaked or otherwise lost one must be sure that it has been " +
+                "secured in a way that makes it practically impossible to retrieve.<br><br>You need to create an secure " +
+                "cryptographic storage for the password of the users on the web application.";
     }
 
     @Override
