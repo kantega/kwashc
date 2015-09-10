@@ -102,12 +102,15 @@ public class SSLCipherSuiteTest extends AbstractTest {
 
     @Override
     public String getName() {
-        return "SSL/TLS Connection Cipher Strength Test";
+        return "SSL/TLS Connection Cipher Strength";
     }
 
     @Override
     public String getDescription() {
-        return "Test if a weak Cipher is  allowed for an SSL/TLS connection.";
+        return DESCRIPTION_SECURE_COMMUNICATION + "<br><br> A cipher suite is a named combination of authentication, encryption" +
+                ", message authentication code (MAC) and key exchange algorithms used to negotiate the security settings" +
+                " in and SSL/TLS based communication. To ensure that the communication is secure it is important to only " +
+                "support strong and secure cipher suites. ";
     }
 
     @Override
@@ -122,7 +125,8 @@ public class SSLCipherSuiteTest extends AbstractTest {
 
     @Override
     public String getHint() {
-        return null;
+        return "Create a blacklist of disabled SSL/TLS cipher suites using <excludeCipherSuites> in <configuration> of " +
+                "the jetty-maven-plugin in pom.xml. A blacklist might be good, but you should also consider a whitelist.";
     }
 
     @Override
@@ -218,7 +222,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
                         } catch (KeyManagementException e1) {
                             return exitIncorrectCertificate(testResult);
                         } catch (IOException e1) {
-                            testResult.setResultEnum(ResultEnum.failed);
+                            testResult.setResultEnum(ResultEnum.partial);
                             testResult.setMessage("Almost there, no weak/anonymous ciphers and allows Perfect Forward Secrecy, but some of your ciphers require DSA keys, which are effectively limited to 1024 bits!");
                             return testResult;
                         } finally {
@@ -233,7 +237,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
                 } catch (KeyManagementException e1) {
                     return exitIncorrectCertificate(testResult);
                 } catch (IOException e1) {
-                    testResult.setResultEnum(ResultEnum.failed);
+                    testResult.setResultEnum(ResultEnum.partial);
                     testResult.setMessage("Looking better, your application does not allow SSL/TLS connection with anonymous/weak ciphers, but does not support Perfect Forward Secrecy!");
                     return testResult;
                 } finally {

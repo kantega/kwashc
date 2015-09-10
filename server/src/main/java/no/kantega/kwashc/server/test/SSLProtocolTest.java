@@ -64,12 +64,13 @@ public class SSLProtocolTest extends AbstractTest {
 
     @Override
     public String getName() {
-        return "Secure SSL/TLS Protocol Test";
+        return "Secure SSL/TLS Protocol";
     }
 
     @Override
     public String getDescription() {
-        return "Test if secure SSL/TLS Protocols are supported.";
+        return DESCRIPTION_SECURE_COMMUNICATION + "<br><br>To ensure that the communication is secure it is " +
+                "important to only support strong versions of the protocols.";
     }
 
     @Override
