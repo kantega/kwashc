@@ -16,7 +16,9 @@
 
 package no.kantega.kwashc.server.test;
 
+import com.gargoylesoftware.htmlunit.CookieManager;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.util.Cookie;
 import net.sourceforge.jwebunit.htmlunit.HtmlUnitTestingEngineImpl;
 import net.sourceforge.jwebunit.junit.WebTester;
 import no.kantega.kwashc.server.model.ResultEnum;
@@ -142,8 +144,14 @@ public class CSRFTest extends AbstractTest {
         WebClient client1 = ((HtmlUnitTestingEngineImpl)tester1.getTestingEngine()).getWebClient();
         WebClient client2 = ((HtmlUnitTestingEngineImpl)tester2.getTestingEngine()).getWebClient();
 
-        // TODO: Consider only coping jsessionId cookie, not all cookies, as these might be used as an protection mechanism.
-        client1.setCookieManager(client2.getCookieManager());
+        CookieManager cookieManager2 = client2.getCookieManager();
+        Cookie jsessionIdCookie = cookieManager2.getCookie("JSESSIONID");
+
+        if(jsessionIdCookie != null){
+            CookieManager newCookieManager = new CookieManager();
+            newCookieManager.addCookie(jsessionIdCookie);
+            client1.setCookieManager(newCookieManager);
+        }
 
         // fill in form
         tester1.setTextField("title", "CSRF post");
@@ -156,7 +164,7 @@ public class CSRFTest extends AbstractTest {
         }
         String frontPage = HttpClientUtil.getPageText(site.getAddress() + "blog");
 
-       return frontPage.contains(sessionRandomPost);
+        return frontPage.contains(sessionRandomPost);
     }
 
     @Override
