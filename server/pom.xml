@@ -217,7 +217,6 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>9.2.13.v20150730</version>
 				<configuration>
-					<jvmArgs>-Djava.security.properties=jvm/java.security</jvmArgs>
 					<jettyXml>${project.basedir}/src/test/resources/jetty.xml,${project.basedir}/src/test/resources/jetty-http.xml</jettyXml>
 					<webApp>
 						<contextPath>/</contextPath>
