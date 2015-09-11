@@ -61,7 +61,7 @@ public class UnvalidatedRedirectTest extends AbstractTest {
     @Override
     public String getHint() {
         return "Create a whitelist of domains you trust in RedirectServlet. For this test, hardcoding " +
-                "localhost and owasp.org will be ok. java.net.URL will give you some useful tools for parsing the URL.";
+                "localhost and motherfuckingwebsite.com will be ok. java.net.URL will give you some useful tools for parsing the URL.";
     }
 
     @Override

@@ -31,19 +31,19 @@ import org.apache.http.util.EntityUtils;
  * <p/>
  * Solution:
  * <p/>
- * Add the following to web.xml
+ * Create the file src/main/webapp/error.jsp, and add the following to web.xml
  * <p/>
  * <error-page>
  * <error-code>404</error-code>
- * <location>/WEB_INF/jsp/error.jsp</location>
+ * <location>/error.jsp</location>
  * </error-page>
  * <error-page>
  * <error-code>500</error-code>
- * <location>/WEB_INF/jsp/error.jsp</location>
+ * <location>/error.jsp</location>
  * </error-page>
  * <error-page>
  * <exception-type>java.lang.Throwable</exception-type>
- * <location>/WEB_INF/jsp/error.jsp</location>
+ * <location>/error.jsp</location>
  * </error-page>
  * <p/>
  * Create an error.jsp that does NOT leak ANY information about the application or the server.

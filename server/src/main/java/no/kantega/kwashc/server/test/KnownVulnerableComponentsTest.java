@@ -82,7 +82,7 @@ public class KnownVulnerableComponentsTest extends AbstractTest
 
         IElement elem = tester.getTestingEngine().getElementByID("jquery");
         if(elem == null){
-            testResult.setPassed(false);
+            testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("Do not remove the id attribute from the script tags in header.jsp! Do you think we are using unicorns to test this?");
             setDuration(testResult, startTime);
             return testResult;
