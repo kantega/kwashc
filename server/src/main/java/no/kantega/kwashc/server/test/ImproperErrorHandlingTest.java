@@ -31,7 +31,7 @@ import org.apache.http.util.EntityUtils;
  * <p/>
  * Solution:
  * <p/>
- * Add the following to web.xml
+ * Create the file src/main/webapp/error.jsp, and add the following to web.xml
  * <p/>
  * <error-page>
  * <error-code>404</error-code>
@@ -50,8 +50,8 @@ import org.apache.http.util.EntityUtils;
  * Alternate solution is to upgrade Jetty to 8.0.3+.
  * <p/>
  * Alternate url for provoking an error might be site.getAddress()/edit
- * <p/>
- * Referanser:
+ * </p>
+ * References:
  * http://www.jtmelton.com/2012/01/10/year-of-security-for-java-week-2-error-handling-in-web-xml/
  *
  * @author Espen A. Fossen, (Kantega AS)

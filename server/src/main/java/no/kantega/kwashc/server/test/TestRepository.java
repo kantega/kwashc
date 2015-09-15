@@ -49,10 +49,14 @@ public final class TestRepository {
 
 		//Crypto
 		add(new InsecureCryptographicStorageTest());
+		// Test only works with a server with JVM > 6:
+		if (getMajorJVMVersion() > 6) add(new SSLProtocolTest());
+		add(new SSLCipherSuiteTest());
 
 		//Assorted
 		add(new ClickjackingTest());
 		add(new KnownVulnerableComponentsTest());
+
 	}
 
 	private static void add(AbstractTest test) {

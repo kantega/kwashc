@@ -64,12 +64,13 @@ public class SSLProtocolTest extends AbstractTest {
 
     @Override
     public String getName() {
-        return "Secure SSL/TLS Protocol Test";
+        return "Secure SSL/TLS Protocol";
     }
 
     @Override
     public String getDescription() {
-        return "Test if secure SSL/TLS Protocols are supported.";
+        return DESCRIPTION_SECURE_COMMUNICATION + "<br><br>To ensure that the communication is secure it is " +
+                "important to only support strong versions of the protocols.";
     }
 
     @Override
@@ -84,7 +85,7 @@ public class SSLProtocolTest extends AbstractTest {
 
     @Override
     public String getHint() {
-        return null;
+        return "SSLv3 has been disabled by default in Oracle JDK 7u75 or JDK 8u31 or newer, upgrading might be in order.";
     }
 
     @Override

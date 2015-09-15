@@ -54,6 +54,10 @@ public abstract class AbstractTest {
 			" server, web server, database server, or platform. Security misconfiguration currently ranks #5 in the " +
 			"OWASP Top 10 application security risks. ";
 
+	protected static final String DESCRIPTION_SECURE_COMMUNICATION = "Communication between a client and a server " +
+			"utilities the HTTP protocol. To add security to the HTTP protocol the SSL (Secure Sockets Layer) was " +
+			"introduced, aka. as HTTPS. In later revisions the protocol has changed name to TLS (Transport Layer Security).";
+
 	/**
 	 * Give some information on the threat behind the text. Might be null
 	 *
