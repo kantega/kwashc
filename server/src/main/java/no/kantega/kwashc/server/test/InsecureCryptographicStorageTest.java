@@ -25,6 +25,7 @@ import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.net.URL;
@@ -59,12 +60,30 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
 
     @Override
     public String getDescription(){
-        return "Tests if passwords are stored in a secure cryptographic way in the webapplication.";
+        return "Password storage must be done in a very specific way in order to be secure. There are several ways a " +
+                "password database can be lost (SQL injection, misconfiguration, lost backup tapes, disgruntled DB " +
+                "admins etc), and our goal is to store the passwords in such a way that it is difficult and time " +
+                "consuming to extract the users' passwords even if the DB is stolen." +
+                "<br><br>You probably should be querying a dedicated authentication server, rather than storing the " +
+                "passwords yourself. The blog does however use its internal DB, so you will need to:<ol><li>Use a " +
+                "<i>computationally expensive and cryptographically secure</i> one-way function (\"hash\"). Standard " +
+                "hashing functions like SHA are designed to be <i>fast</i>, allowing an attacker to try <i>hundreds " +
+                "of billions</i> of potential passwords every second, using cheap over the counter home computers.</li>" +
+                "<li>Use an <i>individual</i> salt, unique for each user. This is a random value which is appended to " +
+                "the password before hashing. Individual salts forces the attacker to try password candidates for " +
+                "each user individually since two identical passwords will create two unique hashes. Without salts " +
+                "the attacker can compute one value and search the DB for <i>any</i> user which has used this " +
+                "password.</li></ol>." +
+                "A 10 minute Norwegian talk about proper password storage can be watched " +
+                "<a href='https://vimeo.com/49485270'>here</a> (<a href='https://jonare.github.io/jz12/passwords/'>" +
+                "slides</a>).";
     }
 
     @Override
     public String getExploit(Site site) {
-        return null;
+        return "User databases are usually stolen through other security vulnerabilities, such as SQL Injection. The " +
+                "blog's DB is just a map hard coded in Database.java, so it isn't directly exploitable from running " +
+                "code. ";
     }
 
 	@Override
@@ -74,7 +93,13 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
 
     @Override
     public String getHint() {
-        return null;
+        return "A real world application should use an algorithm especially suited for password storage, like PBKDF2 " +
+                "or scrypt. For the workshop we should avoid the overhead caused by importing new frameworks or tools: " +
+                "<ol><li>Create individual salt: Use SecureRandom to create a random byte array, and " +
+                "org.apache.commons.codec.digest.DigestUtils to create an ASCII digest (hash) of this value.</li>" +
+                "<li>Use DigestUtils to create a cryptographically secure hash (e.g. SHA512) of this salt and the " +
+                "password. Rehash the result a suitable number of times (e.g. 512). This adds computational expense " +
+                "for anyone trying to crack the passwords.</li></ol>";
     }
 
     @Override
@@ -129,11 +154,11 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
                         // nothing really matters
                     }
 
-                    testResult.setResultEnum(ResultEnum.failed);
+                    testResult.setResultEnum(ResultEnum.partial);
                     testResult.setMessage("Passwords should only be stored using ASCII characters!"+ add);
                 } else if (usernamePassword.contains(originalUsernamePassword) || anotherUserPassword.contains(originalAnotherUserPassword)) {
                     testResult.setResultEnum(ResultEnum.failed);
-                    testResult.setMessage("Your application has insecure cryptographic storage!");
+                    testResult.setMessage("Your application stores users' passwords in an insecure manner");
                 } else if (isPasswordCreatedWithInsecureHashAlgorithm(usernamePassword, originalUsernamePassword) ||
                     isPasswordCreatedWithInsecureHashAlgorithm(anotherUserPassword, originalAnotherUserPassword)) {
                     testResult.setResultEnum(ResultEnum.failed);
