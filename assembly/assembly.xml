@@ -31,9 +31,16 @@
 				<fileSets>
 					<fileSet>
 						<includes>
-							<include>src/**</include>
-							<include>pom.xml</include>
+							<include>**/**</include>
 						</includes>
+						<excludes>
+							<exclude>target/**</exclude>
+							<exclude>.idea/**</exclude>
+							<exclude>.gradle/**</exclude>
+							<exclude>.settings/**</exclude>
+							<exclude>build/**</exclude>
+							<exclude>*.iml</exclude>
+						</excludes>
 					</fileSet>
 				</fileSets>
 			</sources>
