@@ -1,5 +1,7 @@
 # Kantega Web Application Security Hero Challenge (KWASHC) #
 
+[![Build Status](https://travis-ci.org/kantega/kwashc.svg)](https://travis-ci.org/kantega/kwashc)
+
 ## About ##
 
 Developed for an in house training challenge for employees. The main goals with the challenge was to educate developers
