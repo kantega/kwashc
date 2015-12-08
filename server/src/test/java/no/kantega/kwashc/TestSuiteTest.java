@@ -60,8 +60,6 @@ public class TestSuiteTest {
 	/*
 	 * Timeout: 2 minutes
 	 */
-	@Ignore("Vi må fikse Exception: Caused by: com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException: 500 /WEB-INF/jsp/blog.jsp(1,63) PWC6188: The absolute uri: http://j\n" +
-			"ava.sun.com/jsp/jstl/core cannot be resolved in either web.xml or the jar files deployed with this application")
 	@Test(timeout = 2 * 60 * 1000)
 	public void testAllTest() throws Exception {
 

@@ -50,8 +50,6 @@ public class SiteRegistrationTest {
 	}
 
 	@Test
-	@Ignore("Vi må fikse Exception: Caused by: com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException: 500 /WEB-INF/jsp/blog.jsp(1,63) PWC6188: The absolute uri: http://j\n" +
-			"ava.sun.com/jsp/jstl/core cannot be resolved in either web.xml or the jar files deployed with this application")
 	public void serverStartsTest() {
 		WebTester tester = new WebTester();
 		tester.getTestingEngine().setIgnoreFailingStatusCodes(true);
@@ -61,8 +59,6 @@ public class SiteRegistrationTest {
 	}
 
 	@Test
-	@Ignore("Vi må fikse Exception: Caused by: com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException: 500 /WEB-INF/jsp/blog.jsp(1,63) PWC6188: The absolute uri: http://j\n" +
-			"ava.sun.com/jsp/jstl/core cannot be resolved in either web.xml or the jar files deployed with this application")
 	public void registerSiteTest() {
 		WebTester tester = new WebTester();
 		tester.getTestingEngine().setIgnoreFailingStatusCodes(true);
@@ -131,8 +127,8 @@ public class SiteRegistrationTest {
 		// clicks into a single test
 		tester.clickLink("execute" + new ClickjackingTest().getIdentifikator() + "Link");
 
+		tester.assertTextPresent(new ClickjackingTest().getName());
 		tester.assertTextPresent(new ClickjackingTest().getInformationURL());
-		tester.assertTextPresent(new ClickjackingTest().getDescription());
 
 		// check if site startup page is available
 		tester.gotoPage("http://localhost:" + serverPort);

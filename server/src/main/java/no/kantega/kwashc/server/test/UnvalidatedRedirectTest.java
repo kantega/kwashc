@@ -76,8 +76,8 @@ public class UnvalidatedRedirectTest extends AbstractTest {
             HttpEntity entity = response.getEntity();
             responseBody = EntityUtils.toString(entity);
 
-	        // OBS: In case we are sent to the front page, we must check for something more specific than the wprd Kantega
-            if (responseBody.contains("Nesten litt magisk - Kantega")) {
+	        // OBS: In case we are sent to the front page, we must check for something more specific than the word Kantega
+            if (responseBody.contains("I Kantega brenner vi for godt design og elegant teknologi")) {
                 testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("The blog can be used in phishing attacks, since it has a redirect service " +
                         "which doesn't discriminate what URLs it redirects to. An attacker might trick a victim into " +
