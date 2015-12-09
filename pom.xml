@@ -20,7 +20,7 @@
 	<groupId>no.kantega.kwashc</groupId>
 	<artifactId>kwashc</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0</version>
+	<version>1.1-SNAPSHOT</version>
 
 	<modules>
         <module>assembly</module>
