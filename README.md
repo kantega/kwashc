@@ -1,6 +1,6 @@
 # Kantega Web Application Security Hero Challenge (KWASHC) #
 
-[![Build Status](https://travis-ci.org/kantega/kwashc.svg)](https://travis-ci.org/kantega/kwashc)
+Status for master: [![Build Status](https://travis-ci.org/kantega/kwashc.svg?branch=master)](https://travis-ci.org/kantega/kwashc)
 
 ## About ##
 
