@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package kwashc.blog.servlet;
+package kwashc.blog.controller;
 
 import kwashc.blog.database.Database;
 import kwashc.blog.model.User;

@@ -74,6 +74,9 @@
                         <c:when test="${result.resultEnum == 'partial'}">
                             <img class="modelight" src="/gfx/modelight_yellow.png" title="Partial"/>
                         </c:when>
+                        <c:when test="${result.resultEnum == 'error'}">
+                            <img class="modelight" src="/gfx/modelight_dark.png" title="Error"/>
+                        </c:when>
 						<c:otherwise>
 							<img class="modelight" src="/gfx/modelight_red.png" title="Failed"/>
 						</c:otherwise>

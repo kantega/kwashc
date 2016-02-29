@@ -135,7 +135,7 @@ public class SiteWorksTest extends AbstractTest {
 		tester.gotoPage(site.getAddress() + "blog/api/comments/list/");
 		tester.assertTextPresent(commentUUID2);
 
-        //Checking the redirect servlet
+        //Checking the redirect controller
 		tester.gotoPage(site.getAddress() + "/redirect?url=http://motherfuckingwebsite.com/");
 		tester.assertTextPresent("This is a motherfucking website.");
 

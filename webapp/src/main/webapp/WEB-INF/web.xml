@@ -24,29 +24,42 @@
     </listener>
 
     <servlet>
-        <servlet-name>BlogServlet</servlet-name>
-        <servlet-class>kwashc.blog.servlet.BlogServlet</servlet-class>
+        <servlet-name>spring-web</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>BlogServlet</servlet-name>
-        <url-pattern>/blog</url-pattern>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.png</url-pattern>
+        <url-pattern>*.jpg</url-pattern>
+        <url-pattern>*.gif</url-pattern>
+        <url-pattern>*.js</url-pattern>
+        <url-pattern>*.css</url-pattern>
+        <url-pattern>/checkIfMyPasswordStoredSecurely</url-pattern>
+
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>spring-web</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>AdminServlet</servlet-name>
-        <servlet-class>kwashc.blog.servlet.AdminServlet</servlet-class>
+        <servlet-name>PasswordTestServlet</servlet-name>
+        <servlet-class>kwashc.blog.internal.PasswordTestServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>AdminServlet</servlet-name>
-        <url-pattern>/blog/admin</url-pattern>
-        <url-pattern>/admin</url-pattern>
+        <servlet-name>PasswordTestServlet</servlet-name>
+        <url-pattern>/checkIfMyPasswordStoredSecurely</url-pattern>
     </servlet-mapping>
 
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>kwashc.blog.servlet.LogInServlet</servlet-class>
+        <servlet-class>kwashc.blog.controller.LogInServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -54,25 +67,6 @@
         <url-pattern>/j_security_check</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>EditServlet</servlet-name>
-        <servlet-class>kwashc.blog.servlet.EditServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>EditServlet</servlet-name>
-        <url-pattern>/edit</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>RedirectServlet</servlet-name>
-        <servlet-class>kwashc.blog.servlet.RedirectServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>RedirectServlet</servlet-name>
-        <url-pattern>/redirect</url-pattern>
-    </servlet-mapping>
 
     <servlet>
         <servlet-name>Jersey Web Application</servlet-name>

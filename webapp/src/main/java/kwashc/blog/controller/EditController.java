@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package kwashc.blog.servlet;
+package kwashc.blog.controller;
 
 import kwashc.blog.database.Database;
 import kwashc.blog.model.Comment;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -32,16 +33,17 @@ import java.io.IOException;
  *
  * 'Comment is edited and anonymised!'
  */
-public class EditServlet extends HttpServlet {
+@Controller
+public class EditController {
 
-    @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @RequestMapping(value = "/edit", method = RequestMethod.GET)
+    public String editComment(HttpServletRequest req) throws ServletException, IOException {
         int commentID = Integer.parseInt(req.getParameter("commentID"));
         Comment c = Database.getComment(commentID);
         String title = c.getTitle();
         c.setTitle(title + " - edited");
         c.setComment("Comment is edited and anonymised!");
 
-        resp.sendRedirect("/blog");
+        return "blog";
     }
 }

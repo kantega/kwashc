@@ -16,12 +16,14 @@
 
 package kwashc.blog.database;
 
+import kwashc.blog.controller.RedirectController;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * We save some statistics on external links, done from {@link kwashc.blog.servlet.RedirectServlet}
+ * We save some statistics on external links, done from {@link RedirectController}
  */
 public class ClickStats {
 

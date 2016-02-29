@@ -18,8 +18,7 @@ package kwashc;
 
 
 import kwashc.blog.model.User;
-import kwashc.blog.servlet.LogInServlet;
-import org.apache.log4j.Logger;
+import kwashc.blog.controller.LogInServlet;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

@@ -20,7 +20,7 @@
 
 <head>
 	<!-- When you register the site, modify the line below: -->
-    <meta name="no.kantega.kwashc" content="insert-your-secret-here"/>
+    <meta name="no.kantega.kwashc" content="7fe7e4e1-d5b4-47bf-a561-5775ab32a60d"/>
 
     <link rel="stylesheet" href="/css/blueprint/plugins/link-icons/screen.css" type="text/css"
           media="screen, projection">

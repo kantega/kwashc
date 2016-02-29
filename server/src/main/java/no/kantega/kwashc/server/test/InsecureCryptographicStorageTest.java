@@ -120,7 +120,7 @@ public class InsecureCryptographicStorageTest extends AbstractTest {
        	    tester.setTextField(originalUsernamePassword, "password");
             tester.clickButton("formSubmitButton");
 
-            tester.gotoPage(site.getAddress() + "admin?checkIfMyPasswordStoredSecurely");
+            tester.gotoPage(site.getAddress() + "/checkIfMyPasswordStoredSecurely");
             responseBody = tester.getPageSource();
 
             if(responseBody.contains("You asked for a protected resource. Please log in:")){
