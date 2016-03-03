@@ -18,7 +18,7 @@ package kwashc;
 
 
 import kwashc.blog.model.User;
-import kwashc.blog.controller.LogInServlet;
+import kwashc.blog.controller.LoginController;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -48,16 +48,14 @@ public class SecurityFilter implements Filter {
 
         HttpSession session = request.getSession(true);
 
-        Object userObject = session.getAttribute(LogInServlet.USER_SESSION_ATTRIBUTE);
+        Object userObject = session.getAttribute(LoginController.USER_SESSION_ATTRIBUTE);
 
         if (userObject != null && userObject instanceof User) {
             // a user is logged in, proceed
             chain.doFilter(req, resp);
         } else {
-            // save the target URL for later use
-            session.setAttribute(LogInServlet.TARGET_PAGE_SESSION_ATTRIBUTE, request.getRequestURI() + "?" + request.getQueryString());
             // show login page
-            session.getServletContext().getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, response);
+            session.getServletContext().getRequestDispatcher("/login").forward(req, response);
         }
     }
 

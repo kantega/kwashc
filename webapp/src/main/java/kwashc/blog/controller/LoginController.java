@@ -19,24 +19,28 @@ package kwashc.blog.controller;
 import kwashc.blog.database.Database;
 import kwashc.blog.model.User;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
-public class LogInServlet extends HttpServlet {
+@Controller
+public class LoginController {
 
-    private static final Logger logger = Logger.getLogger(LogInServlet.class);
+    private static final Logger logger = Logger.getLogger(LoginController.class);
 
     public static final String USER_SESSION_ATTRIBUTE = "user";
-    public static final String TARGET_PAGE_SESSION_ATTRIBUTE = "TARGET_PAGE";
 
-    @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String displayLogin(Model model) {
+        return "login";
+    }
 
+    @RequestMapping(value = "/doLogin")
+    public String processLogin(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
 
         // gather credentials from the request:
@@ -48,16 +52,11 @@ public class LogInServlet extends HttpServlet {
         if (user != null && user.getPassword().equals(password)) {
             session.setAttribute(USER_SESSION_ATTRIBUTE, user);
             logger.info("User logged in: " + user);
-            // a user is logged in, redirect to target:
-            if (session.getAttribute(TARGET_PAGE_SESSION_ATTRIBUTE) != null) {
-                response.sendRedirect(String.valueOf(session.getAttribute(TARGET_PAGE_SESSION_ATTRIBUTE)));
-            } else {
-                response.sendRedirect("/");
-            }
+            return "redirect:/blog";
         } else {
             logger.info("User failed to log in: " + username);
             // show login page
-            session.getServletContext().getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+            return "redirect:/login";
         }
     }
 }
