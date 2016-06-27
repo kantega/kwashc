@@ -41,7 +41,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 /**
- * Test if the web application controller container and underlying SSL/TLS Protocol implementation support TLS 1.2, and
+ * Test if the web application servlet container and underlying SSL/TLS Protocol implementation support TLS 1.2, and
  * does not allow usage of SSL 3.0 protocol.
  *
  * Solution, part 1: Either use Oracle JDK 8u31, JDK 7u75 or JDK 6u91 which has SSLv3.0 disabled by default, or add the
