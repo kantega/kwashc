@@ -44,6 +44,8 @@ public class TestController {
 	@Autowired
 	private TestRunRepository testRunRepository;
 
+    public final static boolean SHOW_HINTS = false;
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String viewTests(Model model) {
         model.addAttribute("tests", TestRepository.getTests());
@@ -53,6 +55,7 @@ public class TestController {
     @RequestMapping(value = "/{testName}", method = RequestMethod.GET)
     public String viewTests(Model model, @PathVariable String testName) {
         model.addAttribute("test", TestRepository.getTests().get(testName));
+        model.addAttribute("showHints", SHOW_HINTS);
         return "test/viewTest";
     }
 
@@ -96,6 +99,8 @@ public class TestController {
 		model.addAttribute("test", test);
 		model.addAttribute("site", site);
 		model.addAttribute("result", result);
+        model.addAttribute("showHints", SHOW_HINTS);
+
 		return "test/viewTest";
 	}
 
