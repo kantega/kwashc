@@ -44,6 +44,7 @@ public class EditController {
         c.setTitle(title + " - edited");
         c.setComment("Comment is edited and anonymised!");
 
-        return "blog";
+
+        return "redirect:/blog"; //redirect to BlogController
     }
 }

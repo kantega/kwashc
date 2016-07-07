@@ -35,6 +35,6 @@ public class AdminController {
         if (commentToDelete != null) {
             Database.deleteComment(Integer.parseInt(commentToDelete));
         }
-        return "redirect:/blog";
+        return "redirect:/blog"; //redirect to BlogController
     }
 }
