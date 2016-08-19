@@ -20,7 +20,7 @@
 
 <p>You asked for a protected resource. Please log in:</p>
 
-<form action="/j_security_check" method="POST">
+<form action="/doLogin" method="POST">
     <fieldset>
 
         <p>

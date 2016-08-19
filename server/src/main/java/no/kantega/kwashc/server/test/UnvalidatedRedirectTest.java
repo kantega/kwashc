@@ -71,13 +71,13 @@ public class UnvalidatedRedirectTest extends AbstractTest {
         String responseBody = "";
 
         try {
-            HttpGet request = new HttpGet(site.getAddress() + "/redirect?url=http://www.kantega.no");
+            HttpGet request = new HttpGet(site.getAddress() + "/redirect?url=http://www.internetlastpage.com");
             HttpResponse response = httpclient.execute(request);
             HttpEntity entity = response.getEntity();
             responseBody = EntityUtils.toString(entity);
 
 	        // OBS: In case we are sent to the front page, we must check for something more specific than the wprd Kantega
-            if (responseBody.contains("Nesten litt magisk - Kantega")) {
+            if (responseBody.contains("very last")) {
                 testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("The blog can be used in phishing attacks, since it has a redirect service " +
                         "which doesn't discriminate what URLs it redirects to. An attacker might trick a victim into " +

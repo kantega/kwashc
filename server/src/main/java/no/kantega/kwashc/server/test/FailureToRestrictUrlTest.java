@@ -26,7 +26,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 /**
- * Tests triggers a NumberFormatException in an unrestricted part of the admin servlet
+ * Tests triggers a NumberFormatException in an unrestricted part of the admin controller
  * <p/>
  * The actual restrict url error is because of missing protection of the /blog/admin url in web.xml.
  * <p/>

@@ -33,7 +33,7 @@
     ${result.exploit}
     </div>
 </c:if>
-<c:if test="${test.hint != null}">
+<c:if test="${showHints && (test.hint != null)}">
     <div class="floatContainer wide">
         <input type="button" class="button positive leftFloat noMargin" onclick="javascript:$('#hint').toggle();" value="Toggle hint"/>
     </div>

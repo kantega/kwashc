@@ -31,7 +31,7 @@ import java.util.UUID;
  * Whether an unauthenticated user can edit a blog post
  *
  * Solution:
- * Add the edit servlet to the login filter
+ * Add the edit controller to the login filter
  *
  * @author Øystein Øie, (www.kantega.no)
  */

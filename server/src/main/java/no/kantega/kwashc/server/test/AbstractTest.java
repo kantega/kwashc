@@ -72,7 +72,7 @@ public abstract class AbstractTest {
 			result = testSite(site, result);
 		} catch (Throwable e) {
 			logger.info("Error during test.", e);
-			result.setResultEnum(ResultEnum.failed);
+			result.setResultEnum(ResultEnum.error);
 			result.setMessage("Error: " + e.getMessage());
 		}
 		return result;
