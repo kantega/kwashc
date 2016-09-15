@@ -67,14 +67,6 @@ Create Eclipse project with correct path for dependencies
     Anders Båtstrand   idea, framework and tests
     Espen A. Fossen    framework and additional tests
     Øystein Øie        framework and additional tests
-    Jon Are Rakvåg     additional tests
+    Jon Are Rakvåg     framework and additional tests
     Frode Standal      additional tests
     Espen Hjertø       web design
-
-
-## Contact ##
-
-For ideas, suggestions or other non spam inquiries:
-
-    anders.batstrand at kantega dot no
-    espen.fossen at kantega dot no
