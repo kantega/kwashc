@@ -1,9 +1,0 @@
-maven:
-  #image: maven:3-jdk-8
-  build: .
-  ports:
-    - "8080:8080"
-    - "8443:8443"
-  volumes:
-    - .:/usr/src/app
-
