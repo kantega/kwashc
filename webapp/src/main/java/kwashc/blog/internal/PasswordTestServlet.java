@@ -16,14 +16,14 @@
 
 package kwashc.blog.internal;
 
-import kwashc.blog.database.Database;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import static kwashc.blog.database.AccountsRepository.getSecret;
 
 /** This servlet is needed for the KWASHC testing server, and is not considered part of the application to be secured.
  *  Do not modify.
@@ -35,7 +35,7 @@ public class PasswordTestServlet extends HttpServlet {
         PrintWriter writer = null;
         try{
             StringBuffer res = new StringBuffer("<html><head></head><body>");
-            res.append("P1:").append(Database.getUser("username").getPassword()).append(":P1 P2:").append(Database.getUser("anotheruser").getPassword()).append(":P2");
+            res.append("P1:").append(getSecret("username")).append(":P1 P2:").append(getSecret("anotheruser")).append(":P2");
             res.append("</body></html>");
             writer = response.getWriter();
             writer.print(res);
