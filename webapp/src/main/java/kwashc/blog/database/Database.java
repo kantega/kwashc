@@ -20,28 +20,21 @@ import kwashc.blog.model.Comment;
 import kwashc.blog.model.User;
 
 import javax.servlet.ServletException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * This blog system uses a very basic in-memory database, consisting of a map og users, and a set of comments.
  */
 public class Database {
 
-    private static final Map<String, User> users = Collections.synchronizedMap(new HashMap<String, User>());
-
     private static final Set<Comment> comments = Collections.synchronizedSet(new TreeSet<Comment>());
 
     static {
-        // initial content:
-        User user = new User("username", "password");
-        users.put("username", user);
-        users.put("anotheruser", new User("anotheruser", "anotherpassword"));
-        // system user
-        users.put("system", new User("system", "xik74659bs7zw6t59sw6508w"));
-
+        User user = AccountsRepository.loadUser("username");
         comments.add(new Comment(user, "http://www.google.com/", "Test message", "This is a test message, already residing in the database."));
     }
-
 
     public static Comment getComment(int ID) throws ServletException {
         for (Comment comment : comments) {
@@ -59,10 +52,6 @@ public class Database {
 
     public static void addComment(Comment comment) {
         comments.add(comment);
-    }
-
-    public static User getUser(String username) {
-        return users.get(username);
     }
 
     public static Set<Comment> getComments() {
