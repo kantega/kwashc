@@ -61,7 +61,7 @@ public class InputValidationTest extends AbstractTest {
 
     @Override
 	public String getInformationURL() {
-		return "https://www.securityninja.co.uk/secure-development/input-validation/";
+		return "https://www.owasp.org/index.php/Input_Validation_Cheat_Sheet";
 	}
 
     @Override
