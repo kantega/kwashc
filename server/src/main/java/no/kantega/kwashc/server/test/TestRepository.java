@@ -51,7 +51,7 @@ public final class TestRepository {
 		add(new InsecureCryptographicStorageTest());
 		// Test only works with a server with JVM > 6:
 		if (getMajorJVMVersion() > 6) add(new SSLProtocolTest());
-		add(new SSLCipherSuiteTest());
+		add(new CipherSuiteTest());
 
 		//Assorted
 		add(new ClickjackingTest());

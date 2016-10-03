@@ -19,11 +19,7 @@ package no.kantega.kwashc;
 import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
-import no.kantega.kwashc.server.test.AbstractTest;
-import no.kantega.kwashc.server.test.SSLCipherSuiteTest;
-import no.kantega.kwashc.server.test.SiteExistsTest;
-import no.kantega.kwashc.server.test.SiteWorksTest;
-import no.kantega.kwashc.server.test.TestRepository;
+import no.kantega.kwashc.server.test.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -68,7 +64,7 @@ public class TestSuiteTest {
 		for (AbstractTest test : TestRepository.getTests().values()) {
 			if (test instanceof SiteWorksTest || test instanceof SiteExistsTest) {
 				assertTestOK(test.testSite(site));
-			} else if (test instanceof SSLCipherSuiteTest) {
+			} else if (test instanceof CipherSuiteTest) {
 				// test does not work, error in test system
 			} else {
 				assertTestNotOK(test.testSite(site));

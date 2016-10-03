@@ -27,6 +27,7 @@ import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
+import sun.security.ssl.SSLSocketFactoryImpl;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
@@ -39,6 +40,8 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -53,8 +56,7 @@ import java.security.cert.X509Certificate;
  * The actual test goes as follows:
  *
  * 1. Checks for availability of insecure, anonymous, weak ciphers
- * 2. Checks if Perfect Forward Secrecy ciphers with key length less then 1024 are present.
- * 3. Checks if the best Forward Secrecy ciphers are available.
+ * 2. Checks if Perfect Forward Secrecy ciphers are available.
  *
  * Solution, part 1:
  *
@@ -81,11 +83,7 @@ import java.security.cert.X509Certificate;
  *
  * Solution, part 2:
  *
- * Make sure there are all TLS_DHE_DSS_WITH* based ciphers are excluded.
- *
- * Solution, part 3:
- *
- * Make sure only Perfect Forward Secrecy ciphers with key length of > 1024 are available.
+ * Make sure only Perfect Forward Secrecy ciphers with DH key length of > 1024 are available.
  *
  * Referanses:
  * <p/>
@@ -98,7 +96,50 @@ import java.security.cert.X509Certificate;
  *
  * @author Espen A. Fossen, (www.kantega.no)
  */
-public class SSLCipherSuiteTest extends AbstractTest {
+public class CipherSuiteTest extends AbstractTest {
+
+    public CipherSuiteTest() {
+
+        try {
+            verifyCipherSuites(ciphers);
+            verifyCipherSuites(ciphers2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String[] ciphers = new String[]{
+            "SSL_RSA_WITH_3DES_EDE_CBC_SHA",
+            "SSL_DHE_RSA_WITH_DES_CBC_SHA",
+            "SSL_DHE_DSS_WITH_DES_CBC_SHA",
+            "SSL_RSA_WITH_NULL_MD5",
+            "SSL_RSA_WITH_NULL_SHA",
+            "SSL_DH_anon_EXPORT_WITH_DES40_CBC_SHA",
+            "SSL_DH_anon_EXPORT_WITH_RC4_40_MD5",
+            "SSL_RSA_WITH_RC4_128_SHA",
+            "SSL_RSA_WITH_RC4_128_MD5",
+            "TLS_KRB5_EXPORT_WITH_DES_CBC_40_MD5",
+            "TLS_KRB5_EXPORT_WITH_DES_CBC_40_SHA",
+            "TLS_DH_anon_WITH_AES_128_GCM_SHA256",
+            "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA",
+            "TLS_ECDHE_RSA_WITH_RC4_128_SHA",
+            "TLS_ECDH_ECDSA_WITH_RC4_128_SHA",
+            "TLS_ECDH_RSA_WITH_RC4_128_SHA"
+    };
+
+    private String[] ciphers2 = new String[]{
+            "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
+            "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
+            "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256",
+            "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
+            "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
+            "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
+            "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+            "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+            "TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA",
+            "TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA"
+    };
+
 
     @Override
     public String getName() {
@@ -147,25 +188,6 @@ public class SSLCipherSuiteTest extends AbstractTest {
 
         try {
 
-            String[] ciphers = new String[]{
-                    "SSL_RSA_WITH_3DES_EDE_CBC_SHA",
-                    "SSL_DHE_RSA_WITH_DES_CBC_SHA",
-                    "SSL_DHE_DSS_WITH_DES_CBC_SHA",
-                    "SSL_RSA_WITH_NULL_MD5",
-                    "SSL_RSA_WITH_NULL_SHA",
-                    "SSL_DH_anon_EXPORT_WITH_DES40_CBC_SHA",
-                    "SSL_DH_anon_EXPORT_WITH_RC4_40_MD5",
-                    "SSL_RSA_WITH_RC4_128_SHA",
-                    "SSL_RSA_WITH_RC4_128_MD5",
-                    "TLS_KRB5_EXPORT_WITH_DES_CBC_40_MD5",
-                    "TLS_KRB5_EXPORT_WITH_DES_CBC_40_SHA",
-                    "TLS_DH_anon_WITH_AES_128_GCM_SHA256",
-                    "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA",
-                    "TLS_ECDHE_RSA_WITH_RC4_128_SHA",
-                    "TLS_ECDH_ECDSA_WITH_RC4_128_SHA",
-                    "TLS_ECDH_RSA_WITH_RC4_128_SHA"
-            };
-
             HttpResponse response = checkClientForCiphers(site, httpsPort, httpclient, ciphers);
 
             if (response.getStatusLine().getStatusCode() == 200) {
@@ -182,63 +204,23 @@ public class SSLCipherSuiteTest extends AbstractTest {
 
                 HttpClient httpclient2 = HttpClientUtil.getHttpClient();
                 try {
-                    String[] ciphers = new String[]{
-                            "TLS_DHE_DSS_WITH_AES_128_CBC_SHA",
-                            "TLS_DHE_DSS_WITH_AES_128_CBC_SHA256",
-                            "TLS_DHE_DSS_WITH_AES_128_GCM_SHA256",
-                            "TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA"};
-                    HttpResponse response = checkClientForCiphers(site, httpsPort, httpclient2, ciphers);
 
-                    if (response.getStatusLine().getStatusCode() == 200) {
+                    HttpResponse response2 = checkClientForCiphers(site, httpsPort, httpclient2, ciphers2);
 
-                        HttpClient httpclient3 = HttpClientUtil.getHttpClient();
-                        try {
-                            String[] ciphers2 = new String[]{
-                                    "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
-                                    "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
-                                    "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256",
-                                    "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
-                                    "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
-                                    "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
-                                    "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
-                                    "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
-                                    "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
-                                    "TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA",
-                                    "TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA",
-                                    "TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA"
-                            };
-
-                            HttpResponse response2 = checkClientForCiphers(site, httpsPort, httpclient3, ciphers2);
-
-                            if (response2.getStatusLine().getStatusCode() == 200) {
-                                testResult.setResultEnum(ResultEnum.passed);
-                                testResult.setMessage("Top score, no weak/anonymous ciphers and supporting the best available Perfect Forward Secrecy ciphers are present.");
-                            } else {
-                                exitWrongHttpCode(testResult);
-                            }
-                            return testResult;
-                        } catch (NoSuchAlgorithmException e1) {
-                            return exitMissingCipherSuites(testResult);
-                        } catch (KeyManagementException e1) {
-                            return exitIncorrectCertificate(testResult);
-                        } catch (IOException e1) {
-                            testResult.setResultEnum(ResultEnum.partial);
-                            testResult.setMessage("Almost there, no weak/anonymous ciphers and allows Perfect Forward Secrecy, but some of your ciphers require DSA keys, which are effectively limited to 1024 bits!");
-                            return testResult;
-                        } finally {
-                            httpclient3.getConnectionManager().shutdown();
-                        }
+                    if (response2.getStatusLine().getStatusCode() == 200) {
+                        testResult.setResultEnum(ResultEnum.passed);
+                        testResult.setMessage("Top score, no weak/anonymous ciphers and supporting the best available Perfect Forward Secrecy ciphers are present.");
                     } else {
                         exitWrongHttpCode(testResult);
                     }
                     return testResult;
-                } catch (NoSuchAlgorithmException e1) {
+                } catch (NoSuchAlgorithmException e3) {
                     return exitMissingCipherSuites(testResult);
-                } catch (KeyManagementException e1) {
+                } catch (KeyManagementException e3) {
                     return exitIncorrectCertificate(testResult);
-                } catch (IOException e1) {
+                } catch (IOException e3) {
                     testResult.setResultEnum(ResultEnum.partial);
-                    testResult.setMessage("Looking better, your application does not allow SSL/TLS connection with anonymous/weak ciphers, but does not support Perfect Forward Secrecy!");
+                    testResult.setMessage("Almost there, no weak/anonymous ciphers, but no support for ciphers with Perfect Forward Secrecy!");
                     return testResult;
                 } finally {
                     httpclient2.getConnectionManager().shutdown();
@@ -299,7 +281,7 @@ public class SSLCipherSuiteTest extends AbstractTest {
         return httpclient.execute(request);
     }
 
-    TrustManager allowAllTrustManager = new X509TrustManager() {
+    private TrustManager allowAllTrustManager = new X509TrustManager() {
 
 
         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -317,6 +299,18 @@ public class SSLCipherSuiteTest extends AbstractTest {
     @Override
     public TestCategory getTestCategory() {
         return TestCategory.crypto;
+    }
+
+    private void verifyCipherSuites(String[] ciphers) throws Exception {
+        javax.net.ssl.SSLSocketFactory sslSocket = new SSLSocketFactoryImpl();
+        String[] supportedCiphers = sslSocket.getSupportedCipherSuites();
+        List<String> supportedCiphersList = Arrays.asList(supportedCiphers);
+        for (String s : ciphers) {
+            if(!supportedCiphersList.contains(s)){
+                throw new RuntimeException(String.format("Cipher %s is not supported in the running Java environment. " +
+                        "Please fix by enabling obsolete/disabled ciphers via -Djava.security.properties=jvm/java.security or check if the cipher is actually valid.", s));
+            }
+        }
     }
 
 }
