@@ -56,7 +56,7 @@
         <li>The run:
             <ul>
                 <li>mvnw(.cmd) clean install</li>
-                <li>mvnw(.cmd) -f webapp/pom.xml jetty:run</li>
+                <li>mvnw(.cmd) jetty:run</li>
             </ul>
         </li>
         <li>Access blog application with browser on <a target="_blank" href="http://localhost:8080">localhost:8080</a></li>
