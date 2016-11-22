@@ -1,3 +1,3 @@
 [submodule "webapp"]
 	path = webapp
-	url = git@github.com:kantega/kwashc-webapp.git
+	url = https://github.com/kantega/kwashc-webapp.git
