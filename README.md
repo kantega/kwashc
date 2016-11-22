@@ -40,6 +40,10 @@ __Clients__
 
 ## Usage ##
 
+Get webapp submodule before building
+
+        git submodule update --init --recursive
+
 Build and run server
 
         mvn clean install
