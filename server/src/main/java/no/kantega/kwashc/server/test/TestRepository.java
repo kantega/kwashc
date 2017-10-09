@@ -78,12 +78,15 @@ public final class TestRepository {
 				"java.nio.Buffer",
 				"java.lang.Enum",
 				"java.util.Deque",
-				"java.util.Objects"
+				"java.util.Objects",
+				"java.util.concurrent.Flow"
 		};
 
 		for (int i = s.length - 1; i >= 0; i--) {
 			try {
 				Class cls = Class.forName(s[i]);
+				int o = i+1;
+				System.out.println("Major JVM version: "+o);
 				return i;
 			} catch (ClassNotFoundException e) {
 				// ignore

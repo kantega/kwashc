@@ -48,7 +48,7 @@ Build and run server
 
         mvn clean install
         cd server
-        MAVEN_OPTS="-Djava.security.properties=jvm/java.security" mvn jetty:run
+        MAVEN_OPTS="-Djava.security.properties=jvm/java.security" mvn jetty:run-forked
 
 Build and run client
 
@@ -57,7 +57,7 @@ Build and run client
 
 Run client with all protocols and ciphers enabled
 
-        MAVEN_OPTS="-Djava.security.properties=../server/jvm/java.security" mvn jetty:run
+        MAVEN_OPTS="-Djava.security.properties=../server/jvm/java.security" mvn jetty:run-forked
 
 
 Create Eclipse project with correct path for dependencies
