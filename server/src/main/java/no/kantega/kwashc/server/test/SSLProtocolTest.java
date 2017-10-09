@@ -19,26 +19,9 @@ package no.kantega.kwashc.server.test;
 import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.CoreConnectionPNames;
-import org.apache.http.params.HttpParams;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.URL;
+import javax.net.ssl.SSLHandshakeException;
 import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 
 /**
  * Test if the web application servlet container and underlying SSL/TLS Protocol implementation support TLS 1.2, and
@@ -60,7 +43,7 @@ import java.security.cert.X509Certificate;
  *
  * @author Espen A. Fossen, (www.kantega.no)
  */
-public class SSLProtocolTest extends AbstractTest {
+public class SSLProtocolTest extends AbstractSSLTest {
 
     @Override
     public String getName() {
@@ -102,14 +85,9 @@ public class SSLProtocolTest extends AbstractTest {
             return testResult;
         }
 
-        HttpClient httpclient = HttpClientUtil.getHttpClient();
-
         try {
 
-            HttpClient httpClient = HttpClientUtil.getHttpClient();
-            HttpResponse response = checkClient(site, httpsPort, httpClient, new String[]{"SSLv3"}, null);
-
-            if (response.getStatusLine().getStatusCode() == 200) {
+            if (checkClient(site, httpsPort, new String[]{"SSLv3"}, null) == 200) {
                 testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("Your application accepts an insecure SSL protocol!");
             } else {
@@ -121,13 +99,10 @@ public class SSLProtocolTest extends AbstractTest {
             testResult.setResultEnum(ResultEnum.failed);
             testResult.setMessage("Certificate configuration does not seem to be correct, check certificate on remote environment!");
             return testResult;
-        } catch (IOException e) {
-            if (e.getMessage().contains("peer not authenticated")) {
+        } catch (SSLHandshakeException e) {
+            if (e.getMessage().contains("No appropriate protocol (protocol is disabled or cipher suites are inappropriate)") || e.getMessage().contains("Received fatal alert: handshake_failure")) {
 
-                HttpClient httpClient = HttpClientUtil.getHttpClient();
-                HttpResponse response = checkClient(site, httpsPort, httpClient, new String[]{"TLSv1.2"}, null);
-
-                if (response.getStatusLine().getStatusCode() == 200) {
+                if (checkClient(site, httpsPort, new String[]{"TLSv1.2"}, null) == 200) {
                     testResult.setResultEnum(ResultEnum.passed);
                     testResult.setMessage("That`s better, you application supports secure SSL/TLS protocol TLSv1.2!");
                 } else {
@@ -141,62 +116,10 @@ public class SSLProtocolTest extends AbstractTest {
                 testResult.setMessage("Actual testing failed, check that the connection is working!");
             }
         } finally {
-            httpclient.getConnectionManager().shutdown();
             setDuration(testResult, startTime);
         }
 
         return testResult;
     }
 
-    private HttpResponse checkClient(Site site, int httpsPort, HttpClient httpclient, String[] protocols, String[] ciphers) throws NoSuchAlgorithmException, KeyManagementException, IOException {
-        SSLContext sslcontext = SSLContext.getInstance("TLS");
-        sslcontext.init(null, new TrustManager[]{allowAllTrustManager}, null);
-
-        SSLSocketFactory sf = new SSLSocketFactory(sslcontext, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-
-        HttpParams params = new BasicHttpParams();
-        params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 1000);
-        params.setParameter(CoreConnectionPNames.SO_TIMEOUT, 1000);
-
-        SSLSocket socket = (SSLSocket) sf.createSocket(params);
-        if (protocols != null) {
-            socket.setEnabledProtocols(protocols);
-        }
-        if (ciphers != null) {
-            socket.setEnabledCipherSuites(ciphers);
-        }
-
-        URL url = new URL(site.getAddress());
-
-        InetSocketAddress address = new InetSocketAddress(url.getHost(), httpsPort);
-        sf.connectSocket(socket, address, null, params);
-
-        Scheme sch = new Scheme("https", httpsPort, sf);
-        httpclient.getConnectionManager().getSchemeRegistry().register(sch);
-
-        HttpGet request = new HttpGet("https://" + url.getHost() + ":" + site.getSecureport() + url.getPath() + "blog");
-
-        return httpclient.execute(request);
-    }
-
-
-    TrustManager allowAllTrustManager = new X509TrustManager() {
-
-
-        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-        }
-
-        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-        }
-
-        public X509Certificate[] getAcceptedIssuers() {
-            return null;
-        }
-
-    };
-
-    @Override
-    public TestCategory getTestCategory() {
-        return TestCategory.crypto;
-    }
 }

@@ -6,7 +6,7 @@ import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
 
 /**
- * SQL Injecion test
+ * SQL Injection test
  *
  * <p>Attempt logging in with a SQL injection. If successful, we will short-circuit
  * the SQL query by introducing an <tt>OR true</tt> condition.</p>

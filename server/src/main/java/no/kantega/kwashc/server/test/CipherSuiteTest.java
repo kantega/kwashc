@@ -19,27 +19,12 @@ package no.kantega.kwashc.server.test;
 import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.CoreConnectionPNames;
-import org.apache.http.params.HttpParams;
 import sun.security.ssl.SSLSocketFactoryImpl;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,21 +32,21 @@ import java.util.List;
 /**
  * Test if SSL/TLS based communication allows insecure/weak ciphers and supports the best available Perfect Forward
  * Secrecy ciphers.
- *
+ * <p>
  * Oracle has done a good job in disabling bad/weak ciphers in recent versions. Unfortunately that makes testing for
  * them a bit harder. To do this we need to override some settings in JDK_HOME/lib/security/java.security. To make this
  * work properly we need to start the server using jetty:run-forked. Alternatively this could have been done using
  * MAVEN_OPTS="-Djava.security.properties=jvm/java.security" mvn jetty:run.
- *
+ * <p>
  * The actual test goes as follows:
- *
+ * <p>
  * 1. Checks for availability of insecure, anonymous, weak ciphers
  * 2. Checks if Perfect Forward Secrecy ciphers are available.
- *
+ * <p>
  * Solution, part 1:
- *
+ * <p>
  * Exclude the following ciphers
- *
+ * <p>
  * <excludeCipherSuites>
  * <excludeCipherSuite>SSL_RSA_WITH_3DES_EDE_CBC_SHA</excludeCipherSuite>
  * <excludeCipherSuite>SSL_DHE_RSA_WITH_DES_CBC_SHA</excludeCipherSuite>
@@ -80,23 +65,24 @@ import java.util.List;
  * <excludeCipherSuite>TLS_ECDH_ECDSA_WITH_RC4_128_SHA</excludeCipherSuite>
  * <excludeCipherSuite>TLS_ECDH_RSA_WITH_RC4_128_SHA</excludeCipherSuite>
  * </excludeCipherSuites>
- *
+ * <p>
  * Solution, part 2:
- *
+ * <p>
  * Make sure only Perfect Forward Secrecy ciphers with DH key length of > 1024 are available.
- *
+ * <p>
  * Referanses:
  * <p/>
  * http://wiki.eclipse.org/Jetty/Howto/CipherSuites
  * http://www.techstacks.com/howto/j2se5_ssl_cipher_strength.html
+ * https://hc.apache.org/httpcomponents-client-ga/httpclient/examples/org/apache/http/examples/client/ClientCustomSSL.java
  * http://cephas.net/blog/2007/10/02/using-a-custom-socket-factory-with-httpclient/
  * https://blogs.oracle.com/java-platform-group/entry/java_8_will_use_tls
  * https://www.ssllabs.com/ssltest/viewClient.html?name=Java&version=8u31
- * server/cipher/*.txt: FUll list of ciphers supported by different Java versions.
+ * server/cipher/*.txt: Full list of ciphers supported by different Java versions.
  *
  * @author Espen A. Fossen, (www.kantega.no)
  */
-public class CipherSuiteTest extends AbstractTest {
+public class CipherSuiteTest extends AbstractSSLTest {
 
     public CipherSuiteTest() {
 
@@ -139,7 +125,6 @@ public class CipherSuiteTest extends AbstractTest {
             "TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA",
             "TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA"
     };
-
 
     @Override
     public String getName() {
@@ -184,13 +169,9 @@ public class CipherSuiteTest extends AbstractTest {
             return testResult;
         }
 
-        HttpClient httpclient = HttpClientUtil.getHttpClient();
-
         try {
 
-            HttpResponse response = checkClientForCiphers(site, httpsPort, httpclient, ciphers);
-
-            if (response.getStatusLine().getStatusCode() == 200) {
+            if (checkClient(site, httpsPort, new String[]{"TLSv1"}, ciphers) == 200) {
                 testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("Your application accepts weak/anonymous SSL/TLS cipher suites!");
             }
@@ -199,31 +180,26 @@ public class CipherSuiteTest extends AbstractTest {
             return exitMissingCipherSuites(testResult);
         } catch (KeyManagementException e) {
             return exitIncorrectCertificate(testResult);
-        } catch (IOException e) {
-            if (e.getMessage().contains("peer not authenticated")) {
+        } catch (SSLHandshakeException e) {
+            if (e.getMessage().contains("No appropriate protocol (protocol is disabled or cipher suites are inappropriate)")) {
 
-                HttpClient httpclient2 = HttpClientUtil.getHttpClient();
                 try {
 
-                    HttpResponse response2 = checkClientForCiphers(site, httpsPort, httpclient2, ciphers2);
-
-                    if (response2.getStatusLine().getStatusCode() == 200) {
+                    if (checkClient(site, httpsPort, new String[]{"TLSv1"}, ciphers2) == 200) {
                         testResult.setResultEnum(ResultEnum.passed);
                         testResult.setMessage("Top score, no weak/anonymous ciphers and supporting the best available Perfect Forward Secrecy ciphers are present.");
                     } else {
                         exitWrongHttpCode(testResult);
                     }
                     return testResult;
-                } catch (NoSuchAlgorithmException e3) {
+                } catch (NoSuchAlgorithmException e1) {
                     return exitMissingCipherSuites(testResult);
-                } catch (KeyManagementException e3) {
+                } catch (KeyManagementException e1) {
                     return exitIncorrectCertificate(testResult);
-                } catch (IOException e3) {
+                } catch (IOException e1) {
                     testResult.setResultEnum(ResultEnum.partial);
-                    testResult.setMessage("Almost there, no weak/anonymous ciphers, but no support for ciphers with Perfect Forward Secrecy!");
+                    testResult.setMessage("Almost there, no weak/anonymous ciphers and allows Perfect Forward Secrecy, but some of your ciphers require DSA keys, which are effectively limited to 1024 bits!");
                     return testResult;
-                } finally {
-                    httpclient2.getConnectionManager().shutdown();
                 }
 
             } else {
@@ -231,7 +207,6 @@ public class CipherSuiteTest extends AbstractTest {
                 testResult.setMessage("Actual testing failed, check that the connection is working!");
             }
         } finally {
-            httpclient.getConnectionManager().shutdown();
             setDuration(testResult, startTime);
         }
 
@@ -255,58 +230,12 @@ public class CipherSuiteTest extends AbstractTest {
         return testResult;
     }
 
-    private HttpResponse checkClientForCiphers(Site site, int httpsPort, HttpClient httpclient, String[] ciphers) throws NoSuchAlgorithmException, KeyManagementException, IOException {
-        SSLContext sslcontext = SSLContext.getInstance("TLS");
-        sslcontext.init(null, new TrustManager[]{allowAllTrustManager}, null);
-
-        SSLSocketFactory sf = new SSLSocketFactory(sslcontext, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-
-        HttpParams params = new BasicHttpParams();
-        params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 1000);
-        params.setParameter(CoreConnectionPNames.SO_TIMEOUT, 1000);
-
-        SSLSocket socket = (SSLSocket) sf.createSocket(params);
-        socket.setEnabledCipherSuites(ciphers);
-
-        URL url = new URL(site.getAddress());
-
-        InetSocketAddress address = new InetSocketAddress(url.getHost(), httpsPort);
-        sf.connectSocket(socket, address, null, params);
-
-        Scheme sch = new Scheme("https", httpsPort, sf);
-        httpclient.getConnectionManager().getSchemeRegistry().register(sch);
-
-        HttpGet request = new HttpGet("https://" + url.getHost() + ":" + site.getSecureport() + url.getPath() + "blog");
-
-        return httpclient.execute(request);
-    }
-
-    private TrustManager allowAllTrustManager = new X509TrustManager() {
-
-
-        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-        }
-
-        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-        }
-
-        public X509Certificate[] getAcceptedIssuers() {
-            return null;
-        }
-
-    };
-
-    @Override
-    public TestCategory getTestCategory() {
-        return TestCategory.crypto;
-    }
-
     private void verifyCipherSuites(String[] ciphers) throws Exception {
         javax.net.ssl.SSLSocketFactory sslSocket = new SSLSocketFactoryImpl();
         String[] supportedCiphers = sslSocket.getSupportedCipherSuites();
         List<String> supportedCiphersList = Arrays.asList(supportedCiphers);
         for (String s : ciphers) {
-            if(!supportedCiphersList.contains(s)){
+            if (!supportedCiphersList.contains(s)) {
                 throw new RuntimeException(String.format("Cipher %s is not supported in the running Java environment. " +
                         "Please fix by enabling obsolete/disabled ciphers via -Djava.security.properties=jvm/java.security or check if the cipher is actually valid.", s));
             }

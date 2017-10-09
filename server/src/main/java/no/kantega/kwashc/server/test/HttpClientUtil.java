@@ -17,27 +17,28 @@
 package no.kantega.kwashc.server.test;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.impl.client.HttpClients;
 
 import java.io.IOException;
 
 public class HttpClientUtil {
 
-    static String getPageText(String address) throws IOException {
-        HttpClient httpclient = getHttpClient();
-        HttpGet request = new HttpGet(address);
-        return httpclient.execute(request, new BasicResponseHandler());
-    }
+	static String getPageText(String address) throws IOException {
+		HttpClient httpclient = getHttpClient();
+		HttpGet request = new HttpGet(address);
+		return httpclient.execute(request, new BasicResponseHandler());
+	}
 
 	static HttpClient getHttpClient() {
-		HttpClient httpClient = new DefaultHttpClient();
-		// timeout: 5 seconds
-		httpClient.getParams().setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 5 * 1000);
-		httpClient.getParams().setIntParameter(CoreConnectionPNames.SO_TIMEOUT, 5 * 1000);
-		return httpClient;
+		RequestConfig config = RequestConfig.custom()
+				.setSocketTimeout(5 * 1000)
+				.setConnectTimeout(5 * 1000)
+				.build();
+
+		return HttpClients.custom().setDefaultRequestConfig(config).build();
 	}
 
 }
