@@ -249,6 +249,25 @@
 
     <profiles>
         <profile>
+            <id>java8</id>
+            <activation>
+                <jdk>8</jdk>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.eclipse.jetty</groupId>
+                            <artifactId>jetty-maven-plugin</artifactId>
+                            <configuration>
+                                <jvmArgs>-Djava.security.properties=jvm/java.security</jvmArgs>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
             <id>java9</id>
             <activation>
                 <jdk>9</jdk>
@@ -270,7 +289,7 @@
                             <groupId>org.eclipse.jetty</groupId>
                             <artifactId>jetty-maven-plugin</artifactId>
                             <configuration>
-                                <jvmArgs>--add-modules java.xml.bind</jvmArgs>
+                                <jvmArgs>-Djava.security.properties=jvm/java.security --add-modules java.xml.bind</jvmArgs>
                             </configuration>
                         </plugin>
                     </plugins>
