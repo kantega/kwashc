@@ -18,13 +18,9 @@ package no.kantega.kwashc;
 
 import no.kantega.kwashc.server.model.Site;
 import org.apache.commons.io.FileUtils;
-import org.eclipse.jetty.http.ssl.SslContextFactory;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import java.io.File;
@@ -44,18 +40,19 @@ public class WebappJettyStarter {
 		File baseDir = findWebappBaseDir();
 		File warFile = new File(baseDir, warFolder);
 
-		SelectChannelConnector selectChannelConnector = new SelectChannelConnector();
+		ServerConnector connector = new ServerConnector(server);
+
+		HttpConfiguration https = new HttpConfiguration();
+		https.addCustomizer(new SecureRequestCustomizer());
 
 		SslContextFactory sslContextFactory = new SslContextFactory();
-		sslContextFactory.setKeyStore(findServerBaseDir().getAbsolutePath() + "/src/test/resources/jetty-ssl.keystore");
+		sslContextFactory.setKeyStorePath(findServerBaseDir().getAbsolutePath() + "/src/test/resources/jetty-ssl.keystore");
 		sslContextFactory.setKeyStorePassword("owaspJetty");
 		sslContextFactory.setCertAlias("owaspJetty");
 		sslContextFactory.setKeyStoreType("JKS");
-		assert sslContextFactory.checkConfig();
 
-		SslSocketConnector sslSocketConnector = new SslSocketConnector(sslContextFactory);
-
-		server.setConnectors(new Connector[]{selectChannelConnector, sslSocketConnector});
+		ServerConnector sslConnector = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, "http/1.1"), new HttpConnectionFactory(https));
+		server.setConnectors(new Connector[]{connector, sslConnector});
 
 		WebAppContext webAppContext = new WebAppContext(warFile.getAbsolutePath(), contextpath);
 		webAppContext.setTempDirectory(FileUtils.getTempDirectory());
@@ -65,8 +62,8 @@ public class WebappJettyStarter {
 		server.start();
 
 		Site site = new Site();
-		site.setAddress("http://localhost:" + selectChannelConnector.getLocalPort() + "/");
-		site.setSecureport(Integer.toString(sslSocketConnector.getLocalPort()));
+		site.setAddress("http://localhost:" + connector.getLocalPort() + "/");
+		site.setSecureport(Integer.toString(sslConnector.getLocalPort()));
 		site.setSecret("insert-your-secret-here");
 		site.setName("One blog to rule them all");
 		site.setOwner("Bruce Schneier");

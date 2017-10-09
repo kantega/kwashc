@@ -20,8 +20,8 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -32,7 +32,7 @@ import java.io.File;
 /**
  * To start the webapp
  *
- * @author Anders Båstrand, (www.kantega.no)
+ * @author Anders Bï¿½strand, (www.kantega.no)
  */
 public class ServerJettyStarter {
 
@@ -47,9 +47,9 @@ public class ServerJettyStarter {
 		File baseDir = findServerBaseDir();
 		File warFile = new File(baseDir, warFolder);
 
-		SelectChannelConnector selectChannelConnector = new SelectChannelConnector();
+		ServerConnector connector = new ServerConnector(server);
 
-		server.setConnectors(new Connector[]{selectChannelConnector});
+		server.setConnectors(new Connector[]{connector});
 
 		webAppContext = new WebAppContext(warFile.getAbsolutePath(), contextpath);
 		webAppContext.setTempDirectory(FileUtils.getTempDirectory());
@@ -58,7 +58,7 @@ public class ServerJettyStarter {
 		server.setHandler(handlerList);
 		server.start();
 
-		int localPort = selectChannelConnector.getLocalPort();
+		int localPort = connector.getLocalPort();
 		System.out.println("Server started on port: " + localPort);
 		return localPort;
 	}
