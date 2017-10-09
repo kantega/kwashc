@@ -57,7 +57,8 @@ public final class TestRepository {
 		add(new ClickjackingTest());
 		add(new KnownVulnerableComponentsTest());
 
-		add(new SQLInjectionTest());
+		// Injection, not finished
+		//add(new SQLInjectionTest());
 	}
 
 	private static void add(AbstractTest test) {
