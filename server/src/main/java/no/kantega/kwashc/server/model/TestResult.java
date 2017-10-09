@@ -36,7 +36,7 @@ public class TestResult extends AbstractPersistable<Long> {
     @Enumerated(EnumType.STRING)
     private ResultEnum resultEnum;
 
-	@Basic
+    @Column(length = 10000)
     private String message;
 
     @Basic

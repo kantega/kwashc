@@ -41,7 +41,7 @@ public class TestRun extends AbstractPersistable<Long> {
 	@Enumerated(EnumType.STRING)
 	private ResultEnum resultEnum;
 
-	@Basic
+	@Column(length = 10000)
 	private String message;
 
 	public TestRun(TestResult testResult) {
