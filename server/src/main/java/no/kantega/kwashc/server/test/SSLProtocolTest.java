@@ -25,18 +25,18 @@ import java.security.KeyManagementException;
 
 /**
  * Test if the web application servlet container and underlying SSL/TLS Protocol implementation support TLS 1.2, and
- * does not allow usage of SSL 3.0 protocol.
- *
- * Solution, part 1: Either use Oracle JDK 8u31, JDK 7u75 or JDK 6u91 which has SSLv3.0 disabled by default, or add the
- * following to jetty-maven-plugin config:
- *
+ * does not allow usage of SSL 3.0 og TLS 1.0 protocol.
+ * <p>
+ * Solution, part 1: Add the following to jetty-maven-plugin config:
+ * <p>
  * <excludeProtocols>
- *     <excludeProtocol>SSLv3</excludeProtocol>
+ * <excludeProtocol>SSLv3</excludeProtocol>
+ * <excludeProtocol>TLSv1</excludeProtocol>
  * </excludeProtocols>
- *
+ * <p>
  * Solution, part 2: Running Jetty 8+ with oracle-jdk 1.7+. Old versions of oracle/sun jdk do not support TLSv 1.2.
- *
- *
+ * <p>
+ * <p>
  * References:
  * http://en.wikipedia.org/wiki/Transport_Layer_Security#Browser_implementations
  * http://www.oracle.com/technetwork/java/javase/documentation/cve-2014-3566-2342133.html
@@ -87,9 +87,9 @@ public class SSLProtocolTest extends AbstractSSLTest {
 
         try {
 
-            if (checkClient(site, httpsPort, new String[]{"SSLv3"}, null) == 200) {
+            if (checkClient(site, httpsPort, new String[]{"SSLv3", "TLSv1"}, null) == 200) {
                 testResult.setResultEnum(ResultEnum.failed);
-                testResult.setMessage("Your application accepts an insecure SSL protocol!");
+                testResult.setMessage("Your application accepts an insecure SSL/TLS protocol!");
             } else {
                 testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("Actual testing failed, check that the connection is working!");
