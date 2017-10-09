@@ -181,7 +181,8 @@ public class CipherSuiteTest extends AbstractSSLTest {
         } catch (KeyManagementException e) {
             return exitIncorrectCertificate(testResult);
         } catch (SSLHandshakeException e) {
-            if (e.getMessage().contains("No appropriate protocol (protocol is disabled or cipher suites are inappropriate)")) {
+            if (e.getMessage().contains("No appropriate protocol (protocol is disabled or cipher suites are inappropriate)")
+                    || ((TestRepository.getMajorJVMVersion() == 8 && e.getMessage().contains("Received fatal alert: handshake_failure")))) {
 
                 try {
 
