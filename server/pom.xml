@@ -192,12 +192,6 @@
             <artifactId>rome</artifactId>
             <version>1.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.shapesecurity</groupId>
-            <artifactId>salvation</artifactId>
-            <version>2.3.0</version>
-        </dependency>
     </dependencies>
 
     <build>

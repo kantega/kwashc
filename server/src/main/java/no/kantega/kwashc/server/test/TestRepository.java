@@ -54,7 +54,6 @@ public final class TestRepository {
 		add(new CipherSuiteTest());
 
 		//Assorted
-		add(new ContentSecurityPolicyTest());
 		add(new ClickjackingTest());
 		add(new KnownVulnerableComponentsTest());
 
