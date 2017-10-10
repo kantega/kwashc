@@ -80,7 +80,7 @@ public class ClickjackingTest extends AbstractCSPTest {
 
 		tester.beginAt(site.getAddress());
 
-		String frameHeader = tester.getHeader(FRAME_OPTIONS);
+		String frameOptionsHeader = tester.getHeader(FRAME_OPTIONS);
 		String cspHeader1 = tester.getHeader(CSP1);
 		String cspHeader2 = tester.getHeader(CSP2);
 		String cspHeader3 = tester.getHeader(CSP3);
@@ -89,7 +89,7 @@ public class ClickjackingTest extends AbstractCSPTest {
 		boolean contentSecurityPolicySolution = false;
 		boolean javascriptSolution = false;
 
-		if (frameHeader != null && (frameHeader.equalsIgnoreCase("deny") || frameHeader.equalsIgnoreCase("sameorigin"))) {
+		if (frameOptionsHeader != null && (frameOptionsHeader.equalsIgnoreCase("deny") || frameOptionsHeader.equalsIgnoreCase("sameorigin"))) {
 			deprecatedHeaderSolution = true;
 		}
 

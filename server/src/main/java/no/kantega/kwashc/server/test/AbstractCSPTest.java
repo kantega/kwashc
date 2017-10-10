@@ -6,5 +6,6 @@ public abstract class AbstractCSPTest extends AbstractTest {
     final String CSP1 = "Content-Security-Policy";
     final String CSP2 = "X-Content-Security-Policy";
     final String CSP3 = "X-WebKit-CSP";
+    final String CSPReport = "Content-Security-Policy-Report-Only";
 
 }
