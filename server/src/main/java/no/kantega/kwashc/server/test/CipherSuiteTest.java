@@ -126,6 +126,18 @@ public class CipherSuiteTest extends AbstractSSLTest {
             "TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA"
     };
 
+    private String[] ciphers3 = new String[]{
+            "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384",
+            "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+            "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
+            "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384",
+            "TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384",
+            "TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384",
+            "TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384",
+            "TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA",
+    };
+
     @Override
     public String getName() {
         return "SSL/TLS Connection Cipher Strength";
@@ -171,7 +183,7 @@ public class CipherSuiteTest extends AbstractSSLTest {
 
         try {
 
-            if (checkClient(site, httpsPort, new String[]{"TLSv1"}, ciphers) == 200) {
+            if (checkClient(site, httpsPort, new String[]{"TLSv1.1", "TLSv1.2"}, ciphers) == 200) {
                 testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("Your application accepts weak/anonymous SSL/TLS cipher suites!");
             }
@@ -186,9 +198,23 @@ public class CipherSuiteTest extends AbstractSSLTest {
 
                 try {
 
-                    if (checkClient(site, httpsPort, new String[]{"TLSv1"}, ciphers2) == 200) {
-                        testResult.setResultEnum(ResultEnum.passed);
-                        testResult.setMessage("Top score, no weak/anonymous ciphers and supporting the best available Perfect Forward Secrecy ciphers are present.");
+                    if (checkClient(site, httpsPort, new String[]{"TLSv1.1", "TLSv1.2"}, ciphers2) == 200) {
+
+                        try {
+                            if (checkClient(site, httpsPort, new String[]{"TLSv1.1", "TLSv1.2"}, ciphers3) == 200) {
+                                testResult.setResultEnum(ResultEnum.passed);
+                                testResult.setMessage("Awesome!! No weak/anonymous ciphers, Perfect Forward Secrecy and highly secure and high performance ciphers!");
+                                return testResult;
+                            }
+                        } catch (NoSuchAlgorithmException e1) {
+                            return exitMissingCipherSuites(testResult);
+                        } catch (KeyManagementException e1) {
+                            return exitIncorrectCertificate(testResult);
+                        } catch (IOException e1) {
+                            testResult.setResultEnum(ResultEnum.partial);
+                            testResult.setMessage("Almost there, no weak/anonymous ciphers and supporting Perfect Forward Secrecy ciphers are present, but you are still not supporting ciphers with SHA-3.");
+                            return testResult;
+                        }
                     } else {
                         exitWrongHttpCode(testResult);
                     }
