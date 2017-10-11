@@ -212,7 +212,7 @@ public class CipherSuiteTest extends AbstractSSLTest {
                             return exitIncorrectCertificate(testResult);
                         } catch (IOException e1) {
                             testResult.setResultEnum(ResultEnum.partial);
-                            testResult.setMessage("Almost there, no weak/anonymous ciphers and supporting Perfect Forward Secrecy ciphers are present, but you are still not supporting ciphers with SHA-3.");
+                            testResult.setMessage("Almost there, no weak/anonymous ciphers and supporting Perfect Forward Secrecy ciphers are present, but you are still not supporting ciphers with TLS_*_SHA384.");
                             return testResult;
                         }
                     } else {
