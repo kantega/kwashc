@@ -27,15 +27,13 @@ import java.security.KeyManagementException;
  * Test if the web application servlet container and underlying SSL/TLS Protocol implementation support TLS 1.2, and
  * does not allow usage of SSL 3.0 og TLS 1.0 protocol.
  * <p>
- * Solution, part 1: Add the following to jetty-maven-plugin config:
+ * Solution, part 1: Add the following to jetty.xml config:
  * <p>
- * <excludeProtocols>
- * <excludeProtocol>SSLv3</excludeProtocol>
- * <excludeProtocol>TLSv1</excludeProtocol>
- * </excludeProtocols>
- * <p>
- * Solution, part 2: Running Jetty 8+ with oracle-jdk 1.7+. Old versions of oracle/sun jdk do not support TLSv 1.2.
- * <p>
+ * <Set name="ExcludeProtocols">
+ *     <Array type="java.lang.String">
+ *         <Item>TLSv1</Item>
+ *     </Array>
+ * </Set>
  * <p>
  * References:
  * http://en.wikipedia.org/wiki/Transport_Layer_Security#Browser_implementations
