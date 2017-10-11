@@ -76,7 +76,7 @@ public class ContentSecurityPolicyTest extends AbstractCSPTest {
                 Policy csp = Parser.parse(cspHeader, site.getAddress());
                 DefaultSrcDirective defaultSrcDirective = csp.getDirectiveByType(DefaultSrcDirective.class);
 
-                if(defaultSrcDirective.values().count() == 0 || defaultSrcDirective.contains(None.INSTANCE)) {
+                if(defaultSrcDirective != null && ( defaultSrcDirective.values().count() == 0 || defaultSrcDirective.contains(None.INSTANCE))) {
                     testResult.setResultEnum(ResultEnum.failed);
                     testResult.setMessage("Looking better, but your default-src directive has no or 'none' value, effectivly blocking loading of sources from your own site!");
                 }else if (csp.allowsScriptFromSource(URI.parse("http://evil.doers.com"))) {
