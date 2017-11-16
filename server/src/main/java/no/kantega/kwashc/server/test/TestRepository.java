@@ -47,16 +47,16 @@ public final class TestRepository {
 		add(new FailureToRestrictUrlTest());
 		add(new ImproperErrorHandlingTest());
 
+		//Assorted
+		add(new ContentSecurityPolicyTest());
+		add(new ClickjackingTest());
+		add(new KnownVulnerableComponentsTest());
+
 		//Crypto
 		add(new InsecureCryptographicStorageTest());
 		// Test only works with a server with JVM > 6:
 		if (getMajorJVMVersion() > 6) add(new SSLProtocolTest());
 		add(new CipherSuiteTest());
-
-		//Assorted
-		add(new ContentSecurityPolicyTest());
-		add(new ClickjackingTest());
-		add(new KnownVulnerableComponentsTest());
 
 		// Injection, not finished
 		//add(new SQLInjectionTest());
