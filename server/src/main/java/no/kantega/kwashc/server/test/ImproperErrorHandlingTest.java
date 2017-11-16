@@ -22,6 +22,7 @@ import no.kantega.kwashc.server.model.TestResult;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
@@ -102,7 +103,7 @@ public class ImproperErrorHandlingTest extends AbstractTest {
         String responseBody2 = "";
 
         try {
-            HttpGet request = new HttpGet(site.getAddress() + "j_security_check?username=username&password=%E6%E6%27");
+            HttpPost request = new HttpPost(site.getAddress() + "doLogin?username=username&password=%E6%E6%27");
             HttpResponse response = httpclient.execute(request);
             int statusCode = response.getStatusLine().getStatusCode();
             HttpEntity entity = response.getEntity();
