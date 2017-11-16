@@ -189,9 +189,9 @@
         </dependency>
 
         <dependency>
-            <groupId>rome</groupId>
+            <groupId>com.rometools</groupId>
             <artifactId>rome</artifactId>
-            <version>1.0</version>
+            <version>1.8.0</version>
         </dependency>
 
         <dependency>
