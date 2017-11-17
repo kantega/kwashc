@@ -21,7 +21,7 @@
 <jsp:include page="/WEB-INF/jsp/serverheader.jsp"/>
 
 <div class="contentPadding bigtext">
-<h2>Score board</h2>
+<h2>Score board (<%= request.getLocalAddr() %>:<%= request.getLocalPort() %>)</h2>
   <p class="graytext">
     Click a Site to inspect test results
      </p>
