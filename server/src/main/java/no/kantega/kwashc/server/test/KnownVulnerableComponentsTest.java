@@ -55,7 +55,7 @@ public class KnownVulnerableComponentsTest extends AbstractTest
 
     @Override
     public String getInformationURL() {
-        return "https://www.owasp.org/index.php/Top_10_2013-A9-Using_Components_with_Known_Vulnerabilities";
+        return "https://www.owasp.org/index.php/Top_10-2017_A9-Using_Components_with_Known_Vulnerabilities";
     }
 
     @Override
