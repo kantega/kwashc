@@ -83,6 +83,10 @@ Run both containers
 
 Run `docker ps` to make sure that containers kwashc_webapp and kwashc_server are running.
 
+Stop containers
+
+          docker-compose down
+
 
 ## Credits ##
 
