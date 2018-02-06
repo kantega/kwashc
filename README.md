@@ -85,7 +85,7 @@ Run `docker ps` to make sure that containers kwashc_webapp and kwashc_server are
 
 Stop containers
 
-          docker-compose down
+        docker-compose down
 
 
 ## Credits ##
