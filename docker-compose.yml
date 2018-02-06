@@ -1,0 +1,47 @@
+# Docker-compose config
+#
+# To build services run:
+# $> docker-compose rebuilding
+# To start services:
+# $> docker-compose up
+# To stop services:
+# $> docker-compose down
+
+version: '3'
+services:
+  server:
+    build: .
+    image: kwashc_server
+    expose:
+      - "9090"
+    ports:
+      - "9090:9090"
+    volumes:  # to be able to edit code without rebuilding
+      - ./server:/usr/src/app/server
+    working_dir: /usr/src/app/server/
+    entrypoint:
+      - mvn
+      - jetty:run-forked
+    networks:
+      - kwashc
+  webapp:
+    build: .
+    image: kwashc_webapp
+    expose:
+      - "8080"
+      - "8443"
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    volumes:  # to be able to edit code without rebuilding
+      - ./webapp:/usr/src/app/webapp
+    working_dir: /usr/src/app/webapp/
+    entrypoint:
+      - mvn
+      - jetty:run
+    depends_on:
+      - server
+    networks:
+      - kwashc
+networks:
+  kwashc:
