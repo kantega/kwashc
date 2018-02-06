@@ -26,9 +26,9 @@
         <li>Download and install <a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">Java</a></li>
         <li>Setup Environment variables for Java</li>
         <ul>
-            <li>Windows: Follow <a href="http://www.itcsolutions.eu/2010/11/29/set-environment-variables-in-windows-7-for-java/">this guide.</a></li>
+            <li>Windows: Follow <a href="https://www.java.com/en/download/help/path.xml">this guide.</a></li>
             <li>Mac OS X: Run the following:<br>
-                <code>echo export "JAVA_HOME=\$(/usr/libexec/java_home)" >> ~/.bash_profile</code><br>
+                <code>launchctl setenv JAVA_HOME `/usr/libexec/java_home`</code><br>
                 Then restart your shell. If that did not work <a href="http://www.mkyong.com/java/how-to-set-java_home-environment-variable-on-mac-os-x/">follow this guide</a></li>
             <li>Linux (Ubuntu):<br>
                 <code>echo export "JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> ~/.bashrc</code><br>
