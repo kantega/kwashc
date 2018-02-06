@@ -66,6 +66,28 @@ Create Eclipse project with correct path for dependencies
         mvn eclipse:eclipse
         mvn -Declipse.workspace="your Eclipse Workspace" eclipse:configure-workspace
 
+
+## Docker Usage ##
+
+Get webapp submodule before building
+
+        git submodule update --init --recursive
+
+Build server and webapp
+
+        docker-compose build
+
+Run both containers
+
+        docker-compose up
+
+Run `docker ps` to make sure that containers kwashc_webapp and kwashc_server are running.
+
+Stop containers
+
+        docker-compose down
+
+
 ## Credits ##
 
     Anders Båtstrand   idea, framework and tests
