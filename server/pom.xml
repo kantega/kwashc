@@ -139,13 +139,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>4.2.0.Final</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
             <!-- We run tests against the webapp in the 'test' phase: -->
             <groupId>no.kantega.kwashc</groupId>
             <artifactId>webapp</artifactId>
