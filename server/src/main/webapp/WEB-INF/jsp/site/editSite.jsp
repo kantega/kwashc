@@ -35,7 +35,7 @@
 
     <p>Before creating a site you must prove that you own it. This is done by adding the following to the header element of your page (header.jsp):</p>
 
-<pre>
+<pre style="font-size: small; font-weight: bold;">
     <c:out value="<meta name=\"no.kantega.kwashc\" content=\"${site.secret}\"/>"/>
 </pre>
 
