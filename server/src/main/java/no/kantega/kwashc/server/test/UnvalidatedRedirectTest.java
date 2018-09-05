@@ -77,8 +77,8 @@ public class UnvalidatedRedirectTest extends AbstractTest {
             HttpEntity entity = response.getEntity();
             responseBody = EntityUtils.toString(entity);
 
-	        // OBS: In case we are sent to the front page, we must check for something more specific than the wprd Kantega
-            if (responseBody.contains("very last")) {
+	        // Check for content on "http://www.internetlastpage.com" to se if the "should-not-be-working" redirect works.
+            if (responseBody.contains("You have reached the very last page of the Internet.")) {
                 testResult.setResultEnum(ResultEnum.failed);
                 testResult.setMessage("The blog can be used in phishing attacks, since it has a redirect service " +
                         "which doesn't discriminate what URLs it redirects to. An attacker might trick a victim into " +
