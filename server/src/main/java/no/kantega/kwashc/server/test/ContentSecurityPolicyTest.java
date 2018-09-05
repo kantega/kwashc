@@ -9,6 +9,8 @@ import net.sourceforge.jwebunit.junit.WebTester;
 import no.kantega.kwashc.server.model.ResultEnum;
 import no.kantega.kwashc.server.model.Site;
 import no.kantega.kwashc.server.model.TestResult;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import static no.kantega.kwashc.server.test.TestCategory.assorted;
 
@@ -60,6 +62,34 @@ public class ContentSecurityPolicyTest extends AbstractCSPTest {
 
         String cspHeader = tester.getHeader(CSP1);
         String cspHeaderReport = tester.getHeader(CSPReport);
+
+        if (cspHeader == null || cspHeader.isEmpty()) {
+            Document document = Jsoup.parse(tester.getPageSource());
+            cspHeader = document.select("meta[http-equiv=Content-Security-Policy]").stream()
+                    .findFirst()
+                    .map(doc -> {
+                        try {
+                            return doc.attr("content");
+                        } catch (Exception e) {
+                            return null;
+                        }
+
+                    }).orElse(null);
+        }
+
+        if (cspHeaderReport == null || cspHeaderReport.isEmpty()) {
+            Document document = Jsoup.parse(tester.getPageSource());
+            cspHeaderReport = document.select("meta[http-equiv=Content-Security-Policy-Report]").stream()
+                    .findFirst()
+                    .map(doc -> {
+                        try {
+                            return doc.attr("content");
+                        } catch (Exception e) {
+                            return null;
+                        }
+
+                    }).orElse(null);
+        }
 
 
         try {
