@@ -54,8 +54,6 @@ public final class TestRepository {
 
 		//Crypto
 		add(new InsecureCryptographicStorageTest());
-		// Test only works with a server with JVM > 6:
-		if (getMajorJVMVersion() > 6) add(new SSLProtocolTest());
 		add(new CipherSuiteTest());
 
 		// Injection, not finished
@@ -70,29 +68,4 @@ public final class TestRepository {
 		return tests;
 	}
 
-	public static int getMajorJVMVersion() {
-		String[] s = {
-				"java.lang.Object",
-				"java.rmi.Remote",
-				"java.util.List",
-				"java.lang.reflect.Proxy",
-				"java.nio.Buffer",
-				"java.lang.Enum",
-				"java.util.Deque",
-				"java.util.Objects",
-				"java.util.concurrent.Flow"
-		};
-
-		for (int i = s.length - 1; i >= 0; i--) {
-			try {
-				Class cls = Class.forName(s[i]);
-				int o = i+1;
-				System.out.println("Major JVM version: "+o);
-				return i;
-			} catch (ClassNotFoundException e) {
-				// ignore
-			}
-		}
-		return 0;
-	}
 }
