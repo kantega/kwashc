@@ -61,7 +61,7 @@ public class TestController {
 
     @RequestMapping("/site/{siteId}/executeAll")
     public String executeTests(@PathVariable Long siteId) {
-        Site site = siteRepository.findOne(siteId);
+        Site site = siteRepository.findById(siteId).orElse(null);
 
         Map<String, AbstractTest> tests = TestRepository.getTests();
 
@@ -87,7 +87,7 @@ public class TestController {
 
 	@RequestMapping(value = "/site/{siteId}/execute={testName}", method = RequestMethod.GET)
 	public String executeTest(Model model, @PathVariable Long siteId, @PathVariable String testName) {
-		Site site = siteRepository.findOne(siteId);
+        Site site = siteRepository.findById(siteId).orElse(null);
 
 		AbstractTest test = TestRepository.getTests().get(testName);
 		TestResult result = test.testSite(site);

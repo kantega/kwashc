@@ -70,20 +70,20 @@ public class SiteController {
 
 	@RequestMapping(value = "/{id}/clickjacking")
 	public String viewClickJacking(@PathVariable Long id, Model model) {
-        Site site = siteRepository.findOne(id);
+        Site site = siteRepository.findById(id).orElse(null);
         model.addAttribute("site", site);
 		return "site/clickJacking";
 	}
 
 	@RequestMapping(value = "/{id}/delete")
 	public String deleteSite(@PathVariable Long id) {
-		siteRepository.delete(id);
+		siteRepository.deleteById(id);
 		return "redirect:/site/";
 	}
 
 	@RequestMapping(value = "/{id}/resetTests")
 	public String resetTests(@PathVariable Long id) {
-		Site site = siteRepository.findOne(id);
+		Site site = siteRepository.findById(id).orElse(null);
 		site.setTestResults(Collections.<TestResult>emptyList());
         siteRepository.save(site);
         return "redirect:/site/" + site.getId() + "/";
@@ -100,7 +100,7 @@ public class SiteController {
 
 	@RequestMapping(value = "/{id}/")
     public String view(@PathVariable Long id, Model model) {
-        Site site = siteRepository.findOne(id);
+        Site site = siteRepository.findById(id).orElse(null);
         model.addAttribute("site", site);
 		model.addAttribute("numberOfTests", TestRepository.getTests().size());
         return "site/viewSite";
@@ -115,7 +115,7 @@ public class SiteController {
 
     @RequestMapping(value = "/{id}/edit")
     public String edit(@PathVariable Long id, Model model) {
-        Site site = siteRepository.findOne(id);
+        Site site = siteRepository.findById(id).orElse(null);
         model.addAttribute("site", site);
         return "site/editSite";
     }
