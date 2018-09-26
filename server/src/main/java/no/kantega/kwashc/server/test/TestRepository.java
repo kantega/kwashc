@@ -55,6 +55,7 @@ public final class TestRepository {
 		//Crypto
 		add(new InsecureCryptographicStorageTest());
 		add(new CipherSuiteTest());
+		add(new SSLProtocolTest());
 
 		// Injection, not finished
 		//add(new SQLInjectionTest());
