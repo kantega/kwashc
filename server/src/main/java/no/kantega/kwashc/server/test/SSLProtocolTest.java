@@ -100,7 +100,7 @@ public class SSLProtocolTest extends AbstractSSLTest {
         } catch (SSLHandshakeException e) {
             if (e.getMessage().contains("No appropriate protocol (protocol is disabled or cipher suites are inappropriate)") || e.getMessage().contains("Received fatal alert: handshake_failure")) {
 
-                if (checkClient(site, httpsPort, new String[]{"TLSv1.2"}, null) == 200) {
+                if (checkClient(site, httpsPort, new String[]{"TLSv1.2", "TLSv1.3"}, null) == 200) {
                     testResult.setResultEnum(ResultEnum.passed);
                     testResult.setMessage("That`s better, you application supports secure SSL/TLS protocol TLSv1.2!");
                 } else {
