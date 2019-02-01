@@ -1,4 +1,4 @@
-FROM maven:3-jdk-8
+FROM maven:3-jdk-11
 
 ADD . /usr/src/app
 WORKDIR /usr/src/app
