@@ -156,6 +156,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.3.6.Final</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.4.1</version>
@@ -230,6 +236,13 @@
             <artifactId>salvation</artifactId>
             <version>2.5.0</version>
         </dependency>
+
+        <!-- Required to make jetty:run work -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -258,27 +271,15 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <configuration>
+                    <jvmArgs>
+                        -Djava.security.properties=jvm/java.security
+                    </jvmArgs>
                     <jettyXml>
                         ${project.basedir}/src/test/resources/jetty.xml,${project.basedir}/src/test/resources/jetty-http.xml
                     </jettyXml>
                     <webApp>
                         <contextPath>/</contextPath>
                     </webApp>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>src/main/webapp/source</directory>
-                            <includes>
-                                <include>KWASHC-webapp.zip</include>
-                            </includes>
-                            <followSymlinks>false</followSymlinks>
-                        </fileset>
-                    </filesets>
                 </configuration>
             </plugin>
         </plugins>

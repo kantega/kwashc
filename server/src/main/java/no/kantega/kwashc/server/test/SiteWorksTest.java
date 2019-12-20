@@ -132,7 +132,7 @@ public class SiteWorksTest extends AbstractTest {
 	    tester.assertTextPresent("Happy day comment: " + commentUUID2);
 
 		//Checking the RESTful APIkwrite
-		tester.gotoPage(site.getAddress() + "blog/api/comments/list/");
+		tester.gotoPage(site.getAddress() + "/blog/api/comments/list/");
 		tester.assertTextPresent(commentUUID2);
 
         //Checking the redirect controller

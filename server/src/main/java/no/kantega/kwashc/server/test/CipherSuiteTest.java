@@ -104,8 +104,6 @@ public class CipherSuiteTest extends AbstractSSLTest {
             "SSL_DH_anon_EXPORT_WITH_RC4_40_MD5",
             "SSL_RSA_WITH_RC4_128_SHA",
             "SSL_RSA_WITH_RC4_128_MD5",
-            "TLS_KRB5_EXPORT_WITH_DES_CBC_40_MD5",
-            "TLS_KRB5_EXPORT_WITH_DES_CBC_40_SHA",
             "TLS_DH_anon_WITH_AES_128_GCM_SHA256",
             "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA",
             "TLS_ECDHE_RSA_WITH_RC4_128_SHA",

@@ -62,7 +62,7 @@ class APITest extends AbstractTest {
     protected TestResult testSite(Site site, TestResult testResult) throws Throwable {
         long startTime = System.nanoTime();
         String sensitiveInfo = "assword\":\"";
-        String apiUrl = site.getAddress() + "blog/api/comments/list/";
+        String apiUrl = site.getAddress() + "/blog/api/comments/list/";
 
         String random = UUID.randomUUID().toString();
 
