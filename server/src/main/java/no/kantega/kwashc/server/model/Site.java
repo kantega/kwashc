@@ -47,7 +47,7 @@ public class Site extends AbstractPersistable<Long> implements Comparable<Site> 
 
     @Size(min = 5, max = 50)
     @Column(nullable = false)
-    @Pattern(regexp = ".*/")
+    @Pattern(regexp = "^http://.*\\/$", message = "Must be a http:// url ending with a trailing /. e.g. http://10.0.3.2:8080/.")
     private String address;
 
 	@Past

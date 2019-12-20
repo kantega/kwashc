@@ -34,11 +34,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/site")
 @SessionAttributes(types = Site.class)
 public class SiteController {
+
+    public static final Pattern IPv6RegexPattern = Pattern.compile("(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))");
 
     @Autowired
     private SiteRepository siteRepository;
@@ -89,11 +92,19 @@ public class SiteController {
         return "redirect:/site/" + site.getId() + "/";
     }
 
+    private String transformIPv6(String remoteAddr) {
+        var matcher = IPv6RegexPattern.matcher(remoteAddr);
+        if (matcher.matches()) {
+            return String.format("[%s]", remoteAddr);
+        }
+        return remoteAddr;
+    }
+
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String registerSite(Model model, HttpServletRequest request) {
 	    Site site = new Site();
 	    site.setSecret(createNewSiteSecret());
-	    site.setAddress("http://" + request.getRemoteAddr() + ":8080/");
+	    site.setAddress("http://" + transformIPv6(request.getRemoteAddr()) + ":8080/");
 	    model.addAttribute("site", site);
 	    return "site/editSite";
     }
