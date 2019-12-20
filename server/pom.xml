@@ -230,6 +230,13 @@
             <artifactId>salvation</artifactId>
             <version>2.5.0</version>
         </dependency>
+
+        <!-- Required to make jetty:run work -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -258,6 +265,9 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <configuration>
+                    <jvmArgs>
+                        -Djava.security.properties=jvm/java.security
+                    </jvmArgs>
                     <jettyXml>
                         ${project.basedir}/src/test/resources/jetty.xml,${project.basedir}/src/test/resources/jetty-http.xml
                     </jettyXml>
